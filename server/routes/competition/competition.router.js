@@ -10,22 +10,31 @@ const trapRouter = require('./trap.router');
 const resultsRouter = require('./results.router');
 
 /**
- * GET route template
+ * GET list of all competitions
  */
 router.get('/', (req, res) => {
-    pool.query(`SELECT * FROM "competition";`)
-      .then((results) => res.send( results.rows ))
-      .catch((error) => {
-        console.log('Error getting from /competition', error)
-        res.sendStatus(500);
-      })
+  pool.query(`SELECT * FROM "competition";`)
+    .then(results => res.send( results.rows ))
+    .catch((error) => {
+      console.log('Error getting from /competition', error);
+      res.sendStatus(500);
+    })
 });
 
 /**
- * POST route template
+ * create a new competition with default values
+ * returns id of new competition as results.rows
  */
 router.post('/', (req, res) => {
-
+  pool.query(`INSERT INTO "competition" DEFAULT VALUES RETURNING "id";`)
+    .then((results) => {
+      console.log('ID of new competition:', results.rows);
+      res.send(results.rows);
+    })
+    .catch(error => {
+      console.log('Error creating new competition', error);
+      res.sendStatus(500);
+    })
 });
 
 /* Routes */

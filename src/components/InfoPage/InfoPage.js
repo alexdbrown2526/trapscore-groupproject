@@ -11,7 +11,8 @@ const InfoPage = () => (
     <p>
       Info Page
     </p>
-    <button onClick={axios.get('/api/competition/shooter')}>Test shooter route</button>
+    <button onClick={() => axios.get('/api/competition/shooter')}>Test shooter GET route</button>
+    <button onClick={() => axios.post('/api/competition')}>Test Competition POST Route</button>
   </div>
 );
 
