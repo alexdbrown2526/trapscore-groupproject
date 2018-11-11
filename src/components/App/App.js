@@ -17,8 +17,8 @@ import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 //TrapScore Routes
-import SelectCompetition from '../SelectCompetiton/SelectCompetiton';
-import EditCompetition from '../EditCompetiton/EditCompetiton';
+import SelectCompetition from '../CompetitionAdmin/SelectCompetition';
+import EditCompetition from '../CompetitionAdmin/EditCompetition';
 import CompetitionRoster from '../CompetitionRoster/CompetitionRoster';
 import NavDrawer from '../NavDrawer/NavDrawer';
 import Results from '../Results/Results';
