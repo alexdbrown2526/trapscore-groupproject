@@ -97,7 +97,7 @@ class ShooterRegistration extends Component {
                 />
             </div>
             <div>
-                Handicap: <input
+                Handicap (yds): <input
                 type="number"
                 name="handicap"
                 value={this.state.handicap}
