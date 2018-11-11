@@ -8,8 +8,6 @@ import {
 
 import { connect } from "react-redux";
 
-import Nav from "../Nav/Nav";
-
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
 
 import UserPage from "../UserPage/UserPage";
@@ -17,15 +15,16 @@ import UserPage from "../UserPage/UserPage";
 // import InfoPage from "../InfoPage/InfoPage";
 
 //TrapScore Routes
+import Nav from "../Nav/Nav";
 import SelectCompetition from "../CompetitionAdmin/SelectCompetition";
 import EditCompetition from "../CompetitionAdmin/EditCompetition";
-import ShooterRegistration from "../ShooterRegistration/ShooterRegistration";
-import CompetitionRoster from "../CompetitionRoster/CompetitionRoster";
-import Results from "../Results/Results";
-import Squadding from "../Squadding/Squadding";
-import Scheduling from "../Scheduling/Scheduling";
-import Scoring from "../Scoring/Scoring";
-import TrapSelection from "../TrapSelection/TrapSelection";
+import CompetitionRoster from "../ViewCompetitionRoster/CompetitionRoster";
+import Results from "../ViewResults/Results";
+import Squadding from "../ViewSquadding/Squadding";
+import Scheduling from "../ViewScheduling/Scheduling";
+import Scoring from "../ViewScoring/Scoring";
+import TrapSelection from "../ViewTrapSelection/TrapSelection";
+import ShooterRegistration from "../ViewShooterRegistration/ShooterRegistration";
 
 import {
   selectCompetitionRoute,
