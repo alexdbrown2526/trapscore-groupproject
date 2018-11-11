@@ -17,16 +17,16 @@ import AboutPage from '../AboutPage/AboutPage';
 import UserPage from '../UserPage/UserPage';
 import InfoPage from '../InfoPage/InfoPage';
 //TrapScore Routes
-import SelectCompetition from '../SelectCompetiton/SelectCompetiton';
-import EditCompetition from '../EditCompetiton/EditCompetiton';
-import CompetitionRoster from '../CompetitionRoster/CompetitionRoster';
+import SelectCompetition from '../CompetitionAdmin/SelectCompetition';
+import EditCompetition from '../CompetitionAdmin/EditCompetition';
+import CompetitionRoster from '../ViewCompetitionRoster/CompetitionRoster';
 import NavDrawer from '../NavDrawer/NavDrawer';
-import Results from '../Results/Results';
-import Squadding from '../Squadding/Squadding';
-import Scheduling from '../Scheduling/Scheduling';
-import Scoring from '../Scoring/Scoring';
-import TrapSelection from '../TrapSelection/TrapSelection';
-import ShooterRegistration from '../ShooterRegistration/ShooterRegistration';
+import Results from '../ViewResults/Results';
+import Squadding from '../ViewSquadding/Squadding';
+import Scheduling from '../ViewScheduling/Scheduling';
+import Scoring from '../ViewScoring/Scoring';
+import TrapSelection from '../ViewTrapSelection/TrapSelection';
+import ShooterRegistration from '../ViewShooterRegistration/ShooterRegistration';
 //
 
 import './App.css';
@@ -54,17 +54,17 @@ class App extends Component {
             {/* TrapScore Routes */}
             <Route
               exact
-              path="/selectcompetiton"
+              path="/selectcompetition"
               component={SelectCompetition}
             />
             <Route
               exact
-              path="/editcompetiton"
+              path="/editcompetition"
               component={EditCompetition}
             />
             <Route
               exact
-              path="/competitonroster"
+              path="/competitionroster"
               component={CompetitionRoster}
             />
             <Route
