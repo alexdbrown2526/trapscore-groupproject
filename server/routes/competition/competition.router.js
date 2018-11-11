@@ -2,10 +2,11 @@ const express = require('express');
 const pool = require('../../modules/pool');
 const router = express.Router();
 
-// sub-route includes
+/* sub-route requires */
 const shooterRouter = require('./shooter.router');
 const eventRouter = require('./event.router');
-const squadRouter = require('./squad.router');
+const squaddingRouter = require('./squadding.router');
+const schedulingRouter = require('./scheduling.router');
 const trapRouter = require('./trap.router');
 const resultsRouter = require('./results.router');
 
@@ -37,10 +38,11 @@ router.post('/', (req, res) => {
     })
 });
 
-/* Routes */
+/* sub-route uses */
 router.use('/shooter', shooterRouter);
 router.use('/event', eventRouter);
-router.use('/squad', squadRouter);
+router.use('/squadding', squaddingRouter);
+router.use('/scheduling', schedulingRouter);
 router.use('/trap', trapRouter);
 router.use('/results', resultsRouter);
 
