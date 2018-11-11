@@ -7,7 +7,8 @@ class TrapSelection extends Component {
     isVisible: false
   };
 
-  // TODO: Populate dropdown with DB traps, currently getting an error that stops at the saga.
+  // TODO: Populate dropdown with DB traps, Map through tomorrow.
+
 
   componentDidMount() {
     this.props.dispatch({ type:'FETCH_TRAPS', payload: ''});
@@ -56,7 +57,8 @@ class TrapSelection extends Component {
 
 const mapStateToProps = reduxState => ({
  
-    reduxState
+    reduxState,
+    traps: reduxState.traps,
 });
 
 export default connect(mapStateToProps)(TrapSelection);

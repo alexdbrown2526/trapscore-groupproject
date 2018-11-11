@@ -5,7 +5,7 @@ const sagaName = 'trapsSaga'
 
 function* fetchTraps() {
   try {
-    const response = yield axios.get('api/competition/traps');
+    const response = yield axios.get('api/competition/trap');
 
     yield put({ type: 'SET_TRAPS', payload: response.data });
   } catch (error) {
