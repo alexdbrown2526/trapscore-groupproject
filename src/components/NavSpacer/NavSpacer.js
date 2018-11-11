@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    paddingTop: theme.spacing.unit * 4,
+    paddingTop: theme.spacing.unit * 8,
     width: "100%",
   },
 });
