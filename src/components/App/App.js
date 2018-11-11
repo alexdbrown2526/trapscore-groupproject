@@ -17,7 +17,6 @@ import UserPage from "../UserPage/UserPage";
 // import InfoPage from "../InfoPage/InfoPage";
 
 //TrapScore Routes
-<<<<<<< HEAD
 import SelectCompetition from "../CompetitionAdmin/SelectCompetition";
 import EditCompetition from "../CompetitionAdmin/EditCompetition";
 import ShooterRegistration from "../ShooterRegistration/ShooterRegistration";
@@ -39,19 +38,6 @@ import {
   registrationRoute,
   resultsRoute,
 } from "../../navigationRoutes";
-=======
-import SelectCompetition from '../CompetitionAdmin/SelectCompetition';
-import EditCompetition from '../CompetitionAdmin/EditCompetition';
-import CompetitionRoster from '../ViewCompetitionRoster/CompetitionRoster';
-import NavDrawer from '../NavDrawer/NavDrawer';
-import Results from '../ViewResults/Results';
-import Squadding from '../ViewSquadding/Squadding';
-import Scheduling from '../ViewScheduling/Scheduling';
-import Scoring from '../ViewScoring/Scoring';
-import TrapSelection from '../ViewTrapSelection/TrapSelection';
-import ShooterRegistration from '../ViewShooterRegistration/ShooterRegistration';
-//
->>>>>>> db5f6942fffef4247cb7ae2edb0e4e86218b3f55
 
 // Material-UI
 import {
@@ -80,7 +66,6 @@ class App extends Component {
     return (
       <Router>
         <div>
-
           <MuiThemeProvider theme={theme}>
             <CssBaseline />
             <Nav />
