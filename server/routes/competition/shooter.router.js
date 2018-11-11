@@ -2,6 +2,7 @@ const express = require('express');
 const pool = require("../../modules/pool");
 const router = express.Router();
 
+
 // GET a list of all shooters associated with a competition
 router.get('/', (req, res) => {
   pool.query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
@@ -70,5 +71,7 @@ router.post('/', (req, res) => {
         res.sendStatus(500);
       })
 });
+
+
 
 module.exports = router;
