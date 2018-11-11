@@ -27,9 +27,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 /* Routes */
+/* ALL OTHER COMPETITION_SPECIFIC ROUTES ARE ROUTED THROUGH THE COMPETITION ROUTER -- no need to add them here */
 app.use('/api/user', userRouter);
 app.use('/api/competition', competitionRouter);
-app.use('/api/competition/shooter', shooterRouter)
 app.use('/api/sms', smsRouter);
 
 // Serve static files
