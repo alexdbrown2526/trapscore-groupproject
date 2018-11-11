@@ -17,6 +17,7 @@ import UserPage from "../UserPage/UserPage";
 // import InfoPage from "../InfoPage/InfoPage";
 
 //TrapScore Routes
+<<<<<<< HEAD
 import SelectCompetition from "../CompetitionAdmin/SelectCompetition";
 import EditCompetition from "../CompetitionAdmin/EditCompetition";
 import ShooterRegistration from "../ShooterRegistration/ShooterRegistration";
@@ -38,6 +39,19 @@ import {
   registrationRoute,
   resultsRoute,
 } from "../../navigationRoutes";
+=======
+import SelectCompetition from '../CompetitionAdmin/SelectCompetition';
+import EditCompetition from '../CompetitionAdmin/EditCompetition';
+import CompetitionRoster from '../ViewCompetitionRoster/CompetitionRoster';
+import NavDrawer from '../NavDrawer/NavDrawer';
+import Results from '../ViewResults/Results';
+import Squadding from '../ViewSquadding/Squadding';
+import Scheduling from '../ViewScheduling/Scheduling';
+import Scoring from '../ViewScoring/Scoring';
+import TrapSelection from '../ViewTrapSelection/TrapSelection';
+import ShooterRegistration from '../ViewShooterRegistration/ShooterRegistration';
+//
+>>>>>>> db5f6942fffef4247cb7ae2edb0e4e86218b3f55
 
 // Material-UI
 import {
@@ -66,6 +80,7 @@ class App extends Component {
     return (
       <Router>
         <div>
+
           <MuiThemeProvider theme={theme}>
             <CssBaseline />
             <Nav />
@@ -95,6 +110,7 @@ class App extends Component {
                 component={ShooterRegistration}
               />
               {/* For protected routes, the view could show one of several things on the same route.
+
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
             If the user is not logged in, the ProtectedRoute will show the 'Login' or 'Register' page.
             Even though it seems like they are different pages, the user is always on localhost:3000/home */}
