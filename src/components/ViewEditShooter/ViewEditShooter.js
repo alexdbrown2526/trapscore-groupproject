@@ -6,7 +6,7 @@ class ViewEditShooter extends Component {
     constructor(props){
         super(props);
         this.state = {
-            first_name:'Joe'
+            first_name:''
         }
     }
     render(){

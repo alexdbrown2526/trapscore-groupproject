@@ -19,11 +19,7 @@ import InfoPage from '../InfoPage/InfoPage';
 //TrapScore Routes
 import SelectCompetition from '../CompetitionAdmin/SelectCompetition';
 import EditCompetition from '../CompetitionAdmin/EditCompetition';
-<<<<<<< HEAD
 import CompetitionRoster from '../ViewCompetitionRoster/CompetitionRoster';
-=======
-import CompetitionRoster from '../CompetitionRoster/CompetitionRoster';
->>>>>>> master
 import NavDrawer from '../NavDrawer/NavDrawer';
 import Results from '../ViewResults/Results';
 import Squadding from '../ViewSquadding/Squadding';
