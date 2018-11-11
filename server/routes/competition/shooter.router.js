@@ -72,11 +72,6 @@ router.post('/', (req, res) => {
       })
 });
 
-router.get('/', (req,res) => {
-  pool.query(`SELECT * FROM "shooter"`)
-  .then((results) => {
-    res.send(results.rows)
-  })
-})
+
 
 module.exports = router;
