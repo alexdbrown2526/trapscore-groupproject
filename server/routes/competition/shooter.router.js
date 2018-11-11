@@ -38,6 +38,21 @@ router.get("/:id", (req, res) => {
     });
 });
 
+// PUT to edit an individual shooter's details by id
+//TODO: add ability to update event and squad associations
+router.put("/:id", (req, res) => {
+  pool.query(`UPDATE "shooter"
+    SET "first_name" = $1, "last_name" = $2, "email" = $3, "phone" = $4, "handicap" = $5, "ata_number" = $6
+    WHERE "id" = $7;`, [req.body.first_name, req.body.last_name, req.body.email, req.body.handicap, req.body.ata_number, req.params.id]
+    )
+    .then( () => res.sendStatus(200)
+    )
+    .catch( error => {
+      console.log('Error updating shooter details:', error);
+      res.sendStatus(500);
+    });
+})
+
 /**
  * POST a new shooter 
  */
