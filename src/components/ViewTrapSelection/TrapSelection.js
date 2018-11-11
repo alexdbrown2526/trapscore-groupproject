@@ -37,14 +37,12 @@ class TrapSelection extends Component {
     return (
       <div>
         <h1>Trap Selection</h1>
+  // {JSON.stringify(this.props.traps, null, 2)}
 
         <form onSubmit={this.handleSubmit}>
           <label>
             <select onChange={this.handleChangeFor('propertyName')}>
-              <option value="Trap One">Trap One</option>
-              <option value="Trap Two">Trap Two</option>
-              <option value="Trap Three">Trap Three</option>
-              <option value="Trap Four">Trap Four</option>
+            {this.props.traps.map(trap => { return <option key={trap.id} value={trap.id}>{trap.name}</option>})}
             </select>
           </label>
           <input type="submit" value="Confirm" />
