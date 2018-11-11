@@ -30,7 +30,8 @@ CREATE TABLE "person" (
 
 CREATE TABLE "trap" (
     "id" serial PRIMARY KEY,
-    "name" VARCHAR(50) NOT NULL
+    "name" VARCHAR(50) NOT NULL,
+		"competition_id" integer REFERENCES "competition"("id")
 );
 
 
