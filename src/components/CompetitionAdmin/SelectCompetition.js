@@ -48,32 +48,24 @@ class SelectCompetition extends Component {
     });
   };
 
-  handleSubmit = event => {
+  addNewCompetition = event => {
     event.preventDefault();
-    this.setState({
-      ...this.state,
-      isVisible: !this.state.isVisible
-    });
+    
     axios({
       method: "POST",
       url: "/api/competition"
     }).then(response => {
       console.log(response.data[0].id);
-      this.setState({
-        ...this.state,
-        competitionToEdit: response.data[0].id
-      });
-console.log('This Comp id:', this.state.competitionToEdit);
-
+      this.editCompetition(response.data[0].id);
     });
   };
 
-  editCompetition = event => {
-    event.preventDefault();
+  editCompetition = id => {
+    console.log(id);
     this.setState({
       ...this.state,
-      isEdit: !this.state.isEdit
-      //Push all of the competition info into local state, pass as props into EditCompetition below
+      competitionToEdit: id,
+      isVisible: !this.state.isVisible,
     });
   };
 
@@ -105,16 +97,18 @@ console.log('This Comp id:', this.state.competitionToEdit);
 
         <List>
           {this.state.competitions.map(comp => {
-            return (
-              <ListItem key={comp.id} value={comp.id}>
-                <button onClick={this.editCompetition}>Edit</button>
+            return <ListItem key={comp.id} value={comp.id}>
+                <button
+                  onClick={() => this.editCompetition(comp.id)}
+                >
+                  Edit
+                </button>
                 {comp.name}
-              </ListItem>
-            );
+              </ListItem>;
           })}
         </List>
 
-        <button onClick={this.handleSubmit}>Add Competition</button>
+        <button onClick={this.addNewCompetition}>Add Competition</button>
         <button onClick={this.handleLogOut}>Log Out</button>
         {displayItem}
         {viewItem}
