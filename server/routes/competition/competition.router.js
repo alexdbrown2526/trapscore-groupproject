@@ -37,7 +37,7 @@ router.get('/:id', (req, res) => {
  * returns id of new competition as results.rows
  */
 router.post('/', (req, res) => {
-  pool.query(`INSERT INTO "competition" DEFAULT VALUES RETURNING "id";`)
+  pool.query(`INSERT INTO "competition" DEFAULT VALUES RETURNING *;`)
     .then((results) => {
       console.log('ID of new competition:', results.rows);
       res.send(results.rows);
