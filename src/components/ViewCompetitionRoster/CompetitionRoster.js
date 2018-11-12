@@ -6,8 +6,8 @@ class CompetitionRoster extends Component {
   constructor(props){
     super(props);
     this.state = {
-      shooters: []
-      
+      shooters: [],
+      selectedShooter: {}
     }
     
   }
@@ -32,15 +32,31 @@ class CompetitionRoster extends Component {
    })
   }
 
-  editShooter = () => {
+  editShooter = (id) => {
     console.log('button working');
 
     axios({
       method: 'GET',
-      url: '/api/competition/shooter/:id'
-    })
-    
+      url: `/api/competition/shooter/${id}`
+    }).then((response) => {
+      console.log(response);
+      
+      this.setState({
+        ...this.state,
+        selectedShooter:response.data[0]
+      })
+
+    }) 
   }
+
+  handleChangeFor = propertyName => (event) => {
+    this.setState({
+       [propertyName]: event.target.value
+    });
+
+}
+    
+  
 
 
 
@@ -53,6 +69,7 @@ class CompetitionRoster extends Component {
   render() {
     return (
 <div>
+  <h2>Competition Roster</h2>
   <table>
     <thead>
       <tr>
@@ -68,12 +85,15 @@ class CompetitionRoster extends Component {
         <td>{person.first_name}</td>
         <td>{person.last_name}</td>
         <td>{person.handicap}</td>
-        <td><button onClick={this.editShooter}>Edit</button></td>
+        <td><button onClick={()=>{this.editShooter(person.id)}}>Edit</button></td>
         </tr>)
       })}
     </tbody>
   </table>
-  <ViewEditShooter />
+  
+  <ViewEditShooter selectedShooter={this.state.selectedShooter}
+  onChange={()=>{this.state.handleChangeFor();}}
+  />
 </div>    
 )
   }
