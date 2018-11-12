@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { List, ListItem, ListItemText } from "@material-ui/core/";
 import axios from "axios";
-import EditCompetition from '../CompetitionAdmin/EditCompetition';
+import EditCompetition from "../CompetitionAdmin/EditCompetition";
 
 const styles = {
   userDetail: {
@@ -22,23 +22,29 @@ const styles = {
 
 class SelectCompetition extends Component {
   state = {
+    // Conditional Rendering Variables
     isVisible: false,
     isLogged: false,
-    isEdit: false,
+    // 
     competitions: [],
     competitionToEdit: Number
   };
 
-  componentDidMount() {
+  refreshData = () => {
     axios({
       method: "GET",
       url: "/api/competition"
     }).then(response => {
       this.setState({
         ...this.state,
-        competitions: response.data
+        competitions: response.data,
+        isVisible: false
       });
     });
+  };
+
+  componentDidMount() {
+    this.refreshData();
   }
 
   handleChangeFor = propertyName => event => {
@@ -50,46 +56,47 @@ class SelectCompetition extends Component {
 
   addNewCompetition = event => {
     event.preventDefault();
-    
+
     axios({
       method: "POST",
       url: "/api/competition"
     }).then(response => {
-      console.log(response.data[0].id);
-      this.editCompetition(response.data[0].id);
+      console.log(response.data[0]);
+      this.editCompetition(response.data[0]);
     });
   };
 
-  editCompetition = id => {
-    console.log(id);
+  editCompetition = selectedCompetition => {
     this.setState({
       ...this.state,
-      competitionToEdit: id,
-      isVisible: !this.state.isVisible,
+      competitionToEdit: selectedCompetition,
+      isVisible: true
     });
   };
-
+  // Conditional Rendering for Log out
   handleLogOut = event => {
     event.preventDefault();
     this.setState({
       ...this.state,
-      isLogged: !this.state.isLogged
+      isLogged: true
     });
   };
 
   render() {
     const { classes } = this.props;
+    //Conditional Rendering if statements/variables
     let displayItem;
     let viewItem;
-    let editItem;
     if (this.state.isVisible) {
-      displayItem =   <EditCompetition edit={this.state.competitionToEdit} />
+      displayItem = (
+        <EditCompetition
+          edit={this.state.competitionToEdit}
+          data={this.refreshData}
+        />
+      );
     }
     if (this.state.isLogged) {
       viewItem = this.props.history.push("/home");
-    }
-    if (this.state.isEdit) {
-      editItem =  <EditCompetition edit={this.state.competitionToEdit} />
     }
     return (
       <div className={classes.list}>
@@ -97,14 +104,12 @@ class SelectCompetition extends Component {
 
         <List>
           {this.state.competitions.map(comp => {
-            return <ListItem key={comp.id} value={comp.id}>
-                <button
-                  onClick={() => this.editCompetition(comp.id)}
-                >
-                  Edit
-                </button>
+            return (
+              <ListItem key={comp.id} value={comp.id}>
+                <button onClick={() => this.editCompetition(comp)}>Edit</button>
                 {comp.name}
-              </ListItem>;
+              </ListItem>
+            );
           })}
         </List>
 
@@ -112,7 +117,6 @@ class SelectCompetition extends Component {
         <button onClick={this.handleLogOut}>Log Out</button>
         {displayItem}
         {viewItem}
-        {editItem}
       </div>
     );
   }
