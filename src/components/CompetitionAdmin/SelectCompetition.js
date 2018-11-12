@@ -52,8 +52,13 @@ class SelectCompetition extends Component {
       ...this.state,
       isVisible: !this.state.isVisible
     });
+    axios({
+      method: "POST",
+      url: "/api/competition"
+    }).then(response => {
+      console.log(response);
+    });
   };
-
 
   editCompetition = event => {
     event.preventDefault();
@@ -92,7 +97,8 @@ class SelectCompetition extends Component {
         <List>
           {this.state.competitions.map(comp => {
             return (
-              <ListItem key={comp.id} value={comp.id}><button onClick={this.editCompetition}>Edit</button>
+              <ListItem key={comp.id} value={comp.id}>
+                <button onClick={this.editCompetition}>Edit</button>
                 {comp.name}
               </ListItem>
             );
