@@ -5,6 +5,7 @@ class ViewEditShooter extends Component {
   constructor(props) {
     super(props);
     this.state = {
+        id: Number,
       first_name: "",
       last_name: "",
       email: "",
@@ -18,8 +19,8 @@ class ViewEditShooter extends Component {
     console.log("update button working");
     axios({
       method: "PUT",
-      url: `/api/competition/shooter/${id}`
-      // data: updatedUserInfo
+      url: `/api/competition/shooter/${this.state.id}`,
+      data: this.state
     });
   };
 
@@ -85,28 +86,8 @@ class ViewEditShooter extends Component {
             onChange={this.handleChangeFor("ata_number")}
           />
         </form>
-        {/* // <ul>
-                //     <li>
-                //         {JSON.stringify(this.props.selectedShooter[0])}
-                //         {this.props.selectedShooter.first_name}
-                //     </li>
-                //     <li>
-                //         {this.props.selectedShooter.last_name}
-                //     </li>
-                //     <li>
-                //         {this.props.selectedShooter.email}
-                //     </li>
-                //     <li>
-                //         {this.props.selectedShooter.phone}
-                //     </li>
-                //     <li>
-                //         {this.props.selectedShooter.handicap}
-                //     </li>
-                //     <li>
-                //         {this.props.selectedShooter.ata_number}
-                //     </li>
-                // </ul> */}
-        <button onClick={this.updateUser}>Save Changes</button>
+       
+        <button onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</button>
       </div>
     );
   }

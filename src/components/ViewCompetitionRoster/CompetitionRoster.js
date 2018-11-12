@@ -12,7 +12,6 @@ class CompetitionRoster extends Component {
     
   }
 
-
   getShooters(){
     axios({
       method: 'GET',
@@ -60,10 +59,6 @@ class CompetitionRoster extends Component {
 
 }
     
-  
-
-
-
   componentDidMount(){
     this.getShooters();
     console.log(this.state.shooters);
