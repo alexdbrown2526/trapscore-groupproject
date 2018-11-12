@@ -10,32 +10,40 @@ router.get("/:event_id", async (req, res) => {
   let dataToSend = {};
   try {
     //Returns an array of all unsquadded shooters associated with the currently selected event
-    const unsquaddedResults = await pool.query(
+    const getUnsquadded = pool.query(
       `SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
       JOIN "shooter_event" ON "shooter_event"."shooter_id" = "shooter"."id"
       WHERE "shooter_event"."event_id" = ${req.params.event_id}
       EXCEPT
       SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
-      JOIN "shooter_squad" ON "shooter_squad"."shooter_id" = "shooter"."id";`
+      JOIN "shooter_squad" ON "shooter_squad"."shooter_id" = "shooter"."id"
+      JOIN "shooter_event" ON "shooter_event"."shooter_id" = "shooter"."id"
+      WHERE "shooter_event"."event_id" = ${req.params.event_id};`
       );
-    const eventDetailResults = await pool.query(
+    //Returns event id and event name
+    const getEventDetails = pool.query(
       `SELECT * FROM "event" WHERE "id" = ${req.params.event_id};`
       );
-    const squadDetailResults = await pool.query(
-      `SELECT json_agg(row_to_json(squ)) as squads
+    //returns an array of squad objects made up of squad id, squad name, and array of squad members
+    const getSquadDetails = pool.query(`SELECT json_agg(row_to_json(squ)) as squads
       FROM (
         SELECT sq."id", sq."name",
         (SELECT json_agg(sh)
         FROM (
           SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_squad"."post_position" FROM "shooter"
           JOIN "shooter_squad" ON "shooter"."id" = "shooter_squad"."shooter_id"
+          JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
           JOIN "squad" ON "shooter_squad"."squad_id" = "squad"."id"
-          WHERE "squad"."id" = sq."id"
+          WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = ${req.params.event_id}
           ORDER BY "shooter_squad"."post_position"
         ) sh
       ) as members
-      FROM "squad" as sq) squ;`
-    );
+      FROM "squad" as sq) squ;`);
+
+    //assemble contents of dataToSend from postgres responses
+    const unsquaddedResults = await getUnsquadded;
+    const eventDetailResults = await getEventDetails;
+    const squadDetailResults = await getSquadDetails;
     
     // assembles response object from database results
     dataToSend = {
