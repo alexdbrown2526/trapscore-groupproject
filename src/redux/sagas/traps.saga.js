@@ -10,7 +10,6 @@ function* fetchTraps() {
 
     const response = yield axios.get("api/competition/trap");
 
-
     yield put({ type: "SET_TRAPS", payload: response.data });
   } catch (error) {
     console.log("error in", sagaName, ":", error);
