@@ -22,6 +22,16 @@ router.get('/', (req, res) => {
     })
 });
 
+//GET a single competition by ID
+router.get('/:id', (req, res) => {
+  pool.query(`SELECT * FROM "competition" WHERE "id" = $1;`, [req.params.id])
+    .then( results => res.send(results.rows))
+    .catch( error => {
+      console.log('Error getting competition details:', error);
+      res.sendStatus(500);
+    })
+})
+
 /**
  * create a new competition with default values
  * returns id of new competition as results.rows
