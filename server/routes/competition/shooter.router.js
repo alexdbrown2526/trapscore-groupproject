@@ -5,20 +5,20 @@ const router = express.Router();
 
 // GET a list of all shooters associated with a competition
 router.get('/', (req, res) => {
-  pool.query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
+  pool
+    .query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
               JOIN "shooter_event" on "shooter"."id" = "shooter_event"."shooter_id"
-              JOIN "event" ON "shooter_event"."event_id" = "event"."id"
-              JOIN "competition" ON "competition"."id" = "event"."competition_id"
-              WHERE "competition_id" = ${req.user.competition_id};`
-    )
+              LEFT JOIN "event" ON "shooter_event"."event_id" = "event"."id"
+              WHERE "event"."competition_id" = ${req.user.competition_id}
+              GROUP BY "shooter"."id";`)
     .then(results => {
       console.log(results.rows);
       res.send(results.rows);
     })
     .catch(error => {
-      console.log('Error getting shooter list from /api/competition/shooter', error);
+      console.log("Error getting shooter list from /api/competition/shooter", error);
       res.sendStatus(500);
-    })
+    });
 });
 
 //  GET a single shooter's details by id
