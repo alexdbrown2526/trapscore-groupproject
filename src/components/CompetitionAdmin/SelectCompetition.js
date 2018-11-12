@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { List, ListItem, ListItemText } from "@material-ui/core/";
 import axios from "axios";
+import EditCompetition from '../CompetitionAdmin/EditCompetition';
 
 const styles = {
   userDetail: {
@@ -24,7 +25,8 @@ class SelectCompetition extends Component {
     isVisible: false,
     isLogged: false,
     isEdit: false,
-    competitions: []
+    competitions: [],
+    competitionToEdit: Number
   };
 
   componentDidMount() {
@@ -56,7 +58,13 @@ class SelectCompetition extends Component {
       method: "POST",
       url: "/api/competition"
     }).then(response => {
-      console.log(response);
+      console.log(response.data[0].id);
+      this.setState({
+        ...this.state,
+        competitionToEdit: response.data[0].id
+      });
+console.log('This Comp id:', this.state.competitionToEdit);
+
     });
   };
 
@@ -65,6 +73,7 @@ class SelectCompetition extends Component {
     this.setState({
       ...this.state,
       isEdit: !this.state.isEdit
+      //Push all of the competition info into local state, pass as props into EditCompetition below
     });
   };
 
@@ -82,13 +91,13 @@ class SelectCompetition extends Component {
     let viewItem;
     let editItem;
     if (this.state.isVisible) {
-      displayItem = this.props.history.push("/editCompetition");
+      displayItem =   <EditCompetition edit={this.state.competitionToEdit} />
     }
     if (this.state.isLogged) {
       viewItem = this.props.history.push("/home");
     }
     if (this.state.isEdit) {
-      editItem = this.props.history.push("/editCompetition");
+      editItem =  <EditCompetition edit={this.state.competitionToEdit} />
     }
     return (
       <div className={classes.list}>
