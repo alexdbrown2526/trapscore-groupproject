@@ -14,6 +14,7 @@ const resultsRouter = require('./results.router');
  * GET list of all competitions
  */
 router.get('/', (req, res) => {
+  console.log('User is logged in with competition ID=', req.user.competition_id)
   pool.query(`SELECT * FROM "competition" ORDER BY "isActive" DESC, "date" ASC;`)
     .then(results => res.send( results.rows ))
     .catch((error) => {
@@ -22,15 +23,7 @@ router.get('/', (req, res) => {
     })
 });
 
-//GET a single competition by ID
-router.get('/:id', (req, res) => {
-  pool.query(`SELECT * FROM "competition" WHERE "id" = $1;`, [req.params.id])
-    .then( results => res.send(results.rows))
-    .catch( error => {
-      console.log('Error getting competition details:', error);
-      res.sendStatus(500);
-    })
-})
+
 
 /**
  * create a new competition with default values
@@ -67,5 +60,14 @@ router.use('/scheduling', schedulingRouter);
 router.use('/trap', trapRouter);
 router.use('/results', resultsRouter);
 
+//GET a single competition by ID
+router.get('/:id', (req, res) => {
+  pool.query(`SELECT * FROM "competition" WHERE "id" = $1;`, [req.params.id])
+    .then(results => res.send(results.rows))
+    .catch(error => {
+      console.log('Error getting competition details:', error);
+      res.sendStatus(500);
+    })
+})
 
 module.exports = router;
