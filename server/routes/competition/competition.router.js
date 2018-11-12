@@ -14,7 +14,7 @@ const resultsRouter = require('./results.router');
  * GET list of all competitions
  */
 router.get('/', (req, res) => {
-  pool.query(`SELECT * FROM "competition";`)
+  pool.query(`SELECT * FROM "competition" ORDER BY "isActive" DESC, "date" ASC;`)
     .then(results => res.send( results.rows ))
     .catch((error) => {
       console.log('Error getting from /competition', error);
