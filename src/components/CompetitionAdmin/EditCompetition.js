@@ -3,15 +3,20 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+import SelectCompetition from "../CompetitionAdmin/SelectCompetition";
 
 class EditCompetition extends Component {
   state = {
-    id: this.props.edit,
+    id: this.props.edit.id,
     date: "",
     name: "",
     location: "",
     defaultPassword: "",
-    newPassword: ""
+    newPassword: "",
+    // Conditional Rendering Variable
+    isVisible: false
+    //
   };
 
   handleChangeFor = propertyName => event => {
@@ -28,10 +33,9 @@ class EditCompetition extends Component {
   };
 
   handleSubmit = event => {
-    alert('Are you sure you want to submit?')
-    event.preventDefault();
+    alert("Competition Submitted!");
     const body = {
-      id: this.props.edit,
+      id: this.props.edit.id,
       date: this.state.date,
       name: this.state.name,
       location: this.state.location
@@ -39,31 +43,39 @@ class EditCompetition extends Component {
 
     axios({
       method: "PUT",
-      url: `/api/competition/`,
+      url: `/api/competition`,
       data: body
     }).then(response => {
       console.log(response);
       this.setState({
         ...this.state,
-        id: '',
-        date: '',
-        name: '',
-        location: ''
+        id: "",
+        date: "",
+        name: "",
+        location: "",
+        isVisible: false
       });
     });
+    console.log(this.state.isVisible);
+    this.props.data();
   };
 
   render() {
+    //Conditional Rendering if statement/variable
+    let viewItem;
+    if (this.state.isVisible) {
+      viewItem = this.props.history.push("/selectCompetition");
+    }
     return (
-                    
       <div>
-        
         <h1>Edit Competition</h1>
         {JSON.stringify(this.props.edit)}
-      
-        <h2>{this.state.name} Competition</h2>
-        <h3>Shareable Registration URL: [url]</h3>
-        <p>Staff Username: {this.state.name} Competition</p>
+
+        <h2>{this.props.edit.name} </h2>
+        <h3>
+          Shareable Registration URL: https://trapscore/{this.props.edit.name}
+        </h3>
+        <p>Staff Username: {this.props.edit.name}</p>
         <p>The default password is the name of the competition and "admin".</p>
         <h3>Change Password</h3>
         <p>
@@ -82,22 +94,23 @@ class EditCompetition extends Component {
             placeholder="New Password"
           />
 
-          <h3>Add New Competition</h3>
+          <h3>Add or Edit Competition</h3>
 
           <input
             value={this.state.name}
             onChange={this.handleChangeFor("name")}
-            placeholder="Name"
+            placeholder={this.props.edit.name}
           />
           <input
             value={this.state.location}
             onChange={this.handleChangeFor("location")}
-            placeholder="Location"
+            placeholder={this.props.edit.location}
           />
         </form>
         <h2>Select Date</h2>
         <DatePicker selected={this.state.date} onChange={this.handleChange} />
         <button onClick={this.handleSubmit}>Submit</button>
+        {viewItem}
       </div>
     );
   }
@@ -107,5 +120,4 @@ const mapStateToProps = reduxState => ({
   reduxState
 });
 
-export default connect(mapStateToProps)(EditCompetition);
-
+export default connect(mapStateToProps)(withRouter(EditCompetition));
