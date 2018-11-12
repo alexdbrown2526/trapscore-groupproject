@@ -51,7 +51,11 @@ class CompetitionRoster extends Component {
 
   handleChangeFor = propertyName => (event) => {
     this.setState({
-       [propertyName]: event.target.value
+      ...this.state,
+      selectedShooter: {
+        ...this.state.selectedShooter,
+        [propertyName]: event.target.value
+      }
     });
 
 }
@@ -92,7 +96,6 @@ class CompetitionRoster extends Component {
   </table>
   
   <ViewEditShooter selectedShooter={this.state.selectedShooter}
-  onChange={()=>{this.state.handleChangeFor();}}
   />
 </div>    
 )

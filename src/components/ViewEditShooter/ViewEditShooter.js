@@ -6,9 +6,13 @@ class ViewEditShooter extends Component {
         constructor(props){
         super(props);
         this.state = {
-            firstName: '',
-            
-         }
+            first_name: '',
+            last_name: '',
+            email: '',
+            handicap: '',
+            phone: '',
+            ata_number: '',
+        }
      }
 
    
@@ -26,17 +30,17 @@ class ViewEditShooter extends Component {
 
     handleChangeFor = propertyName => (event) => {
         this.setState({
-            // ...this.state,
-           firstName: event.target.value
+            ...this.state,
+           [propertyName]: event.target.value
         });
 
     }
 
-    // componentDidMount(){
-    //     this.setState({
-    //         ...this.props.selectedShooter
-    //     })
-    // }
+    componentWillReceiveProps(){
+        this.setState({
+            ...this.props.selectedShooter
+        })
+    }
 
 
     render(){
@@ -46,37 +50,37 @@ class ViewEditShooter extends Component {
 				<input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.first_name}
-					onChange={this.handleChangeFor('firstName')}
+					value={this.state.first_name}
+					onChange={this.handleChangeFor('first_name')}
 				 />
                  <input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.last_name}
-					onChange={this.handleChangeFor('lastName')}
+					value={this.state.last_name}
+					onChange={this.handleChangeFor('last_name')}
 				 />
                  <input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.email}
+					value={this.state.email}
 					onChange={this.handleChangeFor('email')}
 				 />
                  <input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.phone}
+					value={this.state.phone}
 					onChange={this.handleChangeFor('phone')}
 				 />
                  <input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.handicap}
+					value={this.state.handicap}
 					onChange={this.handleChangeFor('handicap')}
 				 />
                  <input className="textfield"
 					type="text"
 					name='searchText'
-					value={this.props.selectedShooter.ata_number}
+					value={this.state.ata_number}
 					onChange={this.handleChangeFor('ata_number')}
 				 />
                  </form>
