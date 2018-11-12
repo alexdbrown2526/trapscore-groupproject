@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import Checkbox from '@material-ui/core/Checkbox'
 
 
 class ShooterRegistration extends Component {
@@ -7,12 +8,16 @@ class ShooterRegistration extends Component {
         super(props);
 
         this.state = {
-            firstName: '',
-            lastName: '',
+            first_name: '',
+            last_name: '',
             email: '',
             phone: Number,
             handicap: Number,
-            ataNumber: Number
+            ata_number: Number,
+            checkedSingles: false,
+            checkedDoubles: false,
+            checkedHandicap: false
+            
 
         }
     }
@@ -21,12 +26,12 @@ class ShooterRegistration extends Component {
         event.preventDefault();
 
         const body = {
-            firstName: this.state.firstName,
-            lastName: this.state.lastName,
+            first_name: this.state.first_name,
+            last_name: this.state.last_name,
             email: this.state.email,
             phone: this.state.phone,
             handicap: this.state.handicap,
-            ataNumber: this.state.ataNumber
+            ata_number: this.state.ata_number
         }
 
         axios({
@@ -35,12 +40,12 @@ class ShooterRegistration extends Component {
             data: body
         }).then((response) => {
             this.setState({
-            firstName: '',
-            lastName: '',
+            first_name: '',
+            last_name: '',
             email: '',
             phone: Number,
             handicap: Number,
-            ataNumber: Number
+            ata_number: Number
 
                 
             })
@@ -56,6 +61,13 @@ class ShooterRegistration extends Component {
 
     }
 
+    handleChangeCheckBox = propertyName => (event) => {
+        this.setState({
+            [propertyName]: event.target.checked
+        
+        })
+    }
+
     
 
 
@@ -68,16 +80,16 @@ class ShooterRegistration extends Component {
                First Name: <input 
                type="text"
                name="firstName"
-               value={this.state.firstName}
-               onChange={this.handleChangeFor('firstName')} 
+               value={this.state.first_name}
+               onChange={this.handleChangeFor('first_name')} 
                />
                 </div>
             <div>
                 Last Name: <input
                 type="text"
                 name="lastName"
-                value={this.state.lastName}
-                onChange={this.handleChangeFor('lastName')}
+                value={this.state.last_name}
+                onChange={this.handleChangeFor('last_name')}
                 />
             </div>
             <div>
@@ -108,9 +120,34 @@ class ShooterRegistration extends Component {
                 ATA #: <input
                 type="number"
                 name="ataNumber"
-                value={this.state.ataNumber}
-                onChange={this.handleChangeFor('ataNumber')}
+                value={this.state.ata_number}
+                onChange={this.handleChangeFor('ata_number')}
                 />
+            </div>
+            <div>
+                <ul>
+                    <li>
+                        Singles
+                        <Checkbox
+                        value="checkedSingles"
+                        checked={this.state.checkedSingles}
+                        onChange={this.handleChangeCheckBox('checkedSingles')} />
+                    </li>
+                    <li>
+                        Doubles
+                        <Checkbox
+                        value="checkedDoubles"
+                        checked={this.state.checkedDoubles}
+                        onChange={this.handleChangeCheckBox('checkedDoubles')} />
+                    </li>
+                    <li>
+                        Handicap
+                        <Checkbox
+                        value="checkedHandicap"
+                        checked={this.state.checkedHandicap}
+                        onChange={this.handleChangeCheckBox('checkedHandicap')} />
+                    </li>
+                </ul>
             </div>
             <div>
             <input
