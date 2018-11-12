@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { List, ListItem, ListItemText } from "@material-ui/core/";
 import axios from "axios";
+import EditCompetition from '../CompetitionAdmin/EditCompetition';
 
 const styles = {
   userDetail: {
@@ -24,7 +25,8 @@ class SelectCompetition extends Component {
     isVisible: false,
     isLogged: false,
     isEdit: false,
-    competitions: []
+    competitions: [],
+    competitionToEdit: Number
   };
 
   componentDidMount() {
@@ -46,25 +48,24 @@ class SelectCompetition extends Component {
     });
   };
 
-  handleSubmit = event => {
+  addNewCompetition = event => {
     event.preventDefault();
-    this.setState({
-      ...this.state,
-      isVisible: !this.state.isVisible
-    });
+    
     axios({
       method: "POST",
       url: "/api/competition"
     }).then(response => {
-      console.log(response);
+      console.log(response.data[0].id);
+      this.editCompetition(response.data[0].id);
     });
   };
 
-  editCompetition = event => {
-    event.preventDefault();
+  editCompetition = id => {
+    console.log(id);
     this.setState({
       ...this.state,
-      isEdit: !this.state.isEdit
+      competitionToEdit: id,
+      isVisible: !this.state.isVisible,
     });
   };
 
@@ -82,13 +83,13 @@ class SelectCompetition extends Component {
     let viewItem;
     let editItem;
     if (this.state.isVisible) {
-      displayItem = this.props.history.push("/editCompetition");
+      displayItem =   <EditCompetition edit={this.state.competitionToEdit} />
     }
     if (this.state.isLogged) {
       viewItem = this.props.history.push("/home");
     }
     if (this.state.isEdit) {
-      editItem = this.props.history.push("/editCompetition");
+      editItem =  <EditCompetition edit={this.state.competitionToEdit} />
     }
     return (
       <div className={classes.list}>
@@ -96,16 +97,18 @@ class SelectCompetition extends Component {
 
         <List>
           {this.state.competitions.map(comp => {
-            return (
-              <ListItem key={comp.id} value={comp.id}>
-                <button onClick={this.editCompetition}>Edit</button>
+            return <ListItem key={comp.id} value={comp.id}>
+                <button
+                  onClick={() => this.editCompetition(comp.id)}
+                >
+                  Edit
+                </button>
                 {comp.name}
-              </ListItem>
-            );
+              </ListItem>;
           })}
         </List>
 
-        <button onClick={this.handleSubmit}>Add Competition</button>
+        <button onClick={this.addNewCompetition}>Add Competition</button>
         <button onClick={this.handleLogOut}>Log Out</button>
         {displayItem}
         {viewItem}
