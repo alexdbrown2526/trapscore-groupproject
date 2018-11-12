@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
 class TrapSelection extends Component {
   state = {
@@ -9,25 +9,24 @@ class TrapSelection extends Component {
 
   // TODO: Populate dropdown with DB traps, Map through tomorrow.
 
-
   componentDidMount() {
-    this.props.dispatch({ type:'FETCH_TRAPS', payload: ''});
- }
+    this.props.dispatch({ type: "FETCH_TRAPS" });
+  }
 
   handleChangeFor = propertyName => event => {
     this.setState({
-        ...this.state,
-        [propertyName]: event.target.value
+      ...this.state,
+      [propertyName]: event.target.value
     });
-};
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault();
     this.setState({
       ...this.state,
       isVisible: !this.state.isVisible
     });
-  }
+  };
 
   render() {
     let displayItem;
@@ -37,12 +36,16 @@ class TrapSelection extends Component {
     return (
       <div>
         <h1>Trap Selection</h1>
-  // {JSON.stringify(this.props.traps, null, 2)}
-
         <form onSubmit={this.handleSubmit}>
           <label>
-            <select onChange={this.handleChangeFor('propertyName')}>
-            {this.props.traps.map(trap => { return <option key={trap.id} value={trap.id}>{trap.name}</option>})}
+            <select onChange={this.handleChangeFor("propertyName")}>
+              {this.props.traps.map(trap => {
+                return (
+                  <option key={trap.id} value={trap.id}>
+                    {trap.name}
+                  </option>
+                );
+              })}
             </select>
           </label>
           <input type="submit" value="Confirm" />
@@ -54,9 +57,8 @@ class TrapSelection extends Component {
 }
 
 const mapStateToProps = reduxState => ({
- 
-    reduxState,
-    traps: reduxState.traps,
+  reduxState,
+  traps: reduxState.traps
 });
 
 export default connect(mapStateToProps)(TrapSelection);
