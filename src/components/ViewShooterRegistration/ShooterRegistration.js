@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import axios from 'axios'
+import Checkbox from '@material-ui/core/Checkbox'
 
 
 class ShooterRegistration extends Component {
@@ -12,7 +13,11 @@ class ShooterRegistration extends Component {
             email: '',
             phone: Number,
             handicap: Number,
-            ataNumber: Number
+            ataNumber: Number,
+            checkedSingles: false,
+            checkedDoubles: false,
+            checkedHandicap: false
+            
 
         }
     }
@@ -54,6 +59,13 @@ class ShooterRegistration extends Component {
            [propertyName]: event.target.value
         });
 
+    }
+
+    handleChangeCheckBox = propertyName => (event) => {
+        this.setState({
+            [propertyName]: event.target.checked
+        
+        })
     }
 
     
@@ -111,6 +123,31 @@ class ShooterRegistration extends Component {
                 value={this.state.ataNumber}
                 onChange={this.handleChangeFor('ataNumber')}
                 />
+            </div>
+            <div>
+                <ul>
+                    <li>
+                        Singles
+                        <Checkbox
+                        value="checkedSingles"
+                        checked={this.state.checkedSingles}
+                        onChange={this.handleChangeCheckBox('checkedSingles')} />
+                    </li>
+                    <li>
+                        Doubles
+                        <Checkbox
+                        value="checkedDoubles"
+                        checked={this.state.checkedDoubles}
+                        onChange={this.handleChangeCheckBox('checkedDoubles')} />
+                    </li>
+                    <li>
+                        Handicap
+                        <Checkbox
+                        value="checkedHandicap"
+                        checked={this.state.checkedHandicap}
+                        onChange={this.handleChangeCheckBox('checkedHandicap')} />
+                    </li>
+                </ul>
             </div>
             <div>
             <input

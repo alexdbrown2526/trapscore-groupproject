@@ -44,7 +44,7 @@ router.get("/:id", (req, res) => {
 router.put("/:id", (req, res) => {
   pool.query(`UPDATE "shooter"
     SET "first_name" = $1, "last_name" = $2, "email" = $3, "phone" = $4, "handicap" = $5, "ata_number" = $6
-    WHERE "id" = $7;`, [req.body.first_name, req.body.last_name, req.body.email, req.body.handicap, req.body.ata_number, req.params.id]
+    WHERE "id" = $7;`, [req.body.first_name, req.body.last_name, req.body.email, req.body.phone, req.body.handicap, req.body.ata_number, req.params.id]
     )
     .then( () => res.sendStatus(200)
     )
