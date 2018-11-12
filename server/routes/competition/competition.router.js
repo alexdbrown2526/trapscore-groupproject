@@ -38,6 +38,17 @@ router.post('/', (req, res) => {
     })
 });
 
+// update an existing competition
+router.put('/', (req, res) => {
+  pool.query(`UPDATE "competition" SET "name" = $1, "location" = $2, "date"=$3
+              WHERE "id" = $4;`, [req.body.name, req.body.location, req.body.date, req.body.id])
+    .then(() => res.sendStatus(200))
+    .catch( error => {
+      console.log('Error updating competition:', error);
+      res.sendStatus(500);
+    })
+})
+
 /* sub-route uses */
 router.use('/shooter', shooterRouter);
 router.use('/event', eventRouter);
