@@ -9,9 +9,9 @@ const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
 
 // Route includes
+// ALL other routes are routed through competitionRouter. No need to add more here.
 const userRouter = require('./routes/user.router');
 const competitionRouter = require('./routes/competition/competition.router');
-const shooterRouter = require('./routes/competition/shooter.router')
 const smsRouter = require('./routes/sms.router');
 
 
