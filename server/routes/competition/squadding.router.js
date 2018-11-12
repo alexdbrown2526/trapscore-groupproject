@@ -65,8 +65,10 @@ router.get("/:event_id", async (req, res) => {
 });
 
 /**
- * POST route template
+ * POST to reassign squad members to individual squads
  */
-router.post("/", (req, res) => {});
+router.post("/:event_id", (req, res) => {
+
+});
 
 module.exports = router;
