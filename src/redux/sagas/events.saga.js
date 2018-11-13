@@ -5,7 +5,7 @@ const sagaName = 'eventsSaga'
 
 function* fetchEvents() {
   try {
-    const response = yield axios.get('api/competition/events');
+    const response = yield axios.get('api/competition/event');
 
     yield put({ type: 'SET_EVENTS', payload: response.data });
   } catch (error) {
