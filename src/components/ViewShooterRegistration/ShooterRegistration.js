@@ -28,18 +28,7 @@ class ShooterRegistration extends Component {
 
     registerShooter = (event) => {
         event.preventDefault();
-
-        const body = {
-            first_name: this.state.first_name,
-            last_name: this.state.last_name,
-            email: this.state.email,
-            phone: this.state.phone,
-            handicap: this.state.handicap,
-            ata_number: this.state.ata_number,
-            // checkedSingles: this.statecheckedSingles,
-            // checkedDoubles: this.state.checkedDoubles,
-            // checkedHandicap: this.state.checkedHandicap
-        }
+         const body = this.state;
 
         axios({
             method: 'POST',
@@ -52,9 +41,10 @@ class ShooterRegistration extends Component {
             email: '',
             phone: Number,
             handicap: Number,
-            ata_number: Number
-
-                
+            ata_number: Number,
+            checkedSingles: false,
+            checkedDoubles: false,
+            checkedHandicap: false
             })
                 
             
@@ -63,13 +53,14 @@ class ShooterRegistration extends Component {
 
     handleChangeFor = propertyName => (event) => {
         this.setState({
+            ...this.state,
            [propertyName]: event.target.value
         });
-
     }
 
     handleChangeCheckBox = propertyName => (event) => {
         this.setState({
+            ...this.state,
             [propertyName]: event.target.checked
         
         })
@@ -134,7 +125,7 @@ class ShooterRegistration extends Component {
                  <TextField
                 placeholder="ATA #"
                 type="number"
-                name="ataNumber"
+                name="ata_number"
                 value={this.state.ata_number}
                 onChange={this.handleChangeFor('ata_number')}
                 />
