@@ -7,7 +7,7 @@ class TrapSelection extends Component {
     value: "",
     // Conditional Rendering Variable
     isVisible: false,
-    trap: ''
+    trap: ""
   };
   // Get available Traps
   componentDidMount() {
@@ -20,17 +20,19 @@ class TrapSelection extends Component {
       [propertyName]: event.target.value
     });
   };
-// Conditional Rendering function
-// Dispatch action with payload of selected trap ID 
+  // Conditional Rendering function
+  // Dispatch action with payload of selected trap ID
   handleSubmit = event => {
-    this.props.dispatch({ type: "FETCH_SELECTED_TRAP", payload: this.state.trap}); 
+    this.props.dispatch({
+      type: "FETCH_SELECTED_TRAP",
+      payload: this.state.trap
+    });
     event.preventDefault();
     this.setState({
       ...this.state,
       isVisible: !this.state.isVisible,
-      trap: ''
+      trap: ""
     });
-    
   };
 
   render() {
@@ -42,11 +44,14 @@ class TrapSelection extends Component {
     return (
       <div>
         <h1>Trap Selection</h1>
+        {JSON.stringify(this.state.trap)}
         <form onSubmit={this.handleSubmit}>
           <label>
-            <select onChange={this.handleChangeFor('trap')}>
+            <select onChange={this.handleChangeFor("trap")}>
+              <option>Select Trap</option>
               {this.props.traps.map(trap => {
                 return (
+                  // value={trap id} gets the id of selected trap to be passed to the saga, saga triggers get call to return name and id.
                   <option key={trap.id} value={trap.id}>
                     {trap.name}
                   </option>
