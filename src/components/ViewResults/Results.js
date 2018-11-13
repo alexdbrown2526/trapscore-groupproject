@@ -220,3 +220,4 @@ class Results extends Component {
 const mapStateToProps = ({ reduxStore }) => ({ reduxStore });
 
 export default connect(mapStateToProps)(Results);
+
