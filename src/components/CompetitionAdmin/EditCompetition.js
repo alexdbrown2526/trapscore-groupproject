@@ -4,7 +4,26 @@ import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
-import SelectCompetition from "../CompetitionAdmin/SelectCompetition";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import classNames from 'classnames';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  dense: {
+    marginTop: 16,
+  },
+  menu: {
+    width: 200,
+  },
+});
 
 class EditCompetition extends Component {
   state = {
@@ -66,6 +85,7 @@ class EditCompetition extends Component {
     if (this.state.isVisible) {
       viewItem = this.props.history.push("/selectCompetition");
     }
+    const { classes } = this.props;
     return (
       <div>
         <h1>Edit Competition</h1>
@@ -115,9 +135,15 @@ class EditCompetition extends Component {
     );
   }
 }
+EditCompetition.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+const Edit = withStyles(styles)(EditCompetition);
 
 const mapStateToProps = reduxState => ({
   reduxState,
 });
 
-export default connect(mapStateToProps)(withRouter(EditCompetition));
+export default connect(mapStateToProps)(withRouter(Edit));
+

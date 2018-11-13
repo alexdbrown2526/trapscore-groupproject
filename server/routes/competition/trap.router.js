@@ -15,6 +15,17 @@ router.get('/', (req, res) => {
       });
 });
 
+// Gets id and name of selected trap into the redux state (selectedTrap reducer) for the scoring view so it can be accessed in the selectedTrap array.
+
+router.get('/:id', (req, res) => {
+  pool.query(`SELECT "id", "name" FROM "trap" WHERE "id" = $1;`, [req.params.id])
+    .then(results => res.send(results.rows[0]))
+    .catch(error => {
+      console.log('Error getting competition details:', error);
+      res.sendStatus(500);
+    })
+})
+
 /**
  * POST route template
  */

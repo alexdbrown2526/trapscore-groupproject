@@ -5,8 +5,25 @@ import { withStyles } from "@material-ui/core/styles";
 import { List, ListItem, ListItemText } from "@material-ui/core/";
 import axios from "axios";
 import EditCompetition from "../CompetitionAdmin/EditCompetition";
+import Modal from "@material-ui/core/Modal";
+import Button from "@material-ui/core/Button";
+import { withRouter } from "react-router-dom";
+function rand() {
+  return Math.round(Math.random() * 20) - 10;
+}
 
-const styles = {
+function getModalStyle() {
+  const top = 50 + rand();
+  const left = 50 + rand();
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`
+  };
+}
+
+const styles = theme => ({
   userDetail: {
     padding: 24,
     width: "100%"
@@ -17,15 +34,24 @@ const styles = {
   },
   list: {
     width: 240
+  },
+  paper: {
+    position: "absolute",
+    width: theme.spacing.unit * 100,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4
   }
-};
+});
 
 class SelectCompetition extends Component {
   state = {
     // Conditional Rendering Variables
     isVisible: false,
     isLogged: false,
-    // 
+    // Modal Variable
+    open: false,
+    //
     competitions: [],
     competitionToEdit: Number
   };
@@ -70,7 +96,8 @@ class SelectCompetition extends Component {
     this.setState({
       ...this.state,
       competitionToEdit: selectedCompetition,
-      isVisible: true
+      isVisible: true,
+      open: true
     });
   };
   // Conditional Rendering for Log out
@@ -82,6 +109,10 @@ class SelectCompetition extends Component {
     });
   };
 
+  handleClose = () => {
+    this.setState({ open: false });
+  };
+
   render() {
     const { classes } = this.props;
     //Conditional Rendering if statements/variables
@@ -89,10 +120,19 @@ class SelectCompetition extends Component {
     let viewItem;
     if (this.state.isVisible) {
       displayItem = (
-        <EditCompetition
-          edit={this.state.competitionToEdit}
-          data={this.refreshData}
-        />
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.open}
+          onClose={this.handleClose}
+        >
+          <div style={getModalStyle()} className={classes.paper}>
+            <EditCompetition
+              edit={this.state.competitionToEdit}
+              data={this.refreshData}
+            />
+          </div>
+        </Modal>
       );
     }
     if (this.state.isLogged) {
@@ -106,15 +146,15 @@ class SelectCompetition extends Component {
           {this.state.competitions.map(comp => {
             return (
               <ListItem key={comp.id} value={comp.id}>
-                <button onClick={() => this.editCompetition(comp)}>Edit</button>
+                <Button onClick={() => this.editCompetition(comp)}>Edit</Button>
                 {comp.name}
               </ListItem>
             );
           })}
         </List>
 
-        <button onClick={this.addNewCompetition}>Add Competition</button>
-        <button onClick={this.handleLogOut}>Log Out</button>
+        <Button onClick={this.addNewCompetition}>Add Competition</Button>
+        <Button onClick={this.handleLogOut}>Log Out</Button>
         {displayItem}
         {viewItem}
       </div>
@@ -131,4 +171,4 @@ const Comp = withStyles(styles)(SelectCompetition);
 const mapStateToProps = reduxState => ({
   reduxState
 });
-export default connect(mapStateToProps)(Comp);
+export default connect(mapStateToProps)(withRouter(Comp));
