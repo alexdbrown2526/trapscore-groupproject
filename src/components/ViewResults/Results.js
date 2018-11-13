@@ -2,12 +2,16 @@ import React, { Component } from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
+import { connect } from 'react-redux';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+import axios from 'axios';
 
 class Results extends Component {
   state = {
     page: 0,
     selectedEventId: 1,
-    resultsShouldPaginate: true
+    resultsShouldPaginate: true,
+    resultsData: {},
   };
 
   toggleNextEvent = () => {
@@ -54,7 +58,22 @@ class Results extends Component {
     }
   };
 
+  fetchResultsData = () => {
+    axios.get('/api/competition/results')
+      .then(response => {
+        console.log(response.data)
+        this.setState({
+          ...this.state,
+          resultsData: response.data
+        })
+      })
+      .catch(error => {
+        console.log('Error getting results:', error);
+      })
+  }
+
   componentDidMount() {
+    this.fetchResultsData();
   }
 
   render() {
@@ -173,7 +192,7 @@ class Results extends Component {
     return (
       <>
         <h1>Results</h1>
-        <label><input type="checkbox" onClick={this.togglePagination} />Scroll Results</label>
+        <label><input type="checkbox" onChange={this.togglePagination} />Scroll Results</label>
         {/* toggle button component */}
         <ToggleButtonGroup
           value={this.state.selectedEventId}
@@ -198,4 +217,6 @@ class Results extends Component {
   }
 }
 
-export default Results;
+const mapStateToProps = ({ reduxStore }) => ({ reduxStore });
+
+export default connect(mapStateToProps)(Results);
