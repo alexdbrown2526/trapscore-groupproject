@@ -7,31 +7,68 @@ class Results extends Component {
   state = {
     page: 0,
     selectedEventId: 1,
+    resultsShouldPaginate: true
   };
 
-  // paginateOnASchedule = () => {
-  //   this.setState({
-  //     page: this.state.page + 1,
-  //   })
-  // }
+  toggleNextEvent = () => {
+    this.setState({
+      ...this.state,
+      selectedEventId: this.state.selectedEventId + 1
+    });
+  };
 
-  handleToggle = (event, value) => {
-    console.log("In handleToggle. Event target:", event.target);
+  togglePagination = () => {
+    this.setState({
+      ...this.state,
+      resultsShouldPaginate: !this.state.resultsShouldPaginate
+    });
+    this.paginate();
+  };
 
+  // Toggles between event views every 10 seconds (doesn't restart at 1 after finishing)
+  scheduleEventToggle = () => {
+    if (this.state.selectedEventId < 3) {
+      this.toggleNextEvent();
+    } else {
+      this.setState({
+        ...this.state,
+        selectedEventId: 1
+      });
+    }
+  };
+
+  //sets event ID to local state from toggle buttons above table
+  selectEvent = (event, value) => {
     this.setState({ ...this.state, selectedEventId: value });
   };
+
+  isScrolling;
+
+  paginate = () => {
+    if (this.state.resultsShouldPaginate) {
+      //schedules toggling between events every 5 seconds
+      //TODO: write subroutine of paging through all event results before switching between events
+      this.isScrolling = setInterval(this.scheduleEventToggle, 2000);
+    } else {
+      clearInterval(this.isScrolling);
+    }
+  };
+
+  componentDidMount() {
+  }
 
   render() {
     const columns = [
       {
         Header: "Shooter Name",
-        accessor: "name"
+        accessor: "name",
+        maxWidth: 125
       },
-      {
-        Header: "Total Score",
-        accessor: "score", // Cell: render function to include score out of 100 shots //change later based on server response
-        Cell: row => <div>{row.value} / 100</div>
-      },
+      // {
+      //   Header: "Total Score",
+      //   accessor: "score", // Cell: render function to include score out of 100 shots //change later based on server response
+      //   Cell: row => <div>{row.value} / 100</div>
+      // },
       {
         Header: "Chart Score",
         accessor: "score",
@@ -69,71 +106,79 @@ class Results extends Component {
       {
         Header: "Placement",
         accessor: "placement",
+        maxWidth: "100",
         //Assumes that data object is sorted by 1st place to last place
         Cell: row => <div> {data.indexOf(row.original) + 1} </div>
       }
     ]; //change this after
 
-
     //TODO: get data from redux or API
     const dataStore = [
       {
-      id: 1,
-      name: 'singles',
-      results: [
-        {
-          id: 1,
-          name: "Luke Schlangen",
-          score: 78
-        },
-        {
-          id: 2,
-          name: "Tony Tiger",
-          score: 47
-        }
-      ]
-    }, {
-      id: 2,
-      name: 'doubles',
-      results: [
-        {
-          id: 1,
-          name: "Double Trouble",
-          score: 99
-        },
-        {
-          id: 2,
-          name: "Tony Tiger",
-          score: 32
-        }
-      ]}, {
-      id: 3,
-      name: 'handicap',
-      results: [
-        {
-          id: 1,
-          name: "Clark Kent",
-          score: 56
-        },
-        {
-          id: 2,
-          name: "Tony Tiger",
-          score: 22
-        }
-      ]}
+        id: 1,
+        name: "singles",
+        results: [
+          {
+            id: 1,
+            name: "Luke Schlangen",
+            score: 78
+          },
+          {
+            id: 2,
+            name: "Tony Tiger",
+            score: 47
+          }
+        ]
+      },
+      {
+        id: 2,
+        name: "doubles",
+        results: [
+          {
+            id: 1,
+            name: "Double Trouble",
+            score: 99
+          },
+          {
+            id: 2,
+            name: "Tony Tiger",
+            score: 32
+          }
+        ]
+      },
+      {
+        id: 3,
+        name: "handicap",
+        results: [
+          {
+            id: 1,
+            name: "Clark Kent",
+            score: 56
+          },
+          {
+            id: 2,
+            name: "Tony Tiger",
+            score: 22
+          }
+        ]
+      }
     ];
 
     //reassigns results data by event selected in local state (which is determined by the toggle button)
-    let data = dataStore[dataStore.findIndex(item => item.id === this.state.selectedEventId)].results;
+    let data =
+      dataStore[
+        dataStore.findIndex(item => item.id === this.state.selectedEventId)
+      ].results;
 
     return (
       <>
         <h1>Results</h1>
+        <label><input type="checkbox" onClick={this.togglePagination} />Scroll Results</label>
         {/* toggle button component */}
         <ToggleButtonGroup
           value={this.state.selectedEventId}
           exclusive
-          onChange={this.handleToggle}
+          onChange={this.selectEvent}
         >
           {/* TODO: map these from server/redux */}
           <ToggleButton value={1}>Singles</ToggleButton>
