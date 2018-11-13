@@ -41,7 +41,7 @@ router.get("/", (req, res) => {
                 JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id"
                   JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
                   JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
-                WHERE "event_id" = 1
+                WHERE "event_id" = $1
                 GROUP BY "event"."id", "shooter"."id"
                 ORDER BY "total_hits" DESC
                 ;

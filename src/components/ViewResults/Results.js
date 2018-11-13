@@ -2,18 +2,26 @@ import React, { Component } from "react";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
+import { Switch, FormControlLabel, Typography } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import axios from 'axios';
 
 class Results extends Component {
   state = {
+    //defaults table to first results page on render
     page: 0,
+    //defaults selected event to id of 1. TODO: this won't work if there is no event with id=1
     selectedEventId: 1,
-    resultsShouldPaginate: true,
-    resultsData: {},
+    resultsShouldPaginate: false,
+    //populates on componentDidMount
+    resultsData: [],
+    //boolean stops table from rendering before server response
+    finishedLoading: false,
   };
 
+  //increments selected event in local state
+  //TODO: loop through events array rather than incrementing in case event IDs are not sequential
   toggleNextEvent = () => {
     this.setState({
       ...this.state,
@@ -21,6 +29,7 @@ class Results extends Component {
     });
   };
 
+  //toggles pagination boolean in local state
   togglePagination = () => {
     this.setState({
       ...this.state,
@@ -30,6 +39,7 @@ class Results extends Component {
   };
 
   // Toggles between event views every 10 seconds (doesn't restart at 1 after finishing)
+  //TODO: the if statement assumes events are of id. Change to account for nonsequential IDs, maybe using array indices
   scheduleEventToggle = () => {
     if (this.state.selectedEventId < 3) {
       this.toggleNextEvent();
@@ -46,22 +56,24 @@ class Results extends Component {
     this.setState({ ...this.state, selectedEventId: value });
   };
 
-  isScrolling;
-
   paginate = () => {
-    if (this.state.resultsShouldPaginate) {
-      //schedules toggling between events every 5 seconds
+    if (!this.state.resultsShouldPaginate) {
+      //schedules toggling between events every 10 seconds
       //TODO: write subroutine of paging through all event results before switching between events
-      this.isScrolling = setInterval(this.scheduleEventToggle, 2000);
+      this.isScrolling = setInterval(this.scheduleEventToggle, 10000);
     } else {
       clearInterval(this.isScrolling);
     }
   };
 
+  //Pulls all score results from server and stores response in local state
   fetchResultsData = () => {
+    this.setState({
+      ...this.state,
+      finishedLoading: false,
+    })
     axios.get('/api/competition/results')
       .then(response => {
-        console.log(response.data)
         this.setState({
           ...this.state,
           resultsData: response.data
@@ -72,25 +84,36 @@ class Results extends Component {
       })
   }
 
-  componentDidMount() {
-    this.fetchResultsData();
+  async componentDidMount() {
+    //pulls list of events from redux to populate toggle buttons at top
+    await this.props.dispatch({ type: 'FETCH_EVENTS'})
+    await this.fetchResultsData();
+    console.log(this.props.events)
+    this.setState({
+      ...this.state,
+      finishedLoading: true,
+    })
   }
 
   render() {
     const columns = [
       {
+        Header: "Placement",
+        accessor: "placement",
+        maxWidth: "100",
+        //Assumes that data object is sorted by 1st place to last place
+        Cell: row => <div> {data.indexOf(row.original) + 1} </div>
+      } , {
         Header: "Shooter Name",
         accessor: "name",
-        maxWidth: 125
+        maxWidth: 125,
+        Cell: row => (
+          <div>{row.original.first_name + ' ' + row.original.last_name}</div>
+        )
       },
-      // {
-      //   Header: "Total Score",
-      //   accessor: "score", // Cell: render function to include score out of 100 shots //change later based on server response
-      //   Cell: row => <div>{row.value} / 100</div>
-      // },
       {
-        Header: "Chart Score",
-        accessor: "score",
+        Header: "Total Hits",
+        accessor: "total_hits",
         Cell: row => (
           <>
             <div
@@ -103,12 +126,12 @@ class Results extends Component {
             >
               <div
                 style={{
-                  width: `${row.value}%`,
+                  width: `${row.value/row.original.total_shots * 100}%`,
                   height: "100%",
                   backgroundColor:
-                    row.value > 66
+                    row.value/row.original.total_shots * 100 > 66
                       ? "#85cc00"
-                      : row.value > 33
+                      : row.value/row.original.total_shots * 100 > 33
                       ? "#ffbf00"
                       : "#ff2e00",
                   borderRadius: "2px",
@@ -116,108 +139,57 @@ class Results extends Component {
                   textAlign: "center"
                 }}
               >
-                {row.value} / 100
+                {row.value} / {row.original.total_shots}
               </div>
             </div>
           </>
         )
       },
-      {
-        Header: "Placement",
-        accessor: "placement",
-        maxWidth: "100",
-        //Assumes that data object is sorted by 1st place to last place
-        Cell: row => <div> {data.indexOf(row.original) + 1} </div>
-      }
-    ]; //change this after
+      
+    ]; 
 
-    //TODO: get data from redux or API
-    const dataStore = [
-      {
-        id: 1,
-        name: "singles",
-        results: [
-          {
-            id: 1,
-            name: "Luke Schlangen",
-            score: 78
-          },
-          {
-            id: 2,
-            name: "Tony Tiger",
-            score: 47
-          }
-        ]
-      },
-      {
-        id: 2,
-        name: "doubles",
-        results: [
-          {
-            id: 1,
-            name: "Double Trouble",
-            score: 99
-          },
-          {
-            id: 2,
-            name: "Tony Tiger",
-            score: 32
-          }
-        ]
-      },
-      {
-        id: 3,
-        name: "handicap",
-        results: [
-          {
-            id: 1,
-            name: "Clark Kent",
-            score: 56
-          },
-          {
-            id: 2,
-            name: "Tony Tiger",
-            score: 22
-          }
-        ]
-      }
-    ];
 
-    //reassigns results data by event selected in local state (which is determined by the toggle button)
-    let data =
-      dataStore[
-        dataStore.findIndex(item => item.id === this.state.selectedEventId)
-      ].results;
+    //reassigns results data by event selected in local state (which is determined by the toggle buttons)
+    let data = this.state.resultsData.length ?
+      this.state.resultsData[
+        this.state.resultsData.findIndex(item => item.id === this.state.selectedEventId)
+      ].results : [];
 
-    return (
+    return this.state.finishedLoading ? (
       <>
-        <h1>Results</h1>
-        <label><input type="checkbox" onChange={this.togglePagination} />Scroll Results</label>
-        {/* toggle button component */}
+        <Typography variant='h3'>Results</Typography>
+        <FormControlLabel
+          control={
+            <Switch onChange={this.togglePagination} />
+          }
+          label="Scroll Results"
+          />
         <ToggleButtonGroup
           value={this.state.selectedEventId}
           exclusive
           onChange={this.selectEvent}
         >
-          {/* TODO: map these from server/redux */}
-          <ToggleButton value={1}>Singles</ToggleButton>
-          <ToggleButton value={2}>Doubles</ToggleButton>
-          <ToggleButton value={3}>Handicap</ToggleButton>
+          {this.props.events.map((ev) => {
+            return (
+              <ToggleButton key={ev.id} value={ev.id}>{ev.name}</ToggleButton>
+            )
+          })}
         </ToggleButtonGroup>
-        {/* react-table component */}
         <ReactTable
           columns={columns}
           data={data}
+          pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
           pageSize={15}
           page={this.state.page}
           className="-striped -highlight"
+          onPageChange={(pageIndex) => this.setState({...this.state, page: pageIndex})}
         />
       </>
-    );
+    ) : <div>Loading...</div>;
   }
 }
 
-const mapStateToProps = ({ reduxStore }) => ({ reduxStore });
+const mapStateToProps = ({ events }) => ({ events });
 
 export default connect(mapStateToProps)(Results);
 
