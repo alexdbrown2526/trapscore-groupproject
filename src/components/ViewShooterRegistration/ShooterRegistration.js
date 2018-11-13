@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
 import axios from 'axios'
 import Checkbox from '@material-ui/core/Checkbox'
+import Card from '@material-ui/core/Card'
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import './ShooterRegistration.css'
 
 
 class ShooterRegistration extends Component {
@@ -31,7 +35,10 @@ class ShooterRegistration extends Component {
             email: this.state.email,
             phone: this.state.phone,
             handicap: this.state.handicap,
-            ata_number: this.state.ata_number
+            ata_number: this.state.ata_number,
+            // checkedSingles: this.statecheckedSingles,
+            // checkedDoubles: this.state.checkedDoubles,
+            // checkedHandicap: this.state.checkedHandicap
         }
 
         axios({
@@ -74,26 +81,31 @@ class ShooterRegistration extends Component {
     render(){
         return(
             <div>
+                <Card className="Register-Card">
+                    <center>
                 <form onSubmit={this.registerShooter}>
             <h1>Shooter Registration</h1>
             <div>
-               First Name: <input 
+                <TextField 
+               placeholder="First Name"
                type="text"
-               name="firstName"
+               name="first_name"
                value={this.state.first_name}
                onChange={this.handleChangeFor('first_name')} 
                />
                 </div>
             <div>
-                Last Name: <input
+                <TextField
+                placeholder="Last Name"
                 type="text"
-                name="lastName"
+                name="last_name"
                 value={this.state.last_name}
                 onChange={this.handleChangeFor('last_name')}
                 />
             </div>
             <div>
-                E-mail: <input
+                <TextField
+                placeholder="email"
                 type="text"
                 name="email"
                 value={this.state.email}
@@ -101,7 +113,8 @@ class ShooterRegistration extends Component {
                 />
             </div>
             <div>
-                Phone: <input
+                <TextField
+                placeholder="Phone Number"
                 type="number"
                 name="phone"
                 value={this.state.phone}
@@ -109,7 +122,8 @@ class ShooterRegistration extends Component {
                 />
             </div>
             <div>
-                Handicap (yds): <input
+                 <TextField
+                placeholder="Handicap (yds)"
                 type="number"
                 name="handicap"
                 value={this.state.handicap}
@@ -117,7 +131,8 @@ class ShooterRegistration extends Component {
                 />
             </div>
             <div>
-                ATA #: <input
+                 <TextField
+                placeholder="ATA #"
                 type="number"
                 name="ataNumber"
                 value={this.state.ata_number}
@@ -125,7 +140,7 @@ class ShooterRegistration extends Component {
                 />
             </div>
             <div>
-                <ul>
+                <ul className="Checkbox">
                     <li>
                         Singles
                         <Checkbox
@@ -143,6 +158,7 @@ class ShooterRegistration extends Component {
                     <li>
                         Handicap
                         <Checkbox
+                        
                         value="checkedHandicap"
                         checked={this.state.checkedHandicap}
                         onChange={this.handleChangeCheckBox('checkedHandicap')} />
@@ -150,16 +166,18 @@ class ShooterRegistration extends Component {
                 </ul>
             </div>
             <div>
-            <input
+            <Button
+            variant="contained"
+            color="primary"
               type="submit"
               name="submit"
               value="Register"
-            />
+            >Register</Button>
           </div>
             </form>
 
-
-
+</center>
+</Card>
             </div>
         )
     }
