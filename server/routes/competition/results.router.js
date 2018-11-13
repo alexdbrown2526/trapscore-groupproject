@@ -31,19 +31,20 @@ router.get("/", (req, res) => {
           pool
             .query(
               `
-              SELECT
-                "shooter"."first_name",
-                "shooter"."last_name",
-                SUM("score"."score") AS "total_hits",
-                COUNT("score") AS "total_shots",
-                json_agg("score") AS "raw_scores"
-              FROM "event"
-              JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id"
-                JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
-                JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
-              WHERE "event_id" = $1
-              GROUP BY "event"."id", "shooter"."id"
-              ;
+                SELECT
+                  "shooter"."first_name",
+                  "shooter"."last_name",
+                  SUM("score"."score") AS "total_hits",
+                  COUNT("score") AS "total_shots",
+                  json_agg("score") AS "raw_scores"
+                FROM "event"
+                JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id"
+                  JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
+                  JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
+                WHERE "event_id" = 1
+                GROUP BY "event"."id", "shooter"."id"
+                ORDER BY "total_hits" DESC
+                ;
             `,
               [currentEvent.id]
             )
