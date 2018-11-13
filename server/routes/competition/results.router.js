@@ -2,6 +2,8 @@ const express = require("express");
 const pool = require("../../modules/pool");
 const router = express.Router();
 
+const routerName = "results.router.js";
+
 /**
  * GET route template
  */
@@ -51,12 +53,28 @@ router.get("/", (req, res) => {
             .then(results => {
               currentEvent.results = results.rows;
             })
+            .catch(error => {
+              console.log("### Error in:", routerName);
+              console.log(
+                "### Error getting scores for event with id:",
+                currentEvent.id
+              );
+              console.log(error);
+            })
         );
       }
 
       Promise.all(promises).then(() => {
         res.send(toSend);
       });
+    })
+    .catch(error => {
+      console.log("### Error in:", routerName);
+      console.log(
+        "### Error getting events for competition with id:",
+        competition_id
+      );
+      console.log(error);
     });
 });
 
