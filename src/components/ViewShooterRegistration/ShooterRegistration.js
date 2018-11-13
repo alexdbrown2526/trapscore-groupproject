@@ -18,12 +18,32 @@ class ShooterRegistration extends Component {
             phone: Number,
             handicap: Number,
             ata_number: Number,
-            checkedSingles: false,
-            checkedDoubles: false,
-            checkedHandicap: false
+            eventsChecked: [],
+            competitionEvents:[]
             
 
         }
+    }
+
+    componentDidMount(){
+        axios({
+            method: 'GET',
+            url: `/api/competition/event`
+        }).then((response) => {
+            console.log(response);
+            
+            let competitionEvents;
+
+            if(response.data){
+                competitionEvents=response.data
+            }else {
+                competitionEvents=[];
+            }
+            this.setState({
+                competitionEvents: competitionEvents
+            })
+
+        })
     }
 
     registerShooter = (event) => {
@@ -63,6 +83,14 @@ class ShooterRegistration extends Component {
             ...this.state,
             [propertyName]: event.target.checked
         
+        })
+    }
+
+    checkEvent = (event) => {
+        let eventsChecked = this.state.eventsChecked;
+        eventsChecked = event.target.checked;
+        this.setState({
+            eventsChecked:eventsChecked
         })
     }
 
@@ -130,7 +158,16 @@ class ShooterRegistration extends Component {
                 onChange={this.handleChangeFor('ata_number')}
                 />
             </div>
-            <div>
+            {/* {JSON.stringify(this.state.competitionEvents)} */}
+            <div >
+                {this.state.competitionEvents.map((event) => {
+                    return(<ul className="Checkbox"
+                     key={event.id}>
+                    <li>{event.name}<Checkbox onChange={()=>this.checkEvent()}/></li>
+                    </ul>)
+                })}
+            </div>
+            {/* <div>
                 <ul className="Checkbox">
                     <li>
                         Singles
@@ -155,7 +192,7 @@ class ShooterRegistration extends Component {
                         onChange={this.handleChangeCheckBox('checkedHandicap')} />
                     </li>
                 </ul>
-            </div>
+            </div> */}
             <div>
             <Button
             variant="contained"
