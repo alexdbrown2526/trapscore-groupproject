@@ -15,20 +15,20 @@ class EditCompetition extends Component {
     defaultPassword: "",
     newPassword: "",
     // Conditional Rendering Variable
-    isVisible: false
+    isVisible: false,
     //
   };
 
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value
+      [propertyName]: event.target.value,
     });
   };
 
   handleChange = date => {
     this.setState({
-      date: date
+      date: date,
     });
   };
 
@@ -38,13 +38,13 @@ class EditCompetition extends Component {
       id: this.props.edit.id,
       date: this.state.date,
       name: this.state.name,
-      location: this.state.location
+      location: this.state.location,
     };
 
     axios({
       method: "PUT",
       url: `/api/competition`,
-      data: body
+      data: body,
     }).then(response => {
       console.log(response);
       this.setState({
@@ -53,7 +53,7 @@ class EditCompetition extends Component {
         date: "",
         name: "",
         location: "",
-        isVisible: false
+        isVisible: false,
       });
     });
     console.log(this.state.isVisible);
@@ -117,7 +117,7 @@ class EditCompetition extends Component {
 }
 
 const mapStateToProps = reduxState => ({
-  reduxState
+  reduxState,
 });
 
 export default connect(mapStateToProps)(withRouter(EditCompetition));

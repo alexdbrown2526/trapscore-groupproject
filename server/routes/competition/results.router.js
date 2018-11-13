@@ -2,6 +2,8 @@ const express = require("express");
 const pool = require("../../modules/pool");
 const router = express.Router();
 
+const routerName = "results.router.js";
+
 /**
  * GET route template
  */
@@ -41,7 +43,7 @@ router.get("/", (req, res) => {
                 JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id"
                   JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
                   JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
-                WHERE "event_id" = 1
+                WHERE "event_id" = $1
                 GROUP BY "event"."id", "shooter"."id"
                 ORDER BY "total_hits" DESC
                 ;
@@ -51,12 +53,28 @@ router.get("/", (req, res) => {
             .then(results => {
               currentEvent.results = results.rows;
             })
+            .catch(error => {
+              console.log("### Error in:", routerName);
+              console.log(
+                "### Error getting scores for event with id:",
+                currentEvent.id
+              );
+              console.log(error);
+            })
         );
       }
 
       Promise.all(promises).then(() => {
         res.send(toSend);
       });
+    })
+    .catch(error => {
+      console.log("### Error in:", routerName);
+      console.log(
+        "### Error getting events for competition with id:",
+        competition_id
+      );
+      console.log(error);
     });
 });
 
