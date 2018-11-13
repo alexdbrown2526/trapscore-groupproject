@@ -25,7 +25,7 @@ router.get('/', (req, res) => {
 // TODO: also get all event and squad information associated with the shooter
 router.get("/:id", (req, res) => {
   pool.query(
-      `SELECT "first_name", "last_name", "email", "phone", "handicap", "ata_number" 
+      `SELECT "id", "first_name", "last_name", "email", "phone", "handicap", "ata_number" 
       FROM "shooter"
       WHERE "id" = ${req.params.id};`
     )
