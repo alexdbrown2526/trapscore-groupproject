@@ -5,7 +5,7 @@ class ViewEditShooter extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        id: Number,
+        id: this.props.selectedShooter.id,
       first_name: "",
       last_name: "",
       email: "",
@@ -15,14 +15,24 @@ class ViewEditShooter extends Component {
     };
   }
 
-  updateUser = id => {
+
+  updateUser = () => {
     console.log("update button working");
     axios({
       method: "PUT",
       url: `/api/competition/shooter/${this.state.id}`,
       data: this.state
-    });
+    }).then((response) => {
+        console.log(response);
+        this.setState({
+        })
+        
+        
+    })
   };
+
+
+
 
   handleChangeFor = propertyName => event => {
     this.setState({
@@ -38,6 +48,7 @@ class ViewEditShooter extends Component {
       });
     }
   }
+
 
   render() {
     return (
