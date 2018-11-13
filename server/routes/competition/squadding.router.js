@@ -28,7 +28,7 @@ router.get("/:event_id", async (req, res) => {
     const getSquadDetails = pool.query(`SELECT json_agg(row_to_json(squ)) as squads
       FROM (
         SELECT sq."id", sq."name",
-        (SELECT json_agg(sh)
+        (SELECT COALESCE(json_agg(sh), '[]'::json)
         FROM (
           SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_squad"."post_position" FROM "shooter"
           JOIN "shooter_squad" ON "shooter"."id" = "shooter_squad"."shooter_id"
