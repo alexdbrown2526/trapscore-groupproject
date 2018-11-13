@@ -5,7 +5,7 @@ const sagaName = 'selectedTrapSaga'
 
 function* fetchSelectedTrap(action) {
   try {
-    const response = yield axios.get(`api/competition/scheduling${action.payload}`);
+    const response = yield axios.get(`api/competition/scheduling/${action.payload}`);
 
     yield put({ type: 'SET_SELECTED_TRAP', payload: response.data });
   } catch (error) {
