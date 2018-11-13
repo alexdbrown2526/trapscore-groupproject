@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 
 class TrapSelection extends Component {
   state = {
+    // Value for dropdown selection
     value: "",
-    isVisible: false
+    // Conditional Rendering Variable
+    isVisible: false,
+    trap: ''
   };
-
-  // TODO: Populate dropdown with DB traps, Map through tomorrow.
-
+  // Get available Traps
   componentDidMount() {
     this.props.dispatch({ type: "FETCH_TRAPS" });
   }
@@ -19,16 +20,21 @@ class TrapSelection extends Component {
       [propertyName]: event.target.value
     });
   };
-
+// Conditional Rendering function
+// Dispatch action with payload of selected trap ID 
   handleSubmit = event => {
+    this.props.dispatch({ type: "FETCH_SELECTED_TRAP", payload: this.state.trap}); 
     event.preventDefault();
     this.setState({
       ...this.state,
-      isVisible: !this.state.isVisible
+      isVisible: !this.state.isVisible,
+      trap: ''
     });
+    
   };
 
   render() {
+    // Conditonal Rendering if statement
     let displayItem;
     if (this.state.isVisible) {
       displayItem = this.props.history.push("/scoring");
@@ -38,7 +44,7 @@ class TrapSelection extends Component {
         <h1>Trap Selection</h1>
         <form onSubmit={this.handleSubmit}>
           <label>
-            <select onChange={this.handleChangeFor("propertyName")}>
+            <select onChange={this.handleChangeFor('trap')}>
               {this.props.traps.map(trap => {
                 return (
                   <option key={trap.id} value={trap.id}>
