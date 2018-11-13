@@ -36,7 +36,7 @@ class ShooterRegistration extends Component {
 
             if(response.data){
                 competitionEvents=response.data
-            }else {
+            } else {
                 competitionEvents=[];
             }
             this.setState({
@@ -50,6 +50,12 @@ class ShooterRegistration extends Component {
         event.preventDefault();
          const body = this.state;
 
+         if (this.state.handicap < 16) {
+             alert('You must choose a number between 16 and 27')
+         } else if (this.state.handicap > 27) {
+             alert('You must choose a number between 16 and 27')
+         }
+
         axios({
             method: 'POST',
             url: '/api/competition/shooter',
@@ -62,9 +68,7 @@ class ShooterRegistration extends Component {
             phone: Number,
             handicap: Number,
             ata_number: Number,
-            checkedSingles: false,
-            checkedDoubles: false,
-            checkedHandicap: false
+            
             })
                 
             
@@ -100,6 +104,7 @@ class ShooterRegistration extends Component {
     render(){
         return(
             <div>
+                
                 <Card className="Register-Card">
                     <center>
                 <form onSubmit={this.registerShooter}>
@@ -145,6 +150,8 @@ class ShooterRegistration extends Component {
                 placeholder="Handicap (yds)"
                 type="number"
                 name="handicap"
+                min="16"
+                max="27"
                 value={this.state.handicap}
                 onChange={this.handleChangeFor('handicap')}
                 />

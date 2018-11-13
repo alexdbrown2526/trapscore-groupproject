@@ -7,7 +7,8 @@ class CompetitionRoster extends Component {
     super(props);
     this.state = {
       shooters: [],
-      selectedShooter: {}
+      selectedShooter: {},
+      shooterFilter: ''
     }
     
   }
@@ -58,6 +59,13 @@ class CompetitionRoster extends Component {
     });
 
 }
+
+  handleFilterChange = (event) => {
+    this.setState({
+      shooterFilter: event.target.value
+    })
+    this.handleFilterChange(event.target.value)
+  }
     
   componentDidMount(){
     this.getShooters();
@@ -69,6 +77,10 @@ class CompetitionRoster extends Component {
     return (
 <div>
   <h2>Competition Roster</h2>
+  <div>
+    <input type="text" id="filter" placeholder="Search" value={this.state.shooterFilter}
+    onChange={this.handleFilterChange} />
+  </div>
   <table>
     <thead>
       <tr>
