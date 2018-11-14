@@ -102,6 +102,24 @@ class ShooterRegistration extends Component {
       method: "POST",
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
       data: body,
+    }).then(response => {
+        console.log('Registration successful!', response);
+        this.setState({
+            first_name: "",
+            last_name: "",
+            email: "",
+            phone: Number,
+            handicap: Number,
+            ata_number: Number,
+            //array of event IDs from checkboxes.
+            competition: {
+                events: [],
+            },
+        });
+        this.tryToGetCompetition();
+    }).catch( error => {
+        console.log('Error submitting registration:', error);
+        alert('Error submitting registration. Please try again');
     });
 
     // axios({
