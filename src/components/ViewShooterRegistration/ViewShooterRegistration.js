@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import axios from "axios";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import React, { Component } from 'react';
+import axios from 'axios';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-import { Button, Card, Checkbox, TextField } from "@material-ui/core/";
+import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
-import "./ShooterRegistration.css";
+import './ViewShooterRegistration.css';
 
 const styles = {
   registerCard: {
-    paddingBottom: "3%",
-    paddingTop: "3%",
-    position: "relative",
+    paddingBottom: '3%',
+    paddingTop: '3%',
+    position: 'relative',
     zIndex: 1,
-    display: "flex",
-    overflow: "hidden",
-    backfaceVisibility: "hidden",
-    flexDirection: "column",
-    margin: "0 auto",
+    display: 'flex',
+    overflow: 'hidden',
+    backfaceVisibility: 'hidden',
+    flexDirection: 'column',
+    margin: '0 auto',
     maxWidth: 260,
     border: 0,
     borderRadius: 2,
@@ -26,15 +26,15 @@ const styles = {
     //           0 2px 8px 0 fade(brown, 12%)",
   },
   Checkbox: {
-    listStyle: "none",
+    listStyle: 'none',
   },
 };
 
-class ShooterRegistration extends Component {
+class ViewShooterRegistration extends Component {
   state = {
-    first_name: "",
-    last_name: "",
-    email: "",
+    first_name: '',
+    last_name: '',
+    email: '',
     phone: Number,
     handicap: Number,
     ata_number: Number,
@@ -72,9 +72,9 @@ class ShooterRegistration extends Component {
       id: this.props.match.params.id,
       hash: this.props.match.params.hash,
     };
-    console.log("trying:", toTry);
+    console.log('trying:', toTry);
     axios({
-      method: "GET",
+      method: 'GET',
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
     }).then(response => {
       console.log(response.data);
@@ -91,36 +91,38 @@ class ShooterRegistration extends Component {
     };
 
     if (this.state.handicap < 16) {
-      alert("You must choose a number between 16 and 27");
+      alert('You must choose a number between 16 and 27');
       return false;
     } else if (this.state.handicap > 27) {
-      alert("You must choose a number between 16 and 27");
+      alert('You must choose a number between 16 and 27');
       return false;
     }
 
     axios({
-      method: "POST",
+      method: 'POST',
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
       data: body,
-    }).then(response => {
+    })
+      .then(response => {
         console.log('Registration successful!', response);
         this.setState({
-            first_name: "",
-            last_name: "",
-            email: "",
-            phone: Number,
-            handicap: Number,
-            ata_number: Number,
-            //array of event IDs from checkboxes.
-            competition: {
-                events: [],
-            },
+          first_name: '',
+          last_name: '',
+          email: '',
+          phone: Number,
+          handicap: Number,
+          ata_number: Number,
+          //array of event IDs from checkboxes.
+          competition: {
+            events: [],
+          },
         });
         this.tryToGetCompetition();
-    }).catch( error => {
+      })
+      .catch(error => {
         console.log('Error submitting registration:', error);
         alert('Error submitting registration. Please try again');
-    });
+      });
 
     // axios({
     //   method: "POST",
@@ -196,7 +198,7 @@ class ShooterRegistration extends Component {
                   type="text"
                   name="first_name"
                   value={this.state.first_name}
-                  onChange={this.handleChangeFor("first_name")}
+                  onChange={this.handleChangeFor('first_name')}
                 />
               </div>
               <div>
@@ -205,7 +207,7 @@ class ShooterRegistration extends Component {
                   type="text"
                   name="last_name"
                   value={this.state.last_name}
-                  onChange={this.handleChangeFor("last_name")}
+                  onChange={this.handleChangeFor('last_name')}
                 />
               </div>
               <div>
@@ -214,7 +216,7 @@ class ShooterRegistration extends Component {
                   type="text"
                   name="email"
                   value={this.state.email}
-                  onChange={this.handleChangeFor("email")}
+                  onChange={this.handleChangeFor('email')}
                 />
               </div>
               <div>
@@ -223,7 +225,7 @@ class ShooterRegistration extends Component {
                   type="number"
                   name="phone"
                   value={this.state.phone}
-                  onChange={this.handleChangeFor("phone")}
+                  onChange={this.handleChangeFor('phone')}
                 />
               </div>
               <div>
@@ -234,7 +236,7 @@ class ShooterRegistration extends Component {
                   min="16"
                   max="27"
                   value={this.state.handicap}
-                  onChange={this.handleChangeFor("handicap")}
+                  onChange={this.handleChangeFor('handicap')}
                 />
               </div>
               <div>
@@ -243,7 +245,7 @@ class ShooterRegistration extends Component {
                   type="number"
                   name="ata_number"
                   value={this.state.ata_number}
-                  onChange={this.handleChangeFor("ata_number")}
+                  onChange={this.handleChangeFor('ata_number')}
                 />
               </div>
               {/* {JSON.stringify(this.state.competitionEvents)} */}
@@ -307,8 +309,8 @@ class ShooterRegistration extends Component {
   }
 }
 
-ShooterRegistration.propTypes = {
+ViewShooterRegistration.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ShooterRegistration);
+export default withStyles(styles)(ViewShooterRegistration);
