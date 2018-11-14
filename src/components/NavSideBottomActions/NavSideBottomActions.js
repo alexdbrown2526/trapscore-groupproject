@@ -34,7 +34,7 @@ const NavSideBottomActions = props => {
         <ListItem
           button
           onClick={() => {
-            props.navigateTo(registrationRoute);
+            props.toRegistrationPage();
           }}
         >
           <ListItemText>Registration</ListItemText>
