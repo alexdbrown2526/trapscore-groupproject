@@ -54,25 +54,4 @@ router.put("/:id", (req, res) => {
     });
 })
 
-/**
- * POST a new shooter 
- */
-router.post('/', (req, res) => {
-  console.log('/api/competition/shooter POST:', req.body);
-    pool.query(`INSERT INTO "shooter" ("first_name", "last_name", "email", "phone", "handicap", "ata_number")
-    VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id";`, [req.body.first_name, req.body.last_name, req.body.email, req.body.phone, req.body.handicap, req.body.ata_number])
-      // TODO after we know how event data is coming in from client
-      // .then(results => {
-      //   pool.query(`INSERT INTO "shooter_event" ("event_id", "shooter_id")
-      //               VALUES ($1, $2)`)
-      // })
-      .then(() => res.sendStatus(200))
-      .catch(error => {
-        console.log('Error posting new shooter:', error);
-        res.sendStatus(500);
-      })
-});
-
-
-
 module.exports = router;
