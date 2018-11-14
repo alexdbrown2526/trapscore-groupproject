@@ -91,7 +91,7 @@ class App extends Component {
               <Route exact path={scoringRoute} component={Scoring} />
               <Route
                 path={"/registration/:id&:hash"}
-                component={UrlTestComponent}
+                component={ShooterRegistration}
               />
               {/* For protected routes, the view could show one of several things on the same route.
 
