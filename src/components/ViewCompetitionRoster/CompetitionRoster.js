@@ -8,7 +8,8 @@ class CompetitionRoster extends Component {
     this.state = {
       shooters: [],
       selectedShooter: {},
-      filteredArray: []
+      // filteredArray: [],
+      input: ''
     }
     
   }
@@ -27,6 +28,7 @@ class CompetitionRoster extends Component {
         shooters = []
       }
       this.setState({
+        
       shooters:shooters
       }) 
    })
@@ -60,9 +62,12 @@ class CompetitionRoster extends Component {
 
 }
 
-  handleFilterChange = (event) => {
-    
-  }
+ onFilterChange = (event) => {
+   console.log(event.target.value);
+    this.setState({
+      input: event.target.value
+   })
+ }
     
   componentDidMount(){
     this.getShooters();
@@ -70,18 +75,38 @@ class CompetitionRoster extends Component {
     
   }
 
-  render() {
 
+  render() {
+    const list = this.state.shooters.filter(shooter =>  this.state.input === '' || shooter.first_name.includes(this.state.input))
+        .map((shooter, index) => {
+          console.log(shooter);
+          return <li key={index}>{shooter.first_name} {shooter.last_name} {shooter.handicap}<button onClick={()=>{this.editShooter(shooter.id)}}>Edit</button></li>;
+        });
+
+    return (<div>
+      <input value={this.state.input} type="text" onChange={this.onFilterChange}/>
+        <ul>
+      {list}
+      </ul>
+      <ViewEditShooter selectedShooter={this.state.selectedShooter}
+   />
+      </div>)
+    
     
 
-    return (
-<div>
-  <h2>Competition Roster</h2>
-  <div>
-    <input type="text" id="filter" placeholder="Search" value={this.state.shooterFilter}
-    onChange={this.handleFilterChange} />
-  </div>
-  <table>
+    // return (
+      
+      
+  //  <div>
+     
+  // <h2>Competition Roster</h2>
+  // <div>
+  //   <input type="text" id="filter" placeholder="Search" value={this.state.input}
+  //   onChange={this.onFilterChange} />
+  // </div><div>
+  {/* <ul>{list}</ul> */}
+  {/* </div> */}
+  {/* <table>
     <thead>
       <tr>
         <th>First Name</th>
@@ -100,12 +125,12 @@ class CompetitionRoster extends Component {
         </tr>)
       })}
     </tbody>
-  </table>
+  </table> */}
   
-  <ViewEditShooter selectedShooter={this.state.selectedShooter}
-  />
-</div>    
-)
+  // <ViewEditShooter selectedShooter={this.state.selectedShooter}
+  // />
+// </div>    
+// )
   }
 }
 
