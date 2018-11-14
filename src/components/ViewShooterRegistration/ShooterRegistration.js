@@ -39,7 +39,6 @@ class ShooterRegistration extends Component {
     handicap: Number,
     ata_number: Number,
     //array of event IDs from checkboxes.
-    eventsList: [],
     competition: {
       events: [],
     },
