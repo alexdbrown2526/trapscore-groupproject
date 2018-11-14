@@ -14,13 +14,13 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Nav from '../Nav/Nav';
 import ViewAdminSelectCompetition from '../ViewAdminSelectCompetition/ViewAdminSelectCompetition';
 import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
-import CompetitionRoster from '../ViewCompetitionRoster/CompetitionRoster';
-import Results from '../ViewResults/Results';
-import Squadding from '../ViewSquadding/Squadding';
-import Scheduling from '../ViewScheduling/Scheduling';
+import ViewCompetitionRoster from '../ViewCompetitionRoster/ViewCompetitionRoster';
+import ViewResults from '../ViewResults/ViewResults';
+import ViewSquadding from '../ViewSquadding/ViewSquadding';
+import ViewScheduling from '../ViewScheduling/ViewScheduling';
 import Scoring from '../ViewScoring/Scoring';
 import TrapSelection from '../ViewTrapSelection/TrapSelection';
-import ShooterRegistration from '../ViewShooterRegistration/ShooterRegistration';
+import ViewShooterRegistration from '../ViewShooterRegistration/ViewShooterRegistration';
 
 import {
   selectCompetitionRoute,
@@ -81,18 +81,22 @@ class App extends Component {
               <ProtectedRoute
                 exact
                 path={rosterRoute}
-                component={CompetitionRoster}
+                component={ViewCompetitionRoster}
               />
-              <ProtectedRoute exact path={resultsRoute} component={Results} />
+              <ProtectedRoute
+                exact
+                path={resultsRoute}
+                component={ViewResults}
+              />
               <ProtectedRoute
                 exact
                 path={squaddingRoute}
-                component={Squadding}
+                component={ViewSquadding}
               />
               <ProtectedRoute
                 exact
                 path={schedulingRoute}
-                component={Scheduling}
+                component={ViewScheduling}
               />
               <ProtectedRoute
                 exact
@@ -102,7 +106,7 @@ class App extends Component {
               <ProtectedRoute exact path={scoringRoute} component={Scoring} />
               <Route
                 path={'/registration/:id&:hash'}
-                component={ShooterRegistration}
+                component={ViewShooterRegistration}
               />
               {/* For protected routes, the view could show one of several things on the same route.
 

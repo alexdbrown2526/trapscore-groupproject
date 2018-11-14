@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
-import './ShooterRegistration.css';
+import './ViewShooterRegistration.css';
 
 const styles = {
   registerCard: {
@@ -30,7 +30,7 @@ const styles = {
   },
 };
 
-class ShooterRegistration extends Component {
+class ViewShooterRegistration extends Component {
   state = {
     first_name: '',
     last_name: '',
@@ -309,8 +309,8 @@ class ShooterRegistration extends Component {
   }
 }
 
-ShooterRegistration.propTypes = {
+ViewShooterRegistration.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ShooterRegistration);
+export default withStyles(styles)(ViewShooterRegistration);

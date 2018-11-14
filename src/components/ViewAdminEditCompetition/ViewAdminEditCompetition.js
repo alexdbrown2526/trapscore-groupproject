@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
-import { compose } from 'redux';
 
+import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
   container: {
@@ -28,7 +29,7 @@ const styles = theme => ({
 
 class ViewAdminEditCompetition extends Component {
   state = {
-    id: this.props.edit.id,
+    // id: this.props.edit.id,
     date: '',
     name: '',
     location: '',
@@ -151,5 +152,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles
+  withStyles(styles)
 )(ViewAdminEditCompetition);

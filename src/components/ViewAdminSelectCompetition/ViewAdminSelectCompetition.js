@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem, ListItemText } from '@material-ui/core/';
 import axios from 'axios';
-import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
-import Modal from '@material-ui/core/Modal';
-import Button from '@material-ui/core/Button';
+
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-function rand() {
-  return Math.round(Math.random() * 20) - 10;
-}
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
-function getModalStyle() {
-  const top = 50 + rand();
-  const left = 50 + rand();
+import { Button, List, ListItem, Modal } from '@material-ui/core/';
 
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
 
 const styles = theme => ({
   userDetail: {
@@ -42,9 +30,14 @@ const styles = theme => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 4,
   },
+  modal: {
+    top: '50%',
+    left: '50%',
+    transform: `translate(-50%, -50%)`,
+  },
 });
 
-class SelectCompetition extends Component {
+class ViewAdminSelectCompetition extends Component {
   state = {
     // Conditional Rendering Variables
     isVisible: false,
@@ -103,10 +96,11 @@ class SelectCompetition extends Component {
   // Conditional Rendering for Log out
   handleLogOut = event => {
     event.preventDefault();
-    this.setState({
-      ...this.state,
-      isLogged: true,
-    });
+    this.props.dispatch({ type: 'LOGOUT' });
+    // this.setState({
+    //   ...this.state,
+    //   isLogged: true,
+    // });
   };
 
   handleClose = () => {
@@ -125,8 +119,9 @@ class SelectCompetition extends Component {
           aria-describedby="simple-modal-description"
           open={this.state.open}
           onClose={this.handleClose}
+          className={classes.modal}
         >
-          <div style={getModalStyle()} className={classes.paper}>
+          <div className={classes.paper}>
             <ViewAdminEditCompetition
               edit={this.state.competitionToEdit}
               data={this.refreshData}
@@ -162,13 +157,16 @@ class SelectCompetition extends Component {
   }
 }
 
-SelectCompetition.propTypes = {
+ViewAdminSelectCompetition.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-const Comp = withStyles(styles)(SelectCompetition);
 
 const mapStateToProps = reduxState => ({
   reduxState,
 });
-export default connect(mapStateToProps)(withRouter(Comp));
+
+export default compose(
+  connect(mapStateToProps),
+  withRouter,
+  withStyles(styles)
+)(ViewAdminSelectCompetition);
