@@ -19,7 +19,7 @@ router.get(`/:id&:hash`, (req, res) => {
       `
       SELECT
         "competition".*,
-        json_agg("event")
+        json_agg("event") as "events"
       FROM "competition"
       JOIN "event" ON "event"."competition_id" = "competition"."id"
       WHERE "competition"."id" = $1 AND "secret_url" = $2

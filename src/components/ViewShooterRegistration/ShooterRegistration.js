@@ -40,6 +40,9 @@ class ShooterRegistration extends Component {
     ata_number: Number,
     //array of event IDs from checkboxes.
     eventsList: [],
+    competition: {
+      events: [],
+    },
   };
 
   componentDidMount() {
@@ -83,6 +86,10 @@ class ShooterRegistration extends Component {
   registerShooter = event => {
     event.preventDefault();
     const body = this.state;
+    let toTry = {
+      id: this.props.match.params.id,
+      hash: this.props.match.params.hash,
+    };
 
     if (this.state.handicap < 16) {
       alert("You must choose a number between 16 and 27");
@@ -94,20 +101,26 @@ class ShooterRegistration extends Component {
 
     axios({
       method: "POST",
-      url: "/api/competition/shooter",
+      url: `/api/registration/${toTry.id}&${toTry.hash}`,
       data: body,
-    }).then(() => {
-      this.setState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: Number,
-        handicap: Number,
-        ata_number: Number,
-        //array of event IDs from checkboxes.
-        eventsList: [],
-      });
     });
+
+    // axios({
+    //   method: "POST",
+    //   url: "/api/competition/shooter",
+    //   data: body,
+    // }).then(() => {
+    //   this.setState({
+    //     first_name: "",
+    //     last_name: "",
+    //     email: "",
+    //     phone: Number,
+    //     handicap: Number,
+    //     ata_number: Number,
+    //     //array of event IDs from checkboxes.
+    //     eventsList: [],
+    //   });
+    // });
   };
 
   handleChangeFor = propertyName => event => {
@@ -120,20 +133,36 @@ class ShooterRegistration extends Component {
   handleChangeCheckBox = (event, checked) => {
     //event.target.value is the event ID
     //find the index in this.state.eventsList from the eventID
-    let indexOfCheckedItem = this.state.eventsList.findIndex(
+    let indexOfCheckedItem = this.state.competition.events.findIndex(
       item => item.id === parseInt(event.target.value)
     );
+
     this.setState({
       ...this.state,
-      eventsList: [
-        ...this.state.eventsList.slice(0, indexOfCheckedItem),
-        {
-          ...this.state.eventsList[indexOfCheckedItem],
-          checked: checked,
-        },
-        ...this.state.eventsList.slice(indexOfCheckedItem + 1),
-      ],
+      competition: {
+        ...this.state.competition,
+        events: [
+          ...this.state.competition.events.slice(0, indexOfCheckedItem),
+          {
+            ...this.state.competition.events[indexOfCheckedItem],
+            checked: checked,
+          },
+          ...this.state.competition.events.slice(indexOfCheckedItem + 1),
+        ],
+      },
     });
+
+    // this.setState({
+    //   ...this.state,
+    //   eventsList: [
+    //     ...this.state.eventsList.slice(0, indexOfCheckedItem),
+    //     {
+    //       ...this.state.eventsList[indexOfCheckedItem],
+    //       checked: checked,
+    //     },
+    //     ...this.state.eventsList.slice(indexOfCheckedItem + 1),
+    //   ],
+    // });
   };
 
   render() {
@@ -202,7 +231,7 @@ class ShooterRegistration extends Component {
               </div>
               {/* {JSON.stringify(this.state.competitionEvents)} */}
               <div>
-                {this.state.eventsList.map(ev => {
+                {this.state.competition.events.map(ev => {
                   return (
                     <ul className="Checkbox" key={ev.id}>
                       <li>
