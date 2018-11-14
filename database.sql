@@ -19,7 +19,8 @@ CREATE TABLE "competition" (
     "name" varchar(100) NOT NULL DEFAULT 'New Competition',
     "location" varchar(150) NOT NULL DEFAULT 'Anytown, USA',
     "date" DATE NOT NULL DEFAULT NOW() + INTERVAL '7 days',
-    "isActive" BOOLEAN NOT NULL DEFAULT 'true'
+    "isActive" BOOLEAN NOT NULL DEFAULT 'true',
+	"secret_url" varchar(255)
 );
 
 
@@ -94,12 +95,12 @@ CREATE TABLE "score" (
 );
 
 --Dummy data for competition
-INSERT INTO "competition" ("name","location","date")
+INSERT INTO "competition" ("name","location","date", "secret_url")
 VALUES
-	('Hawaiian Open','Honolulu, HI','12/12/2018'),
-	('New Years Shootout','Waterloo, IA', '12/31/2018'),
-	('Minneshootout','White Bear Lake, MN', '2/2/2019'),
-	('Illinois Speed Trap','Peoria, IL','3/12/2019')
+	('Hawaiian Open','Honolulu, HI','12/12/2018', 'hawaii'),
+	('New Years Shootout','Waterloo, IA', '12/31/2018', 'newYear'),
+	('Minneshootout','White Bear Lake, MN', '2/2/2019', 'shootOut'),
+	('Illinois Speed Trap','Peoria, IL','3/12/2019', 'speedTrap')
 ;
 
 --Dummy data for shooter
@@ -18138,4 +18139,3 @@ VALUES
 	(142,166,1),
 	(142,166,1)
 ;
-
