@@ -43,32 +43,6 @@ router.get(`/:id&:hash`, (req, res) => {
 
 /**
  * POST route to add shooter information to shooter table and event data to shooter_event table
- * req.body will (should) look like this:
- * {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: Number,
-      handicap: Number,
-      ata_number: Number,
-      competition: {
-        id: ''
-        date: '',
-        isActive: Boolean,
-        location: '',
-        secret_url: '',
-        name: '',
-        events: [
-          {
-          id: Number,
-          competition_id: Number,
-          name: '',
-          checked: Boolean
-          }, {}, ...
-        ],
-      }
-    };
- * 
  */
 router.post(`/:id&:hash`, (req, res) => {
   let toTry = {
@@ -80,7 +54,7 @@ router.post(`/:id&:hash`, (req, res) => {
   let newShooterId;
   const eventsFromClient = req.body.competition.events;
   let selectedEventData = [];
-
+  //pseudo-authenticates before posting data
   pool
     .query(
       `
