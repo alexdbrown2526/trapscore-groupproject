@@ -55,18 +55,18 @@ class ShooterRegistration extends Component {
       method: "POST",
       url: "/api/competition/shooter",
       data: body
-    }).then(response => {
-      console.log(response);
+    }).then(() => {
 
-      this.setState({
-        first_name: "",
-        last_name: "",
-        email: "",
-        phone: Number,
-        handicap: Number,
-        ata_number: Number,
-        eventsChecked: []
-      });
+        this.setState({
+            first_name: "",
+            last_name: "",
+            email: "",
+            phone: Number,
+            handicap: Number,
+            ata_number: Number,
+            //array of event IDs from checkboxes.
+            eventsList: [],
+        });
     });
   };
 
