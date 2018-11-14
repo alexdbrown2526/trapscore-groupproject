@@ -11,8 +11,7 @@ class Results extends Component {
   state = {
     //defaults table to first results page on render
     page: 0,
-    //defaults selected event to id of 1. TODO: this won't work if there is no event with id=1
-    selectedEventId: 1,
+    indexOfSelectedEvent: 0,
     resultsShouldPaginate: false,
     //populates on componentDidMount
     resultsData: [],
@@ -21,11 +20,10 @@ class Results extends Component {
   };
 
   //increments selected event in local state
-  //TODO: loop through events array rather than incrementing in case event IDs are not sequential
   toggleNextEvent = () => {
     this.setState({
       ...this.state,
-      selectedEventId: this.state.selectedEventId + 1
+      indexOfSelectedEvent: this.state.indexOfSelectedEvent + 1,
     });
   };
 
@@ -39,21 +37,22 @@ class Results extends Component {
   };
 
   // Toggles between event views every 10 seconds (doesn't restart at 1 after finishing)
-  //TODO: the if statement assumes events are of id. Change to account for nonsequential IDs, maybe using array indices
   scheduleEventToggle = () => {
-    if (this.state.selectedEventId < 3) {
+    if (this.state.indexOfSelectedEvent < this.props.events.length - 1) {
       this.toggleNextEvent();
     } else {
       this.setState({
         ...this.state,
-        selectedEventId: 1
+        indexOfSelectedEvent: 0,
       });
     }
   };
 
   //sets event ID to local state from toggle buttons above table
   selectEvent = (event, value) => {
-    this.setState({ ...this.state, selectedEventId: value });
+    this.setState({ 
+      ...this.state, 
+      indexOfSelectedEvent: this.state.resultsData.findIndex(item => item.id === value) });
   };
 
   paginate = () => {
@@ -89,7 +88,7 @@ class Results extends Component {
     await this.props.dispatch({ type: 'FETCH_EVENTS'})
     await this.fetchResultsData();
     console.log(this.props.events)
-    this.setState({
+    await this.setState({
       ...this.state,
       finishedLoading: true,
     })
@@ -106,7 +105,7 @@ class Results extends Component {
       } , {
         Header: "Shooter Name",
         accessor: "name",
-        maxWidth: 125,
+        maxWidth: '150',
         Cell: row => (
           <div>{row.original.first_name + ' ' + row.original.last_name}</div>
         )
@@ -151,9 +150,7 @@ class Results extends Component {
 
     //reassigns results data by event selected in local state (which is determined by the toggle buttons)
     let data = this.state.resultsData.length ?
-      this.state.resultsData[
-        this.state.resultsData.findIndex(item => item.id === this.state.selectedEventId)
-      ].results : [];
+        this.state.resultsData[this.state.indexOfSelectedEvent].results : [];
 
     return this.state.finishedLoading ? (
       <>
@@ -165,25 +162,33 @@ class Results extends Component {
           label="Scroll Results"
           />
         <ToggleButtonGroup
-          value={this.state.selectedEventId}
+          value={this.state.indexOfSelectedEvent}
           exclusive
           onChange={this.selectEvent}
         >
           {this.props.events.map((ev) => {
             return (
-              <ToggleButton key={ev.id} value={ev.id}>{ev.name}</ToggleButton>
+              <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>{ev.name}</ToggleButton>
             )
           })}
         </ToggleButtonGroup>
         <ReactTable
+          getProps={() => {
+            return {
+              style: {
+                fontFamily: 'Roboto, sans-serif',
+                textAlign: 'center',
+              }
+            }
+          }}
           columns={columns}
           data={data}
           pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-          pageSize={15}
+          defaultPageSize={15}
           page={this.state.page}
           className="-striped -highlight"
           onPageChange={(pageIndex) => this.setState({...this.state, page: pageIndex})}
-        />
+      />
       </>
     ) : <div>Loading...</div>;
   }
