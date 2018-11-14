@@ -17,8 +17,13 @@ router.get(`/:id&:hash`, (req, res) => {
   pool
     .query(
       `
-    SELECT * FROM "competition"
-    WHERE "id" = $1 AND "secret_url" = $2;
+      SELECT
+        "competition".*,
+        json_agg("event")
+      FROM "competition"
+      JOIN "event" ON "event"."competition_id" = "competition"."id"
+      WHERE "competition"."id" = $1 AND "secret_url" = $2
+      GROUP BY "competition"."id";
   `,
       [toTry.id, toTry.hash]
     )

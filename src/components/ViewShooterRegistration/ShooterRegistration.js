@@ -1,45 +1,84 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Checkbox from "@material-ui/core/Checkbox";
-import Card from "@material-ui/core/Card";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+
+import { Button, Card, Checkbox, TextField } from "@material-ui/core/";
+
 import "./ShooterRegistration.css";
-import { connect } from 'react-redux';
+
+const styles = {
+  registerCard: {
+    paddingBottom: "3%",
+    paddingTop: "3%",
+    position: "relative",
+    zIndex: 1,
+    display: "flex",
+    overflow: "hidden",
+    backfaceVisibility: "hidden",
+    flexDirection: "column",
+    margin: "0 auto",
+    maxWidth: 260,
+    border: 0,
+    borderRadius: 2,
+    // boxShadow: "0 3px 4px 0 fade(brown, 14%),
+    //           0 3px 3px -3px fade(rgb(59, 41, 41), 20%),
+    //           0 2px 8px 0 fade(brown, 12%)",
+  },
+  Checkbox: {
+    listStyle: "none",
+  },
+};
 
 class ShooterRegistration extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      first_name: "",
-      last_name: "",
-      email: "",
-      phone: Number,
-      handicap: Number,
-      ata_number: Number,
-      //array of event IDs from checkboxes.
-      eventsList: [],
-    };
-  }
+  state = {
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: Number,
+    handicap: Number,
+    ata_number: Number,
+    //array of event IDs from checkboxes.
+    eventsList: [],
+  };
 
   componentDidMount() {
+    this.tryToGetCompetition();
+    // axios({
+    //   method: "GET",
+    //   url: `/api/competition/event`,
+    // }).then(response => {
+    //   console.log(response);
+
+    //   let eventsList;
+
+    //   if (response.data) {
+    //     eventsList = response.data.map(event => ({
+    //       id: event.id,
+    //       name: event.name,
+    //       checked: false,
+    //     }));
+    //   } else {
+    //     eventsList = [];
+    //   }
+    //   this.setState({ ...this.state, eventsList: eventsList });
+    // });
+  }
+
+  tryToGetCompetition = () => {
+    let toTry = {
+      id: this.props.match.params.id,
+      hash: this.props.match.params.hash,
+    };
+    console.log("trying:", toTry);
     axios({
       method: "GET",
-      url: `/api/competition/event`
+      url: `/api/registration/${toTry.id}&${toTry.hash}`,
     }).then(response => {
-      console.log(response);
-
-      let eventsList;
-
-      if (response.data) {
-          eventsList = response.data.map(event => ({id: event.id, name: event.name, checked: false}));
-      } else {
-          eventsList = [];
-      }
-      this.setState({ ...this.state, eventsList: eventsList });
+      console.log(response.data);
+      this.setState({ competition: response.data });
     });
-  }
+  };
 
   registerShooter = event => {
     event.preventDefault();
@@ -47,57 +86,61 @@ class ShooterRegistration extends Component {
 
     if (this.state.handicap < 16) {
       alert("You must choose a number between 16 and 27");
+      return false;
     } else if (this.state.handicap > 27) {
       alert("You must choose a number between 16 and 27");
+      return false;
     }
 
     axios({
       method: "POST",
       url: "/api/competition/shooter",
-      data: body
+      data: body,
     }).then(() => {
-
-        this.setState({
-            first_name: "",
-            last_name: "",
-            email: "",
-            phone: Number,
-            handicap: Number,
-            ata_number: Number,
-            //array of event IDs from checkboxes.
-            eventsList: [],
-        });
+      this.setState({
+        first_name: "",
+        last_name: "",
+        email: "",
+        phone: Number,
+        handicap: Number,
+        ata_number: Number,
+        //array of event IDs from checkboxes.
+        eventsList: [],
+      });
     });
   };
 
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value
+      [propertyName]: event.target.value,
     });
   };
 
   handleChangeCheckBox = (event, checked) => {
     //event.target.value is the event ID
     //find the index in this.state.eventsList from the eventID
-    let indexOfCheckedItem = this.state.eventsList.findIndex(item => item.id === parseInt(event.target.value))
+    let indexOfCheckedItem = this.state.eventsList.findIndex(
+      item => item.id === parseInt(event.target.value)
+    );
     this.setState({
-        ...this.state,
-        eventsList: [
-            ...this.state.eventsList.slice(0, indexOfCheckedItem), 
-            {
-                ...this.state.eventsList[indexOfCheckedItem], 
-                checked: checked,
-            }, 
-            ...this.state.eventsList.slice(indexOfCheckedItem + 1)
-        ]
-    })
-  }
+      ...this.state,
+      eventsList: [
+        ...this.state.eventsList.slice(0, indexOfCheckedItem),
+        {
+          ...this.state.eventsList[indexOfCheckedItem],
+          checked: checked,
+        },
+        ...this.state.eventsList.slice(indexOfCheckedItem + 1),
+      ],
+    });
+  };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
-        <Card className="Register-Card">
+        <Card className={classes.registerCard}>
           <center>
             <form onSubmit={this.registerShooter}>
               <h1>Shooter Registration</h1>
@@ -218,4 +261,8 @@ class ShooterRegistration extends Component {
   }
 }
 
-export default (ShooterRegistration);
+ShooterRegistration.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(ShooterRegistration);
