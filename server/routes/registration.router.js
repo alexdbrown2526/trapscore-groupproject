@@ -37,7 +37,27 @@ router.get(`/:id&:hash`, (req, res) => {
 });
 
 /**
- * POST route template
+ * POST route to add shooter information to shooter table and event data to shooter_event table
+ * req.body will (should) look like this:
+ * {
+      first_name: "",
+      last_name: "",
+      email: "",
+      phone: Number,
+      handicap: Number,
+      ata_number: Number,
+      //array of event IDs from checkboxes.
+      eventsList: [
+        {
+        id: Number,
+        name: '',
+        checked: Boolean
+        }, {}, ...
+      ],
+    };
+
+    the query to insert into "shooter" returns the ID to associate events in shooter_event as the new results.rows[0]
+ * 
  */
 router.post(`/:id&:hash`, (req, res) => {
   let toTry = {
@@ -46,6 +66,8 @@ router.post(`/:id&:hash`, (req, res) => {
   };
   console.log("trying:", toTry);
   console.log("body:", req.body);
+  let newShooterId;
+  let selectedEventData = [];
 
   pool
     .query(
@@ -58,9 +80,37 @@ router.post(`/:id&:hash`, (req, res) => {
     .then(results => {
       if (results.rows.length > 0) {
         console.log("successfully verified.");
-        // insert code goes here
-        res.sendStatus(200);
-      } else {
+        console.log('/api/competition/:id$:hash POST:', req.body);
+        //posts new shooter data from registration form into "shooter" table and returns the newly created ID
+        pool.query(`INSERT INTO "shooter" ("first_name", "last_name", "email", "phone", "handicap", "ata_number")
+                    VALUES ($1, $2, $3, $4, $5, $6) RETURNING "id";`, 
+                    [req.body.first_name, req.body.last_name, req.body.email, req.body.phone, req.body.handicap, req.body.ata_number]
+          ).then(results => {
+            newShooterId = results.rows[0].id;
+            console.log(newShooterId);
+            req.body.eventsList.forEach((ev) => {
+              if (ev.checked) {
+              selectedEventData.push(`(ev.id, newShooterId)`);
+              }
+            })
+            console.log('data to send as values to "shooter_event"', selectedEventData);
+            pool.query(`INSERT INTO "shooter_event" ("event_id", "shooter_id")
+                       VALUES ${selectedEventData.join(',')};`)
+              .then(() => {
+                res.sendStatus(200);
+              })
+              .catch(error => {
+                console.log('Error inserting shooter event data:', error);
+                res.sendStatus(500);
+              })
+          }).catch(error => {
+            console.log('Error posting shooter data:', error);
+            res.sendStatus(500);
+          })
+          
+          
+
+        } else {
         res.sendStatus(403);
       }
     })
