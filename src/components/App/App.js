@@ -25,6 +25,7 @@ import Scheduling from "../ViewScheduling/Scheduling";
 import Scoring from "../ViewScoring/Scoring";
 import TrapSelection from "../ViewTrapSelection/TrapSelection";
 import ShooterRegistration from "../ViewShooterRegistration/ShooterRegistration";
+import UrlTestComponent from "../UrlTestComponent/UrlTestComponent";
 
 import {
   selectCompetitionRoute,
@@ -89,9 +90,8 @@ class App extends Component {
               <Route exact path={selectTrapRoute} component={TrapSelection} />
               <Route exact path={scoringRoute} component={Scoring} />
               <Route
-                exact
-                path={registrationRoute}
-                component={ShooterRegistration}
+                path={"/registration/:id&:hash"}
+                component={UrlTestComponent}
               />
               {/* For protected routes, the view could show one of several things on the same route.
 
