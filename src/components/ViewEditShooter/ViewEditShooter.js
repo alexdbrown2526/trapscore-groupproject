@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
+import './ViewEditShooter.css'
+import Card from '@material-ui/core/Card'
 
 class ViewEditShooter extends Component {
   constructor(props) {
@@ -53,8 +55,11 @@ class ViewEditShooter extends Component {
   render() {
     return (
       <div>
-        <form className="form">
+        <form className="Edit-Form">
+        <Card className="Edit-Card">
+          First Name:
           <input
+            
             className="textfield"
             type="text"
             name="searchText"
@@ -96,9 +101,11 @@ class ViewEditShooter extends Component {
             value={this.state.ata_number}
             onChange={this.handleChangeFor("ata_number")}
           />
+                <button onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</button>
+
+        </Card>
         </form>
-       
-        <button onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</button>
+      
       </div>
     );
   }
