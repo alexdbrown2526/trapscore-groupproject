@@ -8,7 +8,7 @@ class CompetitionRoster extends Component {
     this.state = {
       shooters: [],
       selectedShooter: {},
-      shooterFilter: ''
+      filteredArray: []
     }
     
   }
@@ -61,10 +61,7 @@ class CompetitionRoster extends Component {
 }
 
   handleFilterChange = (event) => {
-    this.setState({
-      shooterFilter: event.target.value
-    })
-    this.handleFilterChange(event.target.value)
+    
   }
     
   componentDidMount(){
@@ -74,6 +71,9 @@ class CompetitionRoster extends Component {
   }
 
   render() {
+
+    
+
     return (
 <div>
   <h2>Competition Roster</h2>

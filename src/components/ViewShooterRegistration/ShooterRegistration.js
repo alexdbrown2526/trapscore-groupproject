@@ -54,13 +54,15 @@ class ShooterRegistration extends Component {
              alert('You must choose a number between 16 and 27')
          } else if (this.state.handicap > 27) {
              alert('You must choose a number between 16 and 27')
-         }
+         };
 
         axios({
             method: 'POST',
             url: '/api/competition/shooter',
             data: body
         }).then((response) => {
+            console.log(response);
+            
             this.setState({
             first_name: '',
             last_name: '',
@@ -68,6 +70,7 @@ class ShooterRegistration extends Component {
             phone: Number,
             handicap: Number,
             ata_number: Number,
+            eventsChecked: []
             
             })
                 
@@ -90,13 +93,7 @@ class ShooterRegistration extends Component {
         })
     }
 
-    checkEvent = (event) => {
-        let eventsChecked = this.state.eventsChecked;
-        eventsChecked = event.target.checked;
-        this.setState({
-            eventsChecked:eventsChecked
-        })
-    }
+   
 
     
 
@@ -170,7 +167,7 @@ class ShooterRegistration extends Component {
                 {this.state.competitionEvents.map((event) => {
                     return(<ul className="Checkbox"
                      key={event.id}>
-                    <li>{event.name}<Checkbox onChange={()=>this.checkEvent()}/></li>
+                    <li>{event.name}<Checkbox onChange={()=>this.handleChangeCheckBox(event)}/></li>
                     </ul>)
                 })}
             </div>
