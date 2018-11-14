@@ -6,6 +6,7 @@ import { Switch, FormControlLabel, Typography } from "@material-ui/core";
 import { connect } from 'react-redux';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 import axios from 'axios';
+import ResultsDetail from '../ResultsDetail/ResultsDetail';
 
 class Results extends Component {
   state = {
@@ -52,7 +53,7 @@ class Results extends Component {
   selectEvent = (event, value) => {
     this.setState({ 
       ...this.state, 
-      indexOfSelectedEvent: this.state.resultsData.findIndex(item => item.id === value) });
+      indexOfSelectedEvent: value});
   };
 
   paginate = () => {
@@ -188,6 +189,11 @@ class Results extends Component {
           page={this.state.page}
           className="-striped -highlight"
           onPageChange={(pageIndex) => this.setState({...this.state, page: pageIndex})}
+          SubComponent={row => {
+            return (
+              <ResultsDetail row={row} />
+            )
+          }}
       />
       </>
     ) : <div>Loading...</div>;
