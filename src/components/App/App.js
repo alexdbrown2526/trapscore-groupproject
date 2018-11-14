@@ -73,22 +73,38 @@ class App extends Component {
               {/* Visiting localhost:3000 will redirect to localhost:3000/home */}
               <Redirect exact from="/" to="/home" />
               {/* TrapScore Routes */}
-              <Route
+              <ProtectedRoute
                 exact
                 path={selectCompetitionRoute}
                 component={SelectCompetition}
               />
-              <Route
+              <ProtectedRoute
                 exact
                 path={editCompetitionRoute}
                 component={EditCompetition}
               />
-              <Route exact path={rosterRoute} component={CompetitionRoster} />
-              <Route exact path={resultsRoute} component={Results} />
-              <Route exact path={squaddingRoute} component={Squadding} />
-              <Route exact path={schedulingRoute} component={Scheduling} />
-              <Route exact path={selectTrapRoute} component={TrapSelection} />
-              <Route exact path={scoringRoute} component={Scoring} />
+              <ProtectedRoute
+                exact
+                path={rosterRoute}
+                component={CompetitionRoster}
+              />
+              <ProtectedRoute exact path={resultsRoute} component={Results} />
+              <ProtectedRoute
+                exact
+                path={squaddingRoute}
+                component={Squadding}
+              />
+              <ProtectedRoute
+                exact
+                path={schedulingRoute}
+                component={Scheduling}
+              />
+              <ProtectedRoute
+                exact
+                path={selectTrapRoute}
+                component={TrapSelection}
+              />
+              <ProtectedRoute exact path={scoringRoute} component={Scoring} />
               <Route
                 path={"/registration/:id&:hash"}
                 component={ShooterRegistration}

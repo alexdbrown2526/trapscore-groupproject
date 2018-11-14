@@ -48,6 +48,16 @@ class Nav extends Component {
     this.props.dispatch({ type: "LOGOUT" });
   };
 
+  toRegistrationPage = () => {
+    this.setState({
+      sidenavOpen: false,
+    });
+    this.props.dispatch({
+      type: "GO_TO_REGISTRATION_PAGE",
+      payload: this.props.history,
+    });
+  };
+
   render() {
     return (
       <>
@@ -57,7 +67,7 @@ class Nav extends Component {
           <NavList navigateTo={this.navigateTo} />
           <NavSideBottomActions
             logout={this.logout}
-            navigateTo={this.navigateTo}
+            toRegistrationPage={this.toRegistrationPage}
           />
         </NavSide>
       </>

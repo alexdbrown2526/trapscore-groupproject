@@ -1,18 +1,20 @@
 import axios from "axios";
+import { push } from "connected-react-router";
 import { put, takeLatest } from "redux-saga/effects";
 
 const sagaName = "goToRegistrationPageSaga";
 
-function* goToRegistrationPage() {
+function* goToRegistrationPage(action) {
   try {
+    // on the Nav page, we passed props.history in as the payload, here we use it to navigate
     // get the secret url from the server
-
+    const response = yield axios.get("api/competition/secret/");
+    const secretUrl = response.data[0].secret_url;
+    const competitionId = response.data[0].id;
     // send a log out action
+    yield put({ type: "LOGOUT" });
     // navigate to the secret url
-
-    const response = yield axios.get("api/competition/event");
-
-    yield put({ type: "SET_EVENTS", payload: response.data });
+    action.payload.push(`/registration/${competitionId}&${secretUrl}`);
   } catch (error) {
     console.log("error in", sagaName, ":", error);
   }
