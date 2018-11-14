@@ -1,12 +1,14 @@
-import React, { Component } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import axios from "axios";
-import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import classNames from 'classnames';
+import React, { Component } from 'react';
+import axios from 'axios';
+
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const styles = theme => ({
   container: {
@@ -25,14 +27,14 @@ const styles = theme => ({
   },
 });
 
-class EditCompetition extends Component {
+class ViewAdminEditCompetition extends Component {
   state = {
-    id: this.props.edit.id,
-    date: "",
-    name: "",
-    location: "",
-    defaultPassword: "",
-    newPassword: "",
+    // id: this.props.edit.id,
+    date: '',
+    name: '',
+    location: '',
+    defaultPassword: '',
+    newPassword: '',
     // Conditional Rendering Variable
     isVisible: false,
     //
@@ -52,7 +54,7 @@ class EditCompetition extends Component {
   };
 
   handleSubmit = event => {
-    alert("Competition Submitted!");
+    alert('Competition Submitted!');
     const body = {
       id: this.props.edit.id,
       date: this.state.date,
@@ -61,17 +63,17 @@ class EditCompetition extends Component {
     };
 
     axios({
-      method: "PUT",
+      method: 'PUT',
       url: `/api/competition`,
       data: body,
     }).then(response => {
       console.log(response);
       this.setState({
         ...this.state,
-        id: "",
-        date: "",
-        name: "",
-        location: "",
+        id: '',
+        date: '',
+        name: '',
+        location: '',
         isVisible: false,
       });
     });
@@ -83,7 +85,7 @@ class EditCompetition extends Component {
     //Conditional Rendering if statement/variable
     let viewItem;
     if (this.state.isVisible) {
-      viewItem = this.props.history.push("/selectCompetition");
+      viewItem = this.props.history.push('/selectCompetition');
     }
     const { classes } = this.props;
     return (
@@ -105,12 +107,12 @@ class EditCompetition extends Component {
         <form>
           <input
             value={this.state.defaultPassword}
-            onChange={this.handleChangeFor("defaultPassword")}
+            onChange={this.handleChangeFor('defaultPassword')}
             placeholder="Default Password"
           />
           <input
             value={this.state.newPassword}
-            onChange={this.handleChangeFor("newPassword")}
+            onChange={this.handleChangeFor('newPassword')}
             placeholder="New Password"
           />
 
@@ -118,12 +120,12 @@ class EditCompetition extends Component {
 
           <input
             value={this.state.name}
-            onChange={this.handleChangeFor("name")}
+            onChange={this.handleChangeFor('name')}
             placeholder={this.props.edit.name}
           />
           <input
             value={this.state.location}
-            onChange={this.handleChangeFor("location")}
+            onChange={this.handleChangeFor('location')}
             placeholder={this.props.edit.location}
           />
         </form>
@@ -135,15 +137,20 @@ class EditCompetition extends Component {
     );
   }
 }
-EditCompetition.propTypes = {
+ViewAdminEditCompetition.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const Edit = withStyles(styles)(EditCompetition);
+// const ViewAdminEditCompetition = withStyles(styles)(ViewAdminEditCompetition);
 
 const mapStateToProps = reduxState => ({
   reduxState,
 });
 
-export default connect(mapStateToProps)(withRouter(Edit));
+// export default connect(mapStateToProps)(withRouter(Edit));
 
+export default compose(
+  connect(mapStateToProps),
+  withRouter,
+  withStyles(styles)
+)(ViewAdminEditCompetition);

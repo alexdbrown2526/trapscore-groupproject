@@ -1,9 +1,11 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+
 import {
   Avatar,
   Card,
@@ -15,47 +17,47 @@ import {
   ListItem,
   ListItemText,
   Typography,
-} from "@material-ui/core";
+} from '@material-ui/core';
 
-import SettingsIcon from "@material-ui/icons/Settings";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 const styles = theme => ({
   root: {
-    width: "100%",
+    width: '100%',
     // maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "start",
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'start',
   },
   leftSide: {
-    backgroundColor: "lightgray",
-    width: "20%",
+    backgroundColor: 'lightgray',
+    width: '20%',
     minWidth: 100,
-    height: "100vh",
-    overflowY: "scroll",
+    height: '100vh',
+    overflowY: 'scroll',
   },
   rightSide: {
-    width: "75%",
+    width: '75%',
     minWidth: 100,
-    height: "100vh",
-    overflowY: "scroll",
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "start",
+    height: '100vh',
+    overflowY: 'scroll',
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'start',
   },
   subheader: {
-    width: "100%",
+    width: '100%',
     paddingTop: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 1,
     paddingLeft: theme.spacing.unit * 3,
     paddingRight: theme.spacing.unit * 3,
   },
   avatar: {
-    color: "#fff",
+    color: '#fff',
     backgroundColor: theme.palette.primary.main,
   },
   card: {
@@ -64,17 +66,17 @@ const styles = theme => ({
   },
 });
 
-class Squadding extends Component {
+class ViewSquadding extends Component {
   state = {
     unsquadded: [],
     squads: [],
   };
 
   componentDidMount() {
-    console.log("ComponentDidMount");
+    console.log('ComponentDidMount');
     let event_id = 4;
     axios({
-      method: "GET",
+      method: 'GET',
       url: `/api/competition/squadding/${event_id}`,
     })
       .then(response => {
@@ -83,7 +85,7 @@ class Squadding extends Component {
       })
       .catch(error => {
         alert(
-          "Something went wrong getting the squadding data from the server."
+          'Something went wrong getting the squadding data from the server.'
         );
         console.log(error);
       });
@@ -107,7 +109,7 @@ class Squadding extends Component {
                       {shooter.handicap}
                     </Avatar>
                     <ListItemText
-                      primary={shooter.first_name + " " + shooter.last_name}
+                      primary={shooter.first_name + ' ' + shooter.last_name}
                       // secondary={"Handicap: " + shooter.handicap}
                     />
                   </ListItem>
@@ -140,7 +142,7 @@ class Squadding extends Component {
                             </Avatar>
                             <ListItemText
                               primary={
-                                shooter.first_name + " " + shooter.last_name
+                                shooter.first_name + ' ' + shooter.last_name
                               }
                               // secondary={"Handicap: " + shooter.handicap}
                             />
@@ -161,7 +163,7 @@ class Squadding extends Component {
   }
 }
 
-Squadding.propTypes = {
+ViewSquadding.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
@@ -169,4 +171,7 @@ const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default connect(mapStateToProps)(withStyles(styles)(Squadding));
+export default compose(
+  connect(mapStateToProps),
+  withStyles(styles)
+)(ViewSquadding);
