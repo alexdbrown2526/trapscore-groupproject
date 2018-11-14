@@ -1,13 +1,13 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import { List, ListItem, ListItemText } from "@material-ui/core/";
-import axios from "axios";
-import EditCompetition from "../CompetitionAdmin/EditCompetition";
-import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
-import { withRouter } from "react-router-dom";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { List, ListItem, ListItemText } from '@material-ui/core/';
+import axios from 'axios';
+import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
+import Modal from '@material-ui/core/Modal';
+import Button from '@material-ui/core/Button';
+import { withRouter } from 'react-router-dom';
 function rand() {
   return Math.round(Math.random() * 20) - 10;
 }
@@ -19,29 +19,29 @@ function getModalStyle() {
   return {
     top: `${top}%`,
     left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`
+    transform: `translate(-${top}%, -${left}%)`,
   };
 }
 
 const styles = theme => ({
   userDetail: {
     padding: 24,
-    width: "100%"
+    width: '100%',
   },
   contestDetail: {
     paddingLeft: 24,
-    width: "100%"
+    width: '100%',
   },
   list: {
-    width: 240
+    width: 240,
   },
   paper: {
-    position: "absolute",
+    position: 'absolute',
     width: theme.spacing.unit * 100,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4
-  }
+    padding: theme.spacing.unit * 4,
+  },
 });
 
 class SelectCompetition extends Component {
@@ -53,18 +53,18 @@ class SelectCompetition extends Component {
     open: false,
     //
     competitions: [],
-    competitionToEdit: Number
+    competitionToEdit: Number,
   };
 
   refreshData = () => {
     axios({
-      method: "GET",
-      url: "/api/competition"
+      method: 'GET',
+      url: '/api/competition',
     }).then(response => {
       this.setState({
         ...this.state,
         competitions: response.data,
-        isVisible: false
+        isVisible: false,
       });
     });
   };
@@ -76,7 +76,7 @@ class SelectCompetition extends Component {
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value
+      [propertyName]: event.target.value,
     });
   };
 
@@ -84,8 +84,8 @@ class SelectCompetition extends Component {
     event.preventDefault();
 
     axios({
-      method: "POST",
-      url: "/api/competition"
+      method: 'POST',
+      url: '/api/competition',
     }).then(response => {
       console.log(response.data[0]);
       this.editCompetition(response.data[0]);
@@ -97,7 +97,7 @@ class SelectCompetition extends Component {
       ...this.state,
       competitionToEdit: selectedCompetition,
       isVisible: true,
-      open: true
+      open: true,
     });
   };
   // Conditional Rendering for Log out
@@ -105,7 +105,7 @@ class SelectCompetition extends Component {
     event.preventDefault();
     this.setState({
       ...this.state,
-      isLogged: true
+      isLogged: true,
     });
   };
 
@@ -127,7 +127,7 @@ class SelectCompetition extends Component {
           onClose={this.handleClose}
         >
           <div style={getModalStyle()} className={classes.paper}>
-            <EditCompetition
+            <ViewAdminEditCompetition
               edit={this.state.competitionToEdit}
               data={this.refreshData}
             />
@@ -136,7 +136,7 @@ class SelectCompetition extends Component {
       );
     }
     if (this.state.isLogged) {
-      viewItem = this.props.history.push("/home");
+      viewItem = this.props.history.push('/home');
     }
     return (
       <div className={classes.list}>
@@ -163,12 +163,12 @@ class SelectCompetition extends Component {
 }
 
 SelectCompetition.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 const Comp = withStyles(styles)(SelectCompetition);
 
 const mapStateToProps = reduxState => ({
-  reduxState
+  reduxState,
 });
 export default connect(mapStateToProps)(withRouter(Comp));
