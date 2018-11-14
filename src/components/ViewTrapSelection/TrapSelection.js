@@ -51,7 +51,7 @@ class TrapSelection extends Component {
               <option>Select Trap</option>
               {this.props.traps.map(trap => {
                 return (
-                  // value={trap id} gets the id of selected trap to be passed to the saga, saga triggers get call to return name and id.
+                  // value={trap id} gets the id of selected trap to be passed to the saga, saga triggers axios get call to return name and id.
                   <option key={trap.id} value={trap.id}>
                     {trap.name}
                   </option>
