@@ -9,6 +9,7 @@ import {
 import { connect } from 'react-redux';
 
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 //TrapScore Routes
 import Nav from '../Nav/Nav';
@@ -54,7 +55,7 @@ const theme = createMuiTheme({
 
 class App extends Component {
   componentDidMount() {
-    this.props.dispatch({ type: 'FETCH_USER' });
+    this.props.dispatch({ type: LOGIN_ACTIONS.FETCH_USER });
   }
 
   render() {

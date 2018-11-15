@@ -10,6 +10,7 @@ import PropTypes from 'prop-types';
 import { Button, List, ListItem, Modal } from '@material-ui/core/';
 
 import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
+import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 const styles = theme => ({
   userDetail: {
@@ -96,7 +97,7 @@ class ViewAdminSelectCompetition extends Component {
   // Conditional Rendering for Log out
   handleLogOut = event => {
     event.preventDefault();
-    this.props.dispatch({ type: 'LOGOUT' });
+    this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT });
     // this.setState({
     //   ...this.state,
     //   isLogged: true,

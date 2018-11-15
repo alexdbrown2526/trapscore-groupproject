@@ -7,6 +7,8 @@ import NavSide from "../NavSide/NavSide";
 import NavSideHeader from "../NavSideHeader/NavSideHeader";
 import NavList from "../NavList/NavList";
 import NavSideBottomActions from "../NavSideBottomActions/NavSideBottomActions";
+import { LOGIN_ACTIONS } from "../../redux/actions/loginActions";
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 class Nav extends Component {
   state = {
@@ -45,7 +47,7 @@ class Nav extends Component {
     this.setState({
       sidenavOpen: false,
     });
-    this.props.dispatch({ type: "LOGOUT" });
+    this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT });
   };
 
   toRegistrationPage = () => {
@@ -53,7 +55,7 @@ class Nav extends Component {
       sidenavOpen: false,
     });
     this.props.dispatch({
-      type: "GO_TO_REGISTRATION_PAGE",
+      type: USER_ACTIONS.GO_TO_REGISTRATION_PAGE,
       payload: this.props.history,
     });
   };

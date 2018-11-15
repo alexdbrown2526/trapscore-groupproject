@@ -108,7 +108,7 @@ class ViewResults extends Component {
 
   async componentDidMount() {
     //pulls list of events from redux to populate toggle buttons at top
-    await this.props.dispatch({ type: "FETCH_EVENTS" });
+    await this.props.dispatch({ type: USER_ACTIONS.FETCH_EVENTS });
     await this.fetchResultsData();
     console.log(this.props.events);
     await this.setState({
