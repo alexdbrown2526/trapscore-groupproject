@@ -80,16 +80,8 @@ class CompetitionRoster extends Component {
   //Able to filter roster by search field. Select a user and edit their information
 
   render() {
-    // const list = this.state.shooters.filter(shooter => {
-    //   const fullName = `${shooter.first_name} + ' ' + ${shooter.last_name}` 
-    //   this.state.input === '' || fullName.includes(this.state.input)
-    //     .map((shooter, index) => {
-    //       return <li key={index}>{fullName} <button onClick={()=>{this.editShooter(shooter.id)}}>Edit</button></li>;
-    //     });
-    // })
-
-    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.first_name.includes(this.state.input))
-        .map((shooter, index) => <li key={index}>{shooter.first_name} {shooter.last_name}</li>);
+    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
+        .map((shooter, index) => <li key={index}>{shooter.first_name} {shooter.last_name} <button onClick={()=>{this.editShooter(shooter.id)}}>Edit</button></li>);
 
     return (<div>
       <input value={this.state.input} type="text" onChange={this.onFilterChange}/>
