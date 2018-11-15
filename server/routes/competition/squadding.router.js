@@ -35,13 +35,13 @@ router.get("/:event_id", async (req, res) => {
           JOIN "shooter_squad" ON "shooter"."id" = "shooter_squad"."shooter_id"
           JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
           JOIN "squad" ON "shooter_squad"."squad_id" = "squad"."id"
-          WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = ${
-            req.params.event_id
-          }
+          WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = ${req.params.event_id}
           ORDER BY "shooter_squad"."post_position"
         ) sh
       ) as members
-      FROM "squad" as sq) squ;`);
+      FROM "squad" as sq
+      WHERE sq."event_id" = ${req.params.event_id}) squ
+      ;`);
 
     //assemble contents of dataToSend from postgres responses
     const unsquaddedResults = await getUnsquadded;
