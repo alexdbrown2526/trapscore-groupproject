@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
+import { scoringRoute } from '../../navigationRoutes';
 
 class TrapSelection extends Component {
   state = {
@@ -40,7 +41,7 @@ class TrapSelection extends Component {
     // Conditonal Rendering if statement
     let displayItem;
     if (this.state.isVisible) {
-      displayItem = this.props.history.push("/scoring");
+      displayItem = this.props.history.push(scoringRoute);
     }
     return (
       <div>

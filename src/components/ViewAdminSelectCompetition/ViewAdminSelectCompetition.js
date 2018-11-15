@@ -12,6 +12,8 @@ import { Button, List, ListItem, Modal } from '@material-ui/core/';
 import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
+import { homeRoute } from '../../navigationRoutes';
+
 const styles = theme => ({
   userDetail: {
     padding: 24,
@@ -132,7 +134,7 @@ class ViewAdminSelectCompetition extends Component {
       );
     }
     if (this.state.isLogged) {
-      viewItem = this.props.history.push('/home');
+      viewItem = this.props.history.push(homeRoute);
     }
     return (
       <div className={classes.list}>
