@@ -9,6 +9,7 @@ import PropTypes from 'prop-types';
 
 import {
   Avatar,
+  Button,
   Card,
   CardContent,
   CardHeader,
@@ -49,6 +50,7 @@ const styles = theme => ({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'start',
+    alignItems: 'start',
   },
   subheader: {
     width: '100%',
@@ -311,9 +313,9 @@ class ViewSquadding extends Component {
               </List>
             </div>
             <div className={classes.rightSide}>
-              <Typography variant="h4" className={classes.subheader}>
+              {/* <Typography variant="h4" className={classes.subheader}>
                 Squads
-              </Typography>
+              </Typography> */}
               {this.state.squads.map((squad, index) => {
                 return (
                   <Card className={classes.card}>
@@ -371,32 +373,11 @@ class ViewSquadding extends Component {
                           </div>
                         )}
                       </Droppable>
-
-                      {/*
-  // <List>
-  //   {squad.members.map((shooter, index) => {
-  //     return (
-  //       <ListItem key={shooter.id} button>
-  //         <Avatar className={classes.avatar}>
-  //           {shooter.handicap}
-  //         </Avatar>
-  //         <ListItemText
-  //           primary={
-  //             shooter.first_name + ' ' + shooter.last_name
-  //           }
-  //           // secondary={"Handicap: " + shooter.handicap}
-  //         />
-  //       </ListItem>
-  //     );
-  //   })}
-  // </List>
-
-*/}
                     </CardContent>
                   </Card>
                 );
               })}
-              <pre>{JSON.stringify(this.state, null, 2)}</pre>
+              {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
               {/* <pre>{JSON.stringify(this.props, null, 2)}</pre> */}
             </div>
           </DragDropContext>
