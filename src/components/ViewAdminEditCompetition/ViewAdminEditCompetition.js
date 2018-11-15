@@ -7,6 +7,8 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
+import { selectCompetitionRoute } from '../../navigationRoutes';
+
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -54,6 +56,7 @@ class ViewAdminEditCompetition extends Component {
   };
 
   handleSubmit = event => {
+    event.preventDefault();
     alert('Competition Submitted!');
     const body = {
       id: this.props.edit.id,
@@ -85,7 +88,7 @@ class ViewAdminEditCompetition extends Component {
     //Conditional Rendering if statement/variable
     let viewItem;
     if (this.state.isVisible) {
-      viewItem = this.props.history.push('/selectCompetition');
+      viewItem = this.props.history.push(selectCompetitionRoute);
     }
     const { classes } = this.props;
     return (
