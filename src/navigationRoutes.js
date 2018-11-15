@@ -7,3 +7,4 @@ export const selectTrapRoute = "/select-trap";
 export const scoringRoute = "/scoring";
 export const registrationRoute = "/registration";
 export const resultsRoute = "/results";
+export const homeRoute = "/home";
