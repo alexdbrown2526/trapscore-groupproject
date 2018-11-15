@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 class RegisterPage extends Component {
   state = {
@@ -12,14 +13,14 @@ class RegisterPage extends Component {
 
     if (this.state.username && this.state.password) {
       this.props.dispatch({
-        type: 'REGISTER',
+        type: LOGIN_ACTIONS.REGISTER,
         payload: {
           username: this.state.username,
           password: this.state.password,
         },
       });
     } else {
-      this.props.dispatch({type: 'REGISTRATION_INPUT_ERROR'});
+      this.props.dispatch({type: LOGIN_ACTIONS.REGISTRATION_INPUT_ERROR});
     }
   } // end registerUser
 
@@ -77,7 +78,7 @@ class RegisterPage extends Component {
           <button
             type="button"
             className="link-button"
-            onClick={() => {this.props.dispatch({type: 'SET_TO_LOGIN_MODE'})}}
+            onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_LOGIN_MODE})}}
           >
             Login
           </button>

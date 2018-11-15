@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 class TrapSelection extends Component {
   state = {
@@ -11,7 +12,7 @@ class TrapSelection extends Component {
   };
   // Get available Traps
   componentDidMount() {
-    this.props.dispatch({ type: "FETCH_TRAPS" });
+    this.props.dispatch({ type: USER_ACTIONS.FETCH_TRAPS });
   }
 
   handleChangeFor = propertyName => event => {
@@ -24,7 +25,7 @@ class TrapSelection extends Component {
   // Dispatch action with payload of selected trap ID
   handleSubmit = event => {
     this.props.dispatch({
-      type: "FETCH_SELECTED_TRAP",
+      type: USER_ACTIONS.FETCH_SELECTED_TRAP,
       payload: this.state.trap
     });
     event.preventDefault();
