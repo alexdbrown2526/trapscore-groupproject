@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 import { compose } from 'redux';
 import { connect } from 'react-redux';
@@ -66,10 +67,46 @@ const styles = theme => ({
   },
 });
 
+// --------------------------------------------
+// Functions
+// --------------------------------------------
+
+const reorder = (list, startIndex, endIndex) => {
+  const result = Array.from(list);
+  const [removed] = result.splice(startIndex, 1);
+  result.splice(endIndex, 0, removed);
+
+  return result;
+};
+
+const move = (source, destination, droppableSource, droppableDestination) => {
+  const sourceClone = Array.from(source);
+  const destClone = Array.from(destination);
+  const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+  destClone.splice(droppableDestination.index, 0, removed);
+
+  const result = {};
+
+  result.source = sourceClone;
+  result.destination = destClone;
+
+  return result;
+};
+
+// --------------------------------------------
+// Component
+// --------------------------------------------
+
 class ViewSquadding extends Component {
   state = {
     unsquadded: [],
-    squads: [],
+    squads: [
+      {
+        id: 0,
+        members: [],
+      },
+    ],
   };
 
   componentDidMount() {
@@ -91,72 +128,278 @@ class ViewSquadding extends Component {
       });
   }
 
+  getList = id => {
+    if (id === 'unsquadded') {
+      return this.state.unsquadded;
+    } else {
+      return this.state.squads[Number(id)].members;
+    }
+  };
+
+  onDragEnd = result => {
+    const { source, destination } = result;
+
+    console.log('source:', source);
+    console.log('destination:', destination);
+
+    // dropped outside the list
+    if (!destination) {
+      return;
+    }
+
+    if (destination.droppableId != 'unsquadded') {
+      // if destination is already full
+      if (
+        this.state.squads[Number(destination.droppableId)].members.length > 4
+      ) {
+        return;
+      }
+    }
+
+    // dropped on the same table
+    if (source.droppableId === destination.droppableId) {
+      const newItems = reorder(
+        this.getList(source.droppableId),
+        source.index,
+        destination.index
+      );
+
+      if (source.droppableId === 'unsquadded') {
+        this.setState({
+          unsquadded: newItems,
+        });
+      } else {
+        this.setState({
+          squads: [
+            ...this.state.squads.slice(0, Number(source.droppableId)),
+            {
+              ...this.state.squads[source.droppableId],
+              members: newItems,
+            },
+            ...this.state.squads.slice(Number(source.droppableId) + 1),
+          ],
+        });
+      }
+    } else {
+      // if they are two different lists
+      const result = move(
+        this.getList(source.droppableId),
+        this.getList(destination.droppableId),
+        source,
+        destination
+      );
+
+      console.log(result);
+
+      if (source.droppableId === 'unsquadded') {
+        this.setState({
+          unsquadded: result.source,
+        });
+      } else {
+        this.setState({
+          squads: [
+            ...this.state.squads.slice(0, Number(source.droppableId)),
+            {
+              ...this.state.squads[source.droppableId],
+              members: result.source,
+            },
+            ...this.state.squads.slice(Number(source.droppableId) + 1),
+          ],
+        });
+      }
+      if (destination.droppableId === 'unsquadded') {
+        this.setState({
+          unsquadded: result.destination,
+        });
+      } else {
+        this.setState({
+          squads: [
+            ...this.state.squads.slice(0, Number(destination.droppableId)),
+            {
+              ...this.state.squads[destination.droppableId],
+              members: result.destination,
+            },
+            ...this.state.squads.slice(Number(destination.droppableId) + 1),
+          ],
+        });
+      }
+    }
+  };
+
+  addSquad = () => {
+    let toAdd = {
+      id: this.state.squads.length,
+      name: 'squad' + this.state.squads.length,
+      members: [],
+    };
+    let newSquads = [...this.state.squads, toAdd];
+
+    this.setState({ squads: newSquads });
+  };
+
   render() {
     const { classes } = this.props;
     return (
       <>
         <div className={classes.root}>
-          <div className={classes.leftSide}>
-            <Typography variant="h4" className={classes.subheader}>
-              Unsquadded
-            </Typography>
-            <Divider />
-            <List>
-              {this.state.unsquadded.map((shooter, index) => {
-                return (
-                  <ListItem key={shooter.id} button>
-                    <Avatar className={classes.avatar}>
-                      {shooter.handicap}
-                    </Avatar>
-                    <ListItemText
-                      primary={shooter.first_name + ' ' + shooter.last_name}
-                      // secondary={"Handicap: " + shooter.handicap}
-                    />
-                  </ListItem>
-                );
-              })}
-            </List>
-          </div>
-          <div className={classes.rightSide}>
-            <Typography variant="h4" className={classes.subheader}>
-              Squads
-            </Typography>
-            {this.state.squads.map((squad, index) => {
-              return (
-                <Card className={classes.card}>
-                  <CardHeader
-                    action={
-                      <IconButton>
-                        <SettingsIcon />
-                      </IconButton>
-                    }
-                    title={squad.name}
-                  />
-                  <CardContent>
-                    <List>
+          <DragDropContext onDragEnd={this.onDragEnd}>
+            <div className={classes.leftSide}>
+              <Typography variant="h4" className={classes.subheader}>
+                Unsquadded
+              </Typography>
+              <Divider />
+              <List>
+                <Droppable droppableId="unsquadded">
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      // style={getListStyle(snapshot.isDraggingOver)}
+                    >
                       {this.state.unsquadded.map((shooter, index) => {
                         return (
-                          <ListItem key={shooter.id} button>
-                            <Avatar className={classes.avatar}>
-                              {shooter.handicap}
-                            </Avatar>
-                            <ListItemText
-                              primary={
-                                shooter.first_name + ' ' + shooter.last_name
-                              }
-                              // secondary={"Handicap: " + shooter.handicap}
-                            />
-                          </ListItem>
+                          <Draggable
+                            key={shooter.id}
+                            draggableId={shooter.id}
+                            index={index}
+                          >
+                            {(provided, snapshot) => (
+                              <div
+                                ref={provided.innerRef}
+                                {...provided.draggableProps}
+                                {...provided.dragHandleProps}
+                                // style={getItemStyle(
+                                //   snapshot.isDragging,
+                                //   provided.draggableProps.style
+                                // )}
+                              >
+                                <ListItem key={shooter.id} button>
+                                  <Avatar className={classes.avatar}>
+                                    {shooter.handicap}
+                                  </Avatar>
+                                  <ListItemText
+                                    primary={
+                                      shooter.first_name +
+                                      ' ' +
+                                      shooter.last_name
+                                    }
+                                    // secondary={"Handicap: " + shooter.handicap}
+                                  />
+                                </ListItem>
+                              </div>
+                            )}
+                          </Draggable>
                         );
+
+                        // return (
+                        //   <ListItem key={shooter.id} button>
+                        //     <Avatar className={classes.avatar}>
+                        //       {shooter.handicap}
+                        //     </Avatar>
+                        //     <ListItemText
+                        //       primary={
+                        //         shooter.first_name + ' ' + shooter.last_name
+                        //       }
+                        //       // secondary={"Handicap: " + shooter.handicap}
+                        //     />
+                        //   </ListItem>
+                        // );
                       })}
-                    </List>
-                  </CardContent>
-                </Card>
-              );
-            })}
-            <pre>{JSON.stringify(this.state, null, 2)}</pre>
-            {/* <pre>{JSON.stringify(this.props, null, 2)}</pre> */}
-          </div>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </List>
+            </div>
+            <div className={classes.rightSide}>
+              <Typography variant="h4" className={classes.subheader}>
+                Squads
+              </Typography>
+              {this.state.squads.map((squad, index) => {
+                return (
+                  <Card className={classes.card}>
+                    <CardHeader
+                      action={
+                        <IconButton>
+                          <SettingsIcon />
+                        </IconButton>
+                      }
+                      title={squad.name}
+                    />
+                    <CardContent>
+                      <Droppable droppableId={index.toString()}>
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            // style={getListStyle(snapshot.isDraggingOver)}
+                          >
+                            <List>
+                              {squad.members.map((shooter, index) => (
+                                <Draggable
+                                  key={shooter.id}
+                                  draggableId={shooter.id}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => (
+                                    <div
+                                      ref={provided.innerRef}
+                                      {...provided.draggableProps}
+                                      {...provided.dragHandleProps}
+                                      // style={getItemStyle(
+                                      //   snapshot.isDragging,
+                                      //   provided.draggableProps.style
+                                      // )}
+                                    >
+                                      <ListItem button>
+                                        <Avatar className={classes.avatar}>
+                                          {shooter.handicap}
+                                        </Avatar>
+                                        <ListItemText
+                                          primary={
+                                            shooter.first_name +
+                                            ' ' +
+                                            shooter.last_name
+                                          }
+                                          // secondary={"Handicap: " + shooter.handicap}
+                                        />
+                                      </ListItem>
+                                    </div>
+                                  )}
+                                </Draggable>
+                              ))}
+                            </List>
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+
+                      {/*
+  // <List>
+  //   {squad.members.map((shooter, index) => {
+  //     return (
+  //       <ListItem key={shooter.id} button>
+  //         <Avatar className={classes.avatar}>
+  //           {shooter.handicap}
+  //         </Avatar>
+  //         <ListItemText
+  //           primary={
+  //             shooter.first_name + ' ' + shooter.last_name
+  //           }
+  //           // secondary={"Handicap: " + shooter.handicap}
+  //         />
+  //       </ListItem>
+  //     );
+  //   })}
+  // </List>
+
+*/}
+                    </CardContent>
+                  </Card>
+                );
+              })}
+              <pre>{JSON.stringify(this.state, null, 2)}</pre>
+              {/* <pre>{JSON.stringify(this.props, null, 2)}</pre> */}
+            </div>
+          </DragDropContext>
         </div>
       </>
     );
