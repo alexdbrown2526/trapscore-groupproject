@@ -1,8 +1,10 @@
+import { LOGIN_ACTIONS } from "../../actions/loginActions";
+
 const userReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'SET_USER':
+    case LOGIN_ACTIONS.SET_USER:
       return action.payload;
-    case 'UNSET_USER':
+    case  LOGIN_ACTIONS.UNSET_USER:
       return {};
     default:
       return state;
