@@ -1,6 +1,8 @@
+import { USER_ACTIONS } from "../actions/userActions";
+
 const selectedTrapReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'SET_SELECTED_TRAP':
+    case USER_ACTIONS.SET_SELECTED_TRAP:
       return action.payload;
     default:
       return state;
