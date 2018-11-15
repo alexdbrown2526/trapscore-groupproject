@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
+import { USER_ACTIONS } from '../actions/userActions';
 
 const sagaName = 'goToRegistrationPageSaga';
 
@@ -11,7 +12,7 @@ function* goToRegistrationPage(action) {
     const secretUrl = response.data[0].secret_url;
     const competitionId = response.data[0].id;
     // send a log out action
-    yield put({ type: 'LOGOUT' });
+    yield put({ type: USER_ACTIONS.LOGOUT });
     // navigate to the secret url
     action.payload.push(`/registration/${competitionId}&${secretUrl}`);
   } catch (error) {
@@ -20,7 +21,7 @@ function* goToRegistrationPage(action) {
 }
 
 function* goToRegistrationPageSaga() {
-  yield takeLatest('GO_TO_REGISTRATION_PAGE', goToRegistrationPage);
+  yield takeLatest(USER_ACTIONS.GO_TO_REGISTRATION_PAGE, goToRegistrationPage);
 }
 
 export default goToRegistrationPageSaga;
