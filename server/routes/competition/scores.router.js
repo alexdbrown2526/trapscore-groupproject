@@ -58,14 +58,14 @@ router.get("/", async (req, res, next) => {
   try {
     //query trap * by id
     pool
-      .query(`SELECT * FROM "trap" WHERE "id" = $1;`, [req.body.id])
+      .query(`SELECT * FROM "trap" WHERE "id" = $1;`, [req.query.id])
       .then(results => selectedTrap = results.rows[0])
       .catch(error => next(error));
     //query squad_trap by trap id and assigns the row with lowest value of place_in_line to response object
     await pool
       .query(
         `SELECT * FROM "squad_trap" WHERE "trap_id" = $1 ORDER BY "place_in_line" ASC;`,
-        [req.body.id]
+        [req.query.id]
       )
       .then(results => {
         //stores squad id for use by next query to get shooter list

@@ -6,8 +6,7 @@ const sagaName = 'selectedTrapSaga'
 
 function* fetchSelectedTrap(action) {
   try {
-    const response = yield axios.get(`api/competition/trap/${action.payload}`);
-
+    const response = yield axios.get(`api/competition/scores/`, { params: {id: action.payload}});
     yield put({ type: USER_ACTIONS.SET_SELECTED_TRAP, payload: response.data });
   } catch (error) {
     console.log('error in', sagaName, ':', error);
