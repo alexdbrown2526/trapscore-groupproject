@@ -19,20 +19,22 @@ router.get('/', (req, res) => {
     );
     promises.push(
       pool.query(`SELECT json_agg(row_to_json(tra)) as traps
-      FROM (
-        SELECT tr."id", tr."name", tr."competition_id",
-        (SELECT COALESCE(json_agg(sq_tr), '[]'::json)
-        FROM (
-          SELECT "squad_trap"."id", "squad_trap"."squad_id", "squad_trap"."box_number", "squad_trap"."place_in_line", "squad"."name" FROM "squad_trap"
-          JOIN "squad" ON "squad"."id" = "squad_trap"."squad_id"
-          JOIN "trap" ON "trap"."id" = "squad_trap"."trap_id"
-          WHERE "squad_trap"."trap_id" = tr."id"
-          AND "squad_trap"."place_in_line" IS NOT NULL
-          ORDER BY "squad_trap"."place_in_line"
-        ) sq_tr
-      ) as schedule
-      FROM "trap" as tr) tra
-      WHERE tra."competition_id" = ${req.user.competition_id};`)
+                              FROM (
+                                SELECT tr."id", tr."name",
+                                (SELECT COALESCE(json_agg(sq_tr), '[]'::json)
+                                FROM (
+                                  SELECT "squad_trap"."id", "squad_trap"."squad_id", "squad_trap"."box_number", "squad_trap"."place_in_line", "squad"."name" FROM "squad_trap"
+                                  JOIN "squad" ON "squad"."id" = "squad_trap"."squad_id"
+                                  JOIN "trap" ON "trap"."id" = "squad_trap"."trap_id"
+                                  WHERE "squad_trap"."trap_id" = tr."id"
+                                  AND "squad_trap"."place_in_line" IS NOT NULL
+                                  ORDER BY "squad_trap"."place_in_line"
+                                ) sq_tr
+                              ) as schedule
+                              FROM "trap" as tr) tra
+                              WHERE tra."competition_id" = ${
+                                req.user.competition_id
+                              };`)
     );
   } catch (error) {
     console.log(error);
