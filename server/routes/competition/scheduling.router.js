@@ -31,8 +31,8 @@ router.get('/', (req, res) => {
           ORDER BY "squad_trap"."place_in_line"
         ) sq_tr
       ) as schedule
-      FROM "trap" as tr) as "tra"
-      WHERE "tra"."competition_id" = ${req.user.competition_id};`)
+      FROM "trap" as tr) tra
+      WHERE tra."competition_id" = ${req.user.competition_id};`)
     );
   } catch (error) {
     console.log(error);
