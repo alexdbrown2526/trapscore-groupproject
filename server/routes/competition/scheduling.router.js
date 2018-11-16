@@ -28,13 +28,11 @@ router.get('/', (req, res) => {
                                   JOIN "trap" ON "trap"."id" = "squad_trap"."trap_id"
                                   WHERE "squad_trap"."trap_id" = tr."id"
                                   AND "squad_trap"."place_in_line" IS NOT NULL
-                                  AND tr."competition_id" = ${
-                                    req.user.competition_id
-                                  }
                                   ORDER BY "squad_trap"."place_in_line"
                                 ) sq_tr
                               ) as schedule
-                              FROM "trap" as tr) tra;`)
+                              FROM "trap" as tr) tra
+                              WHERE tra."competition_id" = ${req.user.competition_id};`)
     );
   } catch (error) {
     console.log(error);
