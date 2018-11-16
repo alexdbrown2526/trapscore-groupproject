@@ -83,7 +83,8 @@ CREATE TABLE "squad_trap" (
   "squad_id" integer NOT NULL REFERENCES "squad"("id"),
   "trap_id" integer NOT NULL REFERENCES "trap"("id"),
   "box_number" integer,
-  "place_in_line" integer
+  "place_in_line" integer,
+	"current_rotation" integer,
 );
 
 
