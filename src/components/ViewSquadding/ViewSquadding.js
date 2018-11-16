@@ -1,108 +1,22 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-
-import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { DragDropContext } from 'react-beautiful-dnd';
 
-import {
-  Avatar,
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  Typography,
-} from '@material-ui/core';
+import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import SettingsIcon from '@material-ui/icons/Settings';
+import { Divider, Typography } from '@material-ui/core';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    // maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-    flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'start',
-  },
-  leftSide: {
-    backgroundColor: 'lightgray',
-    width: '20%',
-    minWidth: 100,
-    height: '100vh',
-    overflowY: 'scroll',
-  },
-  rightSide: {
-    width: '75%',
-    minWidth: 100,
-    height: '100vh',
-    overflowY: 'scroll',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'start',
-    alignItems: 'start',
-  },
-  subheader: {
-    width: '100%',
-    paddingTop: theme.spacing.unit * 3,
-    paddingBottom: theme.spacing.unit * 1,
-    paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-  },
-  avatar: {
-    color: '#fff',
-    backgroundColor: theme.palette.primary.main,
-  },
-  card: {
-    margin: theme.spacing.unit * 3,
-    width: 300,
-  },
-});
-
-// --------------------------------------------
-// Functions
-// --------------------------------------------
-
-const reorder = (list, startIndex, endIndex) => {
-  const result = Array.from(list);
-  const [removed] = result.splice(startIndex, 1);
-  result.splice(endIndex, 0, removed);
-
-  return result;
-};
-
-const move = (source, destination, droppableSource, droppableDestination) => {
-  const sourceClone = Array.from(source);
-  const destClone = Array.from(destination);
-  const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-  destClone.splice(droppableDestination.index, 0, removed);
-
-  const result = {};
-
-  result.source = sourceClone;
-  result.destination = destClone;
-
-  return result;
-};
-
-// --------------------------------------------
-// Component
-// --------------------------------------------
+import HeaderMargins from '../HeaderMargins/HeaderMargins';
+import DndPage from '../DndPage/DndPage';
+import DndLeftSide from '../DndLeftSide/DndLeftSide';
+import DndRightSide from '../DndRightSide/DndRightSide';
+import DndCard from '../DndCard/DndCard';
+import DndList from '../DndList/DndList';
 
 class ViewSquadding extends Component {
   state = {
-    unsquadded: [],
+    unassigned: [],
     squads: [
       {
         id: 0,
@@ -112,14 +26,16 @@ class ViewSquadding extends Component {
   };
 
   componentDidMount() {
-    console.log('ComponentDidMount');
+    this.refreshList();
+  }
+
+  refreshList = () => {
     let event_id = 4;
     axios({
       method: 'GET',
       url: `/api/competition/squadding/${event_id}`,
     })
       .then(response => {
-        console.log(response);
         this.setState({ ...response.data });
       })
       .catch(error => {
@@ -128,11 +44,11 @@ class ViewSquadding extends Component {
         );
         console.log(error);
       });
-  }
+  };
 
   getList = id => {
-    if (id === 'unsquadded') {
-      return this.state.unsquadded;
+    if (id === 'unassigned') {
+      return this.state.unassigned;
     } else {
       return this.state.squads[Number(id)].members;
     }
@@ -149,7 +65,7 @@ class ViewSquadding extends Component {
       return;
     }
 
-    if (destination.droppableId != 'unsquadded') {
+    if (destination.droppableId != 'unassigned') {
       // if destination is already full
       if (
         this.state.squads[Number(destination.droppableId)].members.length > 4
@@ -166,9 +82,9 @@ class ViewSquadding extends Component {
         destination.index
       );
 
-      if (source.droppableId === 'unsquadded') {
+      if (source.droppableId === 'unassigned') {
         this.setState({
-          unsquadded: newItems,
+          unassigned: newItems,
         });
       } else {
         this.setState({
@@ -193,9 +109,9 @@ class ViewSquadding extends Component {
 
       console.log(result);
 
-      if (source.droppableId === 'unsquadded') {
+      if (source.droppableId === 'unassigned') {
         this.setState({
-          unsquadded: result.source,
+          unassigned: result.source,
         });
       } else {
         this.setState({
@@ -209,9 +125,9 @@ class ViewSquadding extends Component {
           ],
         });
       }
-      if (destination.droppableId === 'unsquadded') {
+      if (destination.droppableId === 'unassigned') {
         this.setState({
-          unsquadded: result.destination,
+          unassigned: result.destination,
         });
       } else {
         this.setState({
@@ -240,162 +156,52 @@ class ViewSquadding extends Component {
   };
 
   render() {
-    const { classes } = this.props;
     return (
       <>
-        <div className={classes.root}>
+        <DndPage>
           <DragDropContext onDragEnd={this.onDragEnd}>
-            <div className={classes.leftSide}>
-              <Typography variant="h4" className={classes.subheader}>
-                Unsquadded
-              </Typography>
+            <DndLeftSide>
+              <HeaderMargins>
+                <Typography variant="h4">Unsquadded</Typography>
+              </HeaderMargins>
               <Divider />
-              <List>
-                <Droppable droppableId="unsquadded">
-                  {(provided, snapshot) => (
-                    <div
-                      ref={provided.innerRef}
-                      // style={getListStyle(snapshot.isDraggingOver)}
-                    >
-                      {this.state.unsquadded.map((shooter, index) => {
-                        return (
-                          <Draggable
-                            key={shooter.id}
-                            draggableId={shooter.id}
-                            index={index}
-                          >
-                            {(provided, snapshot) => (
-                              <div
-                                ref={provided.innerRef}
-                                {...provided.draggableProps}
-                                {...provided.dragHandleProps}
-                                // style={getItemStyle(
-                                //   snapshot.isDragging,
-                                //   provided.draggableProps.style
-                                // )}
-                              >
-                                <ListItem key={shooter.id} button>
-                                  <Avatar className={classes.avatar}>
-                                    {shooter.handicap}
-                                  </Avatar>
-                                  <ListItemText
-                                    primary={
-                                      shooter.first_name +
-                                      ' ' +
-                                      shooter.last_name
-                                    }
-                                    // secondary={"Handicap: " + shooter.handicap}
-                                  />
-                                </ListItem>
-                              </div>
-                            )}
-                          </Draggable>
-                        );
-
-                        // return (
-                        //   <ListItem key={shooter.id} button>
-                        //     <Avatar className={classes.avatar}>
-                        //       {shooter.handicap}
-                        //     </Avatar>
-                        //     <ListItemText
-                        //       primary={
-                        //         shooter.first_name + ' ' + shooter.last_name
-                        //       }
-                        //       // secondary={"Handicap: " + shooter.handicap}
-                        //     />
-                        //   </ListItem>
-                        // );
-                      })}
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </List>
-            </div>
-            <div className={classes.rightSide}>
+              <DndList
+                droppableId="unassigned"
+                data={this.state.unassigned.map(item => {
+                  item.mainText = item.first_name + ' ' + item.last_name;
+                  item.avatar = item.handicap;
+                  return item;
+                })}
+              />
+            </DndLeftSide>
+            <DndRightSide>
               {/* <Typography variant="h4" className={classes.subheader}>
                 Squads
               </Typography> */}
               {this.state.squads.map((squad, index) => {
                 return (
-                  <Card className={classes.card}>
-                    <CardHeader
-                      action={
-                        <IconButton>
-                          <SettingsIcon />
-                        </IconButton>
-                      }
-                      title={squad.name}
+                  <DndCard title={squad.name}>
+                    <DndList
+                      droppableId={index.toString()}
+                      data={squad.members.map(item => {
+                        item.mainText = item.first_name + ' ' + item.last_name;
+                        item.avatar = item.handicap;
+                        return item;
+                      })}
                     />
-                    <CardContent>
-                      <Droppable droppableId={index.toString()}>
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            // style={getListStyle(snapshot.isDraggingOver)}
-                          >
-                            <List>
-                              {squad.members.map((shooter, index) => (
-                                <Draggable
-                                  key={shooter.id}
-                                  draggableId={shooter.id}
-                                  index={index}
-                                >
-                                  {(provided, snapshot) => (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      // style={getItemStyle(
-                                      //   snapshot.isDragging,
-                                      //   provided.draggableProps.style
-                                      // )}
-                                    >
-                                      <ListItem button>
-                                        <Avatar className={classes.avatar}>
-                                          {shooter.handicap}
-                                        </Avatar>
-                                        <ListItemText
-                                          primary={
-                                            shooter.first_name +
-                                            ' ' +
-                                            shooter.last_name
-                                          }
-                                          // secondary={"Handicap: " + shooter.handicap}
-                                        />
-                                      </ListItem>
-                                    </div>
-                                  )}
-                                </Draggable>
-                              ))}
-                            </List>
-                            {provided.placeholder}
-                          </div>
-                        )}
-                      </Droppable>
-                    </CardContent>
-                  </Card>
+                  </DndCard>
                 );
               })}
-              {/* <pre>{JSON.stringify(this.state, null, 2)}</pre> */}
-              {/* <pre>{JSON.stringify(this.props, null, 2)}</pre> */}
-            </div>
+            </DndRightSide>
           </DragDropContext>
-        </div>
+        </DndPage>
       </>
     );
   }
 }
 
-ViewSquadding.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
 const mapStateToProps = state => ({
   user: state.user,
 });
 
-export default compose(
-  connect(mapStateToProps),
-  withStyles(styles)
-)(ViewSquadding);
+export default connect(mapStateToProps)(ViewSquadding);
