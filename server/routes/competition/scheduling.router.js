@@ -47,7 +47,7 @@ router.get('/', (req, res) => {
       traps: values[1].rows[0].traps,
     };
     console.log('dataToSend: ', dataToSend);
-    res.sendStatus(200);
+    res.send(dataToSend);
   });
 });
 

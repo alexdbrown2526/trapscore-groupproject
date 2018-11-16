@@ -11,6 +11,11 @@ const styles = theme => ({
     color: '#fff',
     backgroundColor: theme.palette.primary.main,
   },
+  avatarBox: {
+    color: '#fff',
+    backgroundColor: theme.palette.primary.main,
+    borderRadius: 10,
+  },
 });
 
 const DndItem = props => {
@@ -28,7 +33,9 @@ const DndItem = props => {
           // )}
         >
           <ListItem button>
-            <Avatar className={classes.avatar}>{item.avatar}</Avatar>
+            <Avatar className={props.box ? classes.avatarBox : classes.avatar}>
+              {item.avatar}
+            </Avatar>
             <ListItemText
               primary={item.mainText}
               // secondary={"Handicap: " + shooter.handicap}
