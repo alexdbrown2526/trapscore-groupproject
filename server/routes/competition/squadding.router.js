@@ -71,6 +71,11 @@ router.get('/:event_id', async (req, res) => {
 /**
  * POST to reassign squad members to individual squads
  */
-router.post('/:event_id', (req, res) => {});
+router.put('/:event_id', (req, res) => {
+  newSquadding = req.body;
+  console.log('newSquadding:', newSquadding);
+
+  // loop through all of the unsquadded shooters and make sure they're
+});
 
 module.exports = router;

@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import { Divider, Typography } from '@material-ui/core';
+import { Button, Divider, Typography } from '@material-ui/core';
 
 import HeaderMargins from '../HeaderMargins/HeaderMargins';
 import DndPage from '../DndPage/DndPage';
@@ -26,10 +26,14 @@ class ViewSquadding extends Component {
   };
 
   componentDidMount() {
-    this.refreshList();
+    this.getData();
   }
 
-  refreshList = () => {
+  componentWillUnmount() {
+    this.sendData();
+  }
+
+  getData = () => {
     let event_id = 4;
     axios({
       method: 'GET',
@@ -44,6 +48,15 @@ class ViewSquadding extends Component {
         );
         console.log(error);
       });
+  };
+
+  sendData = () => {
+    let event_id = 4;
+    axios({
+      method: 'PUT',
+      url: `/api/competition/squadding/${event_id}`,
+      data: this.state,
+    });
   };
 
   getList = id => {
@@ -165,6 +178,7 @@ class ViewSquadding extends Component {
                 <Typography variant="h4">Unsquadded</Typography>
               </HeaderMargins>
               <Divider />
+              <Button onClick={this.sendData}>Save</Button>
               <DndList
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {
