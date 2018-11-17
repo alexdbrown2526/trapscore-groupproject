@@ -1,11 +1,8 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
+import React from "react";
 import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { connect } from "react-redux";
-import { List, ListItem, ListItemText } from "@material-ui/core/";
-import { USER_ACTIONS } from "../../redux/actions/userActions";
+import { ListItem, ListItemText } from "@material-ui/core/";
 
 const styles = theme => ({
   toggleContainer: {
@@ -18,61 +15,39 @@ const styles = theme => ({
     background: theme.palette.background.default
   }
 });
-//Pass in the index from the map, give it the button which will call the reducer in that order.
-// NEED TO SEND: Index of the shooter, the value of the shot, shooter_event_id, name of shooter
-//[]TODO: 1. Finish adding/subtracting logic for each round
-//[]TODO: 2. Reset toggles on each round
-//[]TODO: Real data, dispatching data to redux
 
-class ScoringItem extends Component {
-  //This is the first function run on either button toggle
-  selectShot = (event, value) => {
-    let payload = {
-      index: this.props.index,
-      round: this.props.round,
-      score: value
-    };
-    this.props.dispatch({
-      type: USER_ACTIONS.SET_SHOT,
-      payload: payload
-    });
-  };
+const ScoringItem = props => {
+  const { classes } = props;
+  return (
+    <ListItem>
+      <ListItemText>
+      {props.shooter.first_name}
+        </ListItemText>
+      {props.shooter.shots.reduce((sumOfShots, currentShot) => {
+        return sumOfShots + currentShot;
+      }, 0)}
+      /
+      {props.shooter.shots.reduce((sumOfShots, currentShot) => {
+        if (currentShot === null) {
+          return sumOfShots;
+        } else {
+          return sumOfShots + 1;
+        }
+      }, 0)}
+      <ToggleButtonGroup
+        classes = {classes.toggleContainer}
+        value={props.shooter.shots[props.round - 1]}
+        exclusive
+        selected
+        onChange={(event, value) => {
+          props.setScore(props.index, props.round, value);
+        }}
+      >
+        <ToggleButton value={0}>Miss</ToggleButton>
+        <ToggleButton value={1}>Hit</ToggleButton>
+      </ToggleButtonGroup>
+    </ListItem>
+  );
+};
 
-  roundScoreFunction = (sumOfShots, currentShot) => {
-    return sumOfShots + currentShot;
-  };
-
-  CurrentRoundFunction = (sumOfShots, currentShot) => {
-    if (currentShot === null) {
-      return sumOfShots;
-    } else {
-      return sumOfShots + 1;
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <List>
-          <ListItem>
-            {this.props.shooter.first_name}
-            {this.props.shooter.shots.reduce(this.roundScoreFunction)}/
-            {this.props.shooter.shots.reduce(this.CurrentRoundFunction, 0)}
-            <ToggleButtonGroup
-              value={this.props.shooter.shots[this.props.round - 1]}
-              exclusive
-              onChange={this.selectShot}
-            >
-              <ToggleButton value={1}>Hit</ToggleButton>
-              <ToggleButton value={0}>Miss</ToggleButton>
-            </ToggleButtonGroup>
-          </ListItem>
-        </List>
-      </div>
-    );
-  }
-}
-
-const Item = withStyles(styles)(ScoringItem);
-
-export default connect(Item);
+export default withStyles(styles)(ScoringItem);

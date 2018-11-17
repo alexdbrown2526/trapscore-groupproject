@@ -4,8 +4,10 @@ import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { connect } from "react-redux";
-import { List, ListItem, ListItemText } from "@material-ui/core/";
+import { List } from "@material-ui/core/";
 import ScoringItem from "../ScoringItem/ScoringItem";
+
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 // TO POST: SHOOTER EVENT ID , SQUAD EVENT ID, SCORE
 // SQUAD HAS THE EVENT ID
@@ -30,11 +32,10 @@ const styles = theme => ({
 
 class Scoring extends Component {
   state = {
-    Shooters: this.props.Members,
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
-    NextRoundButton: false,
+    NextRoundButton: false
   };
 
   selectRound = (event, value) => {
@@ -42,31 +43,51 @@ class Scoring extends Component {
   };
 
   nextRound = () => {
-    this.setState({ ...this.state, selectedRound: this.state.selectedRound + 1, });
+    this.setState({
+      ...this.state,
+      selectedRound: this.state.selectedRound + 1
+    });
     if (this.state.selectedRound === 5) {
-      this.setState({ ...this.state, selectedRound: this.state.selectedRound, ToggleButton: true}); 
-
+      this.setState({
+        ...this.state,
+        selectedRound: this.state.selectedRound,
+        ToggleButton: true
+      });
     }
+  };
+
+  setScore = (index, round, value) => {
+    this.props.dispatch({
+      type: USER_ACTIONS.SET_SHOT,
+      payload: {
+        index: index,
+        round: round,
+        score: value
+      }
+    });
   };
 
   render() {
     let roundItem;
     if (this.state.selectedRound <= 4) {
-      roundItem=<Button value={this.state.selectedRound} onClick={this.nextRound}>Next Round</Button>
-    }
-    else{
-      roundItem=<Button>Submit Scores</Button>
+      roundItem = (
+        <Button value={this.state.selectedRound} onClick={this.nextRound}>
+          Next Round
+        </Button>
+      );
+    } else {
+      roundItem = <Button>Submit Scores</Button>;
     }
 
     return (
       <div>
         <h1>Scoring</h1>
-      {/* <pre> {JSON.stringify(this.props, null, 2)}</pre>  */}
-      <pre> {JSON.stringify(this.props.selectedTrap, null, 2)}</pre> 
+        {/* <pre> {JSON.stringify(this.props, null, 2)}</pre>  */}
+        <pre> {JSON.stringify(this.props, null, 2)}</pre>
         <h2>{this.props.selectedTrap.name}</h2>
         <h2>Rounds</h2>
         <ToggleButtonGroup
-          value={this.state.selectedRound}
+          value={this.props.currentRound}
           exclusive
           onChange={this.selectRound}
         >
@@ -77,27 +98,43 @@ class Scoring extends Component {
           <ToggleButton value={5}>5</ToggleButton>
         </ToggleButtonGroup>
         <h2>Shooters</h2>
-      
-        {this.props.selectedTrap.shooters.map((shooter, index) => {
-          return <ScoringItem key={shooter.id} shooter={shooter} round={this.state.selectedRound} index={index}/>
-        })}
-
+        <List>
+          {this.props.selectedTrap.shooters.map((shooter, index) => {
+            return (
+              <ScoringItem
+                key={shooter.shooter_id}
+                shooter={shooter}
+                round={this.props.currentRound}
+                index={index}
+                setScore={this.setScore}
+              />
+            );
+          })}
+        </List>
         {roundItem}
+
+        {this.props.selectedTrap.shooters.reduce((sum, current) => {
+          if (current.shots[this.props.currentRound - 1] === null) {
+            return sum;
+          } else {
+            return sum + 1;
+          }
+        }, 0) < this.props.selectedTrap.shooters.length ? (
+          <h1>CLICK MOAR STUFF</h1>
+        ) : (
+          <h1>GOOD TU GO</h1>
+        )}
       </div>
     );
   }
 }
 
 const mapStateToProps = reduxState => ({
-  // reduxState,
-  // traps: reduxState.traps,
-  selectedTrap: reduxState.selectedTrap,
-  Squad: reduxState.test,
-  Members: reduxState.testTwo,
-  // selectedShot: reduxState.selectedShot
+  currentRound: reduxState.currentRound,
+  // reduxState: reduxState,
+  selectedTrap: reduxState.selectedTrap
 });
 
 const Scores = withStyles(styles)(Scoring);
 
 export default connect(mapStateToProps)(Scores);
-

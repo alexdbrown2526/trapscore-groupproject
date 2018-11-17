@@ -8,6 +8,7 @@ import events from './events.reducer';
 import squaddingData from './squaddingData.reducer';
 import schedulingData from './schedulingData.reducer';
 import selectedTrap from './selectedTrap.reducer';
+import currentRound from './currentRound.reducer';
 
 const rootReducer = combineReducers({
   errors,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   squaddingData,
   schedulingData,
   selectedTrap,
+  currentRound,
 });
 
 export default rootReducer;
