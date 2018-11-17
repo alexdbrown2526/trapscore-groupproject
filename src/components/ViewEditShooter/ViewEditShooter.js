@@ -1,6 +1,30 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Card from '@material-ui/core/Card'
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField'
+import Button from '@material-ui/core/Button'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/List'
+
+const styles = theme => ({   
+ 
+  editform: {
+    width: '50%',
+    height: '60vh',
+    minWidth: 100,
+    // display: 'flex',
+    flexDirection: 'column',
+    flexWrap: 'wrap',
+    // alignItems: 'start',
+    backgroundColor: 'blue',
+    marginLeft: '50%',
+    postition: 'relative',
+  },
+  searchButton :{
+      backgroundColor: 'red'
+  }
+  
+});
 
 class ViewEditShooter extends Component {
   constructor(props) {
@@ -52,12 +76,15 @@ class ViewEditShooter extends Component {
 
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
-        <form className="Edit-Form">
-        <Card className="Edit-Card">
+        <form className={classes.editform}>
+        <List>
+          <ListItem>
           First Name:
-          <input
+          <TextField
             
             className="textfield"
             type="text"
@@ -65,49 +92,59 @@ class ViewEditShooter extends Component {
             value={this.state.first_name}
             onChange={this.handleChangeFor("first_name")}
           />
+          </ListItem>
+          <ListItem>
           Last Name:
-          <input
+          <TextField
             className="textfield"
             type="text"
             name="searchText"
             value={this.state.last_name}
             onChange={this.handleChangeFor("last_name")}
           />
+          </ListItem>
+          <ListItem>
           E-Mail:
-          <input
+          <TextField
             className="textfield"
             type="text"
             name="searchText"
             value={this.state.email}
             onChange={this.handleChangeFor("email")}
           />
+          </ListItem>
+          <ListItem>
           Phone Number:
-          <input
+          <TextField
             className="textfield"
             type="text"
             name="searchText"
             value={this.state.phone}
             onChange={this.handleChangeFor("phone")}
           />
+          </ListItem>
+          <ListItem>
           Handicap (yds):
-          <input
+          <TextField
             className="textfield"
             type="text"
             name="searchText"
             value={this.state.handicap}
             onChange={this.handleChangeFor("handicap")}
           />
+          </ListItem>
+          <ListItem>
           ATA Number:
-          <input
+          <TextField
             className="textfield"
             type="text"
             name="searchText"
             value={this.state.ata_number}
             onChange={this.handleChangeFor("ata_number")}
           />
-                <button onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</button>
-
-        </Card>
+          </ListItem>
+                <Button className={classes.searchButton} variant="contained" color="primary" onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</Button>
+                </List>
         </form>
       
       </div>
@@ -115,4 +152,4 @@ class ViewEditShooter extends Component {
   }
 }
 
-export default ViewEditShooter;
+export default withStyles(styles) (ViewEditShooter);

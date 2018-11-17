@@ -6,28 +6,36 @@ import ListItem from '@material-ui/core/ListItem'
 import SettingsIcon from'@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField'
 // import classes from '*.module.scss';
 
 
-const styles = theme => ({   
+const styles = theme => ({  
+    
   roster: {
     backgroundColor: 'red',
-    width: '20%',
+    width: '50%',
     minWidth: 100,
-    height: '100vh',
+    height: '50vh',
     overflowY: 'scroll',
+    
+    
   },
-  editForm: {
-    width: '75%',
-    minWidth: 100,
-    height: '100vh',
-    overflowY: 'scroll',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'start',
-    alignItems: 'start',
+
+  searchField: {
+    backgroundColor: 'blue',
+    height: '5vh'
   }
+  // editForm: {
+  //   width: '50%',
+  //   height: '30vh',
+  //   minWidth: 100,
+  //   // display: 'flex',
+  //   flexDirection: 'row',
+  //   flexWrap: 'wrap',
+  //   // alignItems: 'start',
+  //   backgroundColor: 'red',
+  // }
   
 });
 
@@ -118,9 +126,11 @@ class CompetitionRoster extends Component {
       <div className={classes.editForm}>
             <ViewEditShooter selectedShooter={this.state.selectedShooter} />
             </div>
-      <input value={this.state.input} type="text" onChange={this.onFilterChange}/>
+            <div className={classes.roster}>
+
+      <TextField className={classes.searchField} variant="outlined" placeholder="Search by name"
+       value={this.state.input} type="text" onChange={this.onFilterChange}/>
    
-      <div className={classes.roster}>
         <List>
           Competition Roster
       {list}
