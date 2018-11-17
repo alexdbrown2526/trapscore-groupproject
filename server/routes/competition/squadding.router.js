@@ -73,7 +73,7 @@ router.put('/:event_id', (req, res) => {
   for (let squad of req.body.squads) {
     //loop through squad.members
     squad.members.forEach(member => {
-      updateValues.push(`(${squad.id}, ${member.post_position}, ${member.id}, ${req.params.event_id})`);
+      updateValues.push(`(${squad.id}, ${squad.members.indexOf(member) + 1}, ${member.id}, ${req.params.event_id})`);
     })
     //update shooter_event table with squad_id and post_position by shooter_id and event_id
   }
