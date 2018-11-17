@@ -74,8 +74,18 @@ router.get('/:event_id', async (req, res) => {
 router.put('/:event_id', (req, res) => {
   newSquadding = req.body;
   console.log('newSquadding:', newSquadding);
-
+  // pool.query(`INSERT INTO "shooter_squad"
+  //             ("shooter_id", "squad_id", "post_position")
+  //             SELECT `)
   // loop through all of the unsquadded shooters and make sure they're
 });
+
+// INSERT INTO tag
+// ("key", "value")
+// SELECT 'key1', 'value1'
+// WHERE
+// NOT EXISTS(
+//   SELECT id, "key", "value" FROM tag WHERE key = 'key1' AND value = 'value1'
+// );
 
 module.exports = router;
