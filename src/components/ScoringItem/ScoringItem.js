@@ -80,7 +80,7 @@ class ScoringItem extends Component {
         });
       } 
     }
-
+    
   render() {
     return (
       <div>
