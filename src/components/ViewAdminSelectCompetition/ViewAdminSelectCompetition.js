@@ -130,6 +130,7 @@ class ViewAdminSelectCompetition extends Component {
               edit={this.state.competitionToEdit}
               data={this.refreshData}
             />
+            <button onClick={this.handleClose}>Close</button>
           </div>
         </Modal>
       );
