@@ -19,6 +19,10 @@ const styles = theme => ({
 });
 //Pass in the index from the map, give it the button which will call the reducer in that order.
 // NEED TO SEND: Index of the shooter, the value of the shot, shooter_event_id, name of shooter
+//[]TODO: 1. Finish adding/subtracting logic for each round
+//[]TODO: 2. Reset toggles on each round
+//[]TODO: Real data, dispatching data to redux
+
 
 class ScoringItem extends Component {
   state = {
@@ -29,9 +33,11 @@ class ScoringItem extends Component {
     maxNumber: 1,
     numberOfHits: 0
   };
-  
-  addHit = () => {
+
+  addHit = (event) => {
     console.log('Hit');
+    console.log('This is the event', event);
+    console.log('This is the eventtarget', event.target);
     let hits = this.state.numberOfHits++;
     this.setState({
       ...this.state,
@@ -40,9 +46,10 @@ class ScoringItem extends Component {
     console.log('Hits', hits);
   
   };
+
   //This is the first function run on either button toggle
   selectShot = (event, value) => {
-    this.addHit(); // This adds 1 to the numberOfHits variable, this is so we can set an if statement that will conditonally render the next round button after everybody has shot
+    this.addHit(event); // This adds 1 to the numberOfHits variable, this is so we can set an if statement that will conditonally render the next round button after everybody has shot
     this.setState({
       ...this.state,
       selectedShot: value,
@@ -66,7 +73,6 @@ class ScoringItem extends Component {
 
   //IF RoundScore is 1, this function is run
     minus = (event, value) => {
-      console.log('Event', event);
       console.log('Value', value);
       console.log('RoundScore', this.state.RoundScore);
       console.log('CurrentRound', this.state.CurrentRound);
@@ -79,6 +85,13 @@ class ScoringItem extends Component {
           selectedShot: 0,
         });
       } 
+    }
+
+    reset = () => {
+      this.setState({
+        ...this.state,
+        selectedShot: null,
+      });
     }
 
   render() {
@@ -109,9 +122,11 @@ const mapStateToProps = reduxState => ({
   traps: reduxState.traps,
   selectedTraps: reduxState.selectedTrap,
   Squad: reduxState.test,
-  Members: reduxState.testTwo
+  Members: reduxState.testTwo,
+  selectedShot: reduxState.selectedShot
 });
 
 const Item = withStyles(styles)(ScoringItem);
 
 export default connect(mapStateToProps)(Item);
+

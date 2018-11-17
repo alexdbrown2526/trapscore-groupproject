@@ -34,25 +34,35 @@ class Scoring extends Component {
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
+    NextRoundButton: false,
   };
 
   selectRound = (event, value) => {
     this.setState({ ...this.state, selectedRound: value });
   };
 
-  changeRound = (event, value) => {
-    console.log('Hit', value);
-    
-    this.setState({ ...this.state, selectedRound: value });
+  nextRound = () => {
+    this.setState({ ...this.state, selectedRound: this.state.selectedRound + 1, });
+    if (this.state.selectedRound === 5) {
+      this.setState({ ...this.state, selectedRound: this.state.selectedRound, ToggleButton: true}); 
+
+    }
   };
 
   render() {
+    let roundItem;
+    if (this.state.selectedRound <= 4) {
+      roundItem=<Button value={this.state.selectedRound} onClick={this.nextRound}>Next Round</Button>
+    }
+    else{
+      roundItem=<Button>Submit Scores</Button>
+    }
+
     return (
       <div>
         <h1>Scoring</h1>
         <h2>{this.props.selectedTraps.name}</h2>
         <h2>Rounds</h2>
-
         <ToggleButtonGroup
           value={this.state.selectedRound}
           exclusive
@@ -67,9 +77,10 @@ class Scoring extends Component {
         <h2>Shooters</h2>
       
         {this.state.Shooters.map(shooter => {
-          return <ScoringItem key={shooter.id} shooter={shooter} round={this.state.selectedRound}/>;
+          return <ScoringItem key={shooter.id} shooter={shooter} round={this.state.selectedRound} handleRound={this.nextRound} />
         })}
-          <Button onClick={this.changeRound}>Next Round</Button>
+
+        {roundItem}
       </div>
     );
   }
@@ -80,9 +91,11 @@ const mapStateToProps = reduxState => ({
   traps: reduxState.traps,
   selectedTraps: reduxState.selectedTrap,
   Squad: reduxState.test,
-  Members: reduxState.testTwo
+  Members: reduxState.testTwo,
+  selectedShot: reduxState.selectedShot
 });
 
 const Scores = withStyles(styles)(Scoring);
 
 export default connect(mapStateToProps)(Scores);
+
