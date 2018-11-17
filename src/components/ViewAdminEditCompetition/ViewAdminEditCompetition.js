@@ -16,6 +16,7 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -27,6 +28,9 @@ const styles = theme => ({
   menu: {
     width: 200,
   },
+  modal: {
+    overflowY: 'scroll'
+  }
 });
 
 class ViewAdminEditCompetition extends Component {
@@ -92,7 +96,7 @@ class ViewAdminEditCompetition extends Component {
     }
     const { classes } = this.props;
     return (
-      <div>
+      <div className={classes.modal}>
         <h1>Edit Competition</h1>
         {JSON.stringify(this.props.edit)}
 

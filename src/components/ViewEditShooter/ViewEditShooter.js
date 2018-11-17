@@ -19,6 +19,7 @@ const styles = theme => ({
     backgroundColor: 'blue',
     marginLeft: '50%',
     postition: 'relative',
+    float: 'right',
   },
   searchButton :{
       backgroundColor: 'red'

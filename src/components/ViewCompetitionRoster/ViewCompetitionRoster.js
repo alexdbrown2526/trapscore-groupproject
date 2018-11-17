@@ -11,13 +11,14 @@ import TextField from '@material-ui/core/TextField'
 
 
 const styles = theme => ({  
-    
+
   roster: {
     backgroundColor: 'red',
     width: '50%',
     minWidth: 100,
     height: '50vh',
     overflowY: 'scroll',
+    float: 'left',
     
     
   },
