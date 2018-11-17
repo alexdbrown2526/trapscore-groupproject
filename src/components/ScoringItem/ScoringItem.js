@@ -5,6 +5,7 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { connect } from "react-redux";
 import { List, ListItem, ListItemText } from "@material-ui/core/";
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
 const styles = theme => ({
   toggleContainer: {
@@ -23,87 +24,42 @@ const styles = theme => ({
 //[]TODO: 2. Reset toggles on each round
 //[]TODO: Real data, dispatching data to redux
 
-
 class ScoringItem extends Component {
-  state = {
-    Shooters: this.props.Members,
-    RoundScore: 0,
-    CurrentRound: 0,
-    selectedShot: null,
-    maxNumber: 1,
-    numberOfHits: 0
-  };
-
-  addHit = (event) => {
-    console.log('Hit');
-    console.log('This is the event', event);
-    console.log('This is the eventtarget', event.target);
-    let hits = this.state.numberOfHits++;
-    this.setState({
-      ...this.state,
-      numberOfHits: hits 
-    });
-    console.log('Hits', hits);
-  
-  };
-
   //This is the first function run on either button toggle
   selectShot = (event, value) => {
-    this.addHit(event); // This adds 1 to the numberOfHits variable, this is so we can set an if statement that will conditonally render the next round button after everybody has shot
-    this.setState({
-      ...this.state,
-      selectedShot: value,
-      RoundScore: this.state.RoundScore + value,
-      CurrentRound: this.state.CurrentRound + 1,
+    let payload = {
+      index: this.props.index,
+      round: this.props.round,
+      score: value
+    };
+    this.props.dispatch({
+      type: USER_ACTIONS.SET_SHOT,
+      payload: payload
     });
-    console.log('Number of hits', this.state.numberOfHits);
-    this.checkScoreTotal(this.state.RoundScore, this.state.CurrentRound, value, event);
-  };
-  //IF CurrentRound is 1, this function is run
-  checkScoreTotal = (event, value) => {
-    if (this.state.CurrentRound === 1) {
-      this.setState({
-        ...this.state,
-        selectedShot: value,
-        RoundScore: this.state.RoundScore + value,
-        CurrentRound: this.props.round,
-      });
-    } this.minus(value, event);
   };
 
-  //IF RoundScore is 1, this function is run
-    minus = (event, value) => {
-      console.log('Value', value);
-      console.log('RoundScore', this.state.RoundScore);
-      console.log('CurrentRound', this.state.CurrentRound);
-      console.log('Selected Shot', this.state.selectedShot);
-      if (this.state.RoundScore === 1) {
-        this.setState({
-          ...this.state,
-          RoundScore: this.state.RoundScore - 1,
-          CurrentRound: this.props.round,
-          selectedShot: 0,
-        });
-      } 
-    }
+  roundScoreFunction = (sumOfShots, currentShot) => {
+    return sumOfShots + currentShot;
+  };
 
-    reset = () => {
-      this.setState({
-        ...this.state,
-        selectedShot: null,
-      });
+  CurrentRoundFunction = (sumOfShots, currentShot) => {
+    if (currentShot === null) {
+      return sumOfShots;
+    } else {
+      return sumOfShots + 1;
     }
+  };
 
   render() {
     return (
       <div>
-        {JSON.stringify(this.props.round)}
         <List>
           <ListItem>
             {this.props.shooter.first_name}
-            {this.state.RoundScore}/{this.state.CurrentRound}
+            {this.props.shooter.shots.reduce(this.roundScoreFunction)}/
+            {this.props.shooter.shots.reduce(this.CurrentRoundFunction, 0)}
             <ToggleButtonGroup
-              value={this.state.selectedShot}
+              value={this.props.shooter.shots[this.props.round - 1]}
               exclusive
               onChange={this.selectShot}
             >
@@ -117,16 +73,6 @@ class ScoringItem extends Component {
   }
 }
 
-const mapStateToProps = reduxState => ({
-  reduxState,
-  traps: reduxState.traps,
-  selectedTraps: reduxState.selectedTrap,
-  Squad: reduxState.test,
-  Members: reduxState.testTwo,
-  selectedShot: reduxState.selectedShot
-});
-
 const Item = withStyles(styles)(ScoringItem);
 
-export default connect(mapStateToProps)(Item);
-
+export default connect(Item);

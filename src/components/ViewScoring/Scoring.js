@@ -61,7 +61,9 @@ class Scoring extends Component {
     return (
       <div>
         <h1>Scoring</h1>
-        <h2>{this.props.selectedTraps.name}</h2>
+      {/* <pre> {JSON.stringify(this.props, null, 2)}</pre>  */}
+      <pre> {JSON.stringify(this.props.selectedTrap, null, 2)}</pre> 
+        <h2>{this.props.selectedTrap.name}</h2>
         <h2>Rounds</h2>
         <ToggleButtonGroup
           value={this.state.selectedRound}
@@ -76,8 +78,8 @@ class Scoring extends Component {
         </ToggleButtonGroup>
         <h2>Shooters</h2>
       
-        {this.state.Shooters.map(shooter => {
-          return <ScoringItem key={shooter.id} shooter={shooter} round={this.state.selectedRound} handleRound={this.nextRound} />
+        {this.props.selectedTrap.shooters.map((shooter, index) => {
+          return <ScoringItem key={shooter.id} shooter={shooter} round={this.state.selectedRound} index={index}/>
         })}
 
         {roundItem}
@@ -87,12 +89,12 @@ class Scoring extends Component {
 }
 
 const mapStateToProps = reduxState => ({
-  reduxState,
-  traps: reduxState.traps,
-  selectedTraps: reduxState.selectedTrap,
+  // reduxState,
+  // traps: reduxState.traps,
+  selectedTrap: reduxState.selectedTrap,
   Squad: reduxState.test,
   Members: reduxState.testTwo,
-  selectedShot: reduxState.selectedShot
+  // selectedShot: reduxState.selectedShot
 });
 
 const Scores = withStyles(styles)(Scoring);
