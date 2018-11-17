@@ -67,18 +67,17 @@ router.get('/:event_id', async (req, res) => {
 router.put('/:event_id', (req, res) => {
   newSquadding = req.body;
   console.log('newSquadding:', newSquadding);
-
+  
   let updateValues = [];
   //for each squad in req.body.squads:
   for (let squad of req.body.squads) {
     //loop through squad.members
+    //push (squad_id, calculated post_position from index within array, shooter_id, and event_id) to updateValues array for each squad member
     squad.members.forEach(member => {
       updateValues.push(`(${squad.id}, ${squad.members.indexOf(member) + 1}, ${member.id}, ${req.params.event_id})`);
     })
-    //update shooter_event table with squad_id and post_position by shooter_id and event_id
   }
-  console.log('values array for update: ', updateValues.join(','));
-  
+  //update shooter_event table with new squad_id and post_position for each shooter_id/event_id pair
   pool
     .query(`
     UPDATE "shooter_event"
@@ -95,16 +94,5 @@ router.put('/:event_id', (req, res) => {
       res.sendStatus(500);
     });
 });
-
-// #### EXAMPLE QUERY FOR UPDATING MULTIPLE ROWS AT ONCE:
-// 
-// update test as t set
-// column_a = c.column_a,
-//   column_c = c.column_c
-// from(values
-//   ('123', 1, '---'),
-//   ('345', 2, '+++')
-// ) as c(column_b, column_a, column_c)
-// where c.column_b = t.column_b;
 
 module.exports = router;
