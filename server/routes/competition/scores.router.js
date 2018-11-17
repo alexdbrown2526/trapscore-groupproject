@@ -55,12 +55,12 @@ router.get("/", async (req, res, next) => {
   let squadTrap;
   let shooterList = [];
   let assembledResponse = {};
-  console.log(req.query)
+  console.log(req.query);
   try {
     //query trap * by id
     pool
       .query(`SELECT * FROM "trap" WHERE "id" = $1;`, [req.query.id])
-      .then(results => selectedTrap = results.rows[0])
+      .then(results => (selectedTrap = results.rows[0]))
       .catch(error => next(error));
     //query squad_trap by trap id and assigns the row with lowest value of place_in_line to response object
     await pool
@@ -76,7 +76,8 @@ router.get("/", async (req, res, next) => {
       .catch(error => next(error));
     //get shooter list for current round of shooting
     await pool
-      .query(`SELECT 
+      .query(
+        `SELECT 
                 "shooter"."id" as "shooter_id", "shooter"."first_name", "shooter"."last_name",
                 "shooter_event"."id" as "shooter_event_id"
               FROM "squad_trap"
@@ -84,7 +85,9 @@ router.get("/", async (req, res, next) => {
               JOIN "event" ON "squad"."event_id" = "event"."id"
               JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id" AND "squad"."id" = "shooter_event"."squad_id"
               JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
-              WHERE "squad_trap"."id" = $1;`, [squad_trap_id])
+              WHERE "squad_trap"."id" = $1;`,
+        [squad_trap_id]
+      )
       .then(results => {
         shooterList = results.rows;
         //loop over each shooter, assigning empty score array for current round of shooting
@@ -102,7 +105,10 @@ router.get("/", async (req, res, next) => {
       squad_trap: squadTrap,
       shooters: shooterList
     };
-    console.log('assembled response ready to send to client:', assembledResponse);
+    console.log(
+      "assembled response ready to send to client:",
+      assembledResponse
+    );
 
     res.send(assembledResponse);
   } catch (error) {
@@ -115,8 +121,44 @@ router.get("/", async (req, res, next) => {
 });
 
 /**
- * POST route template
+ * inserts 5 scores for each member of a squad into the score table
+ * increment current_rotation in squad_trap (up to a maximum of 6)
  */
-router.post("/", (req, res) => {});
+router.post("/", (req, res) => {
+  const squad_trap_id = req.body.squad_trap.id;
+  console.log("squad_trap_id=", squad_trap_id);
+  try {
+    pool
+      .query(
+        `UPDATE "squad_trap" 
+        SET "current_rotation" =  "current_rotation" + 1
+        WHERE "id" = ${squad_trap_id}
+        ;`
+      )
+      .then(() => {
+        console.log("score POST succeeded");
+      });
+
+    let formattedShotData = [];
+
+    for (let shooter of req.body.shooters) {
+      shooter.shots.forEach(score =>
+        formattedShotData.push(
+          `(${shooter.shooter_event_id}, ${squad_trap_id}, ${score})`
+        )
+      );
+    }
+
+    pool
+      .query(
+        `INSERT INTO "score" ("shooter_event_id", "squad_trap_id", "score")
+              VALUES ${formattedShotData.join(",")};`
+      )
+      .then(() => res.sendStatus(200));
+  } catch (error) {
+    console.log("Error posting scores:", error);
+    res.sendStatus(500);
+  }
+});
 
 module.exports = router;
