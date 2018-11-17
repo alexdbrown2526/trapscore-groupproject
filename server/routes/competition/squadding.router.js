@@ -11,16 +11,9 @@ router.get('/:event_id', async (req, res) => {
   let dataToSend = {};
   try {
     //Returns an array of all unsquadded shooters associated with the currently selected event
-    const getUnsquadded = pool.query(
-      `SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
+    const getUnsquadded = pool.query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_event"."post_position" FROM "shooter"
       JOIN "shooter_event" ON "shooter_event"."shooter_id" = "shooter"."id"
-      WHERE "shooter_event"."event_id" = ${req.params.event_id}
-      EXCEPT
-      SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
-      JOIN "shooter_squad" ON "shooter_squad"."shooter_id" = "shooter"."id"
-      JOIN "shooter_event" ON "shooter_event"."shooter_id" = "shooter"."id"
-      WHERE "shooter_event"."event_id" = ${req.params.event_id};`
-    );
+      WHERE "shooter_event"."event_id" = ${req.params.event_id} AND "shooter_event"."squad_id" IS NULL;`);
     //Returns event id and event name
     const getEventDetails = pool.query(
       `SELECT * FROM "event" WHERE "id" = ${req.params.event_id};`
@@ -69,23 +62,49 @@ router.get('/:event_id', async (req, res) => {
 });
 
 /**
- * POST to reassign squad members to individual squads
+ * PUT to assign shooters to squads
  */
 router.put('/:event_id', (req, res) => {
   newSquadding = req.body;
   console.log('newSquadding:', newSquadding);
-  // pool.query(`INSERT INTO "shooter_squad"
-  //             ("shooter_id", "squad_id", "post_position")
-  //             SELECT `)
-  // loop through all of the unsquadded shooters and make sure they're
+
+  let updateValues = [];
+  //for each squad in req.body.squads:
+  for (let squad of req.body.squads) {
+    //loop through squad.members
+    squad.members.forEach(member => {
+      updateValues.push(`(${squad.id}, ${member.post_position}, ${member.id}, ${req.params.event_id})`);
+    })
+    //update shooter_event table with squad_id and post_position by shooter_id and event_id
+  }
+  console.log('values array for update: ', updateValues.join(','));
+  
+  pool
+    .query(`
+    UPDATE "shooter_event"
+    SET "squad_id" = columns."squad_id",
+      "post_position" = columns."post_position"
+    FROM( VALUES
+      ${updateValues.join(",")}
+      ) as columns("squad_id", "post_position", "shooter_id", "event_id")
+      WHERE columns."shooter_id" = "shooter_event"."shooter_id" AND columns."event_id" = "shooter_event"."event_id";
+    `)
+    .then(() => res.sendStatus(200))
+    .catch(error => {
+      console.log("Error updating shooter_event:", error);
+      res.sendStatus(500);
+    });
 });
 
-// INSERT INTO tag
-// ("key", "value")
-// SELECT 'key1', 'value1'
-// WHERE
-// NOT EXISTS(
-//   SELECT id, "key", "value" FROM tag WHERE key = 'key1' AND value = 'value1'
-// );
+// #### EXAMPLE QUERY FOR UPDATING MULTIPLE ROWS AT ONCE:
+// 
+// update test as t set
+// column_a = c.column_a,
+//   column_c = c.column_c
+// from(values
+//   ('123', 1, '---'),
+//   ('345', 2, '+++')
+// ) as c(column_b, column_a, column_c)
+// where c.column_b = t.column_b;
 
 module.exports = router;
