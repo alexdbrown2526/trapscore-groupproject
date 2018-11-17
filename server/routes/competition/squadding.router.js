@@ -24,14 +24,13 @@ router.get('/:event_id', async (req, res) => {
         SELECT sq."id", sq."name",
         (SELECT COALESCE(json_agg(sh), '[]'::json)
         FROM (
-          SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_squad"."post_position" FROM "shooter"
-          JOIN "shooter_squad" ON "shooter"."id" = "shooter_squad"."shooter_id"
+          SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_event"."post_position" FROM "shooter"
           JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
-          JOIN "squad" ON "shooter_squad"."squad_id" = "squad"."id"
+          JOIN "squad" ON "shooter_event"."squad_id" = "squad"."id"
           WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = ${
             req.params.event_id
           }
-          ORDER BY "shooter_squad"."post_position"
+          ORDER BY "shooter_event"."post_position"
         ) sh
       ) as members
       FROM "squad" as sq

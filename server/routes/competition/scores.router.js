@@ -16,7 +16,7 @@ const router = express.Router();
     "trap_id": 0,
     "box_number": 0,
     "place_in_line" 0,
-    "current_round": 0,
+    "current_rotation": 0,
   },
   "shooters": [
     {
@@ -55,6 +55,7 @@ router.get("/", async (req, res, next) => {
   let squadTrap;
   let shooterList = [];
   let assembledResponse = {};
+  console.log(req.query)
   try {
     //query trap * by id
     pool
@@ -80,10 +81,9 @@ router.get("/", async (req, res, next) => {
                 "shooter_event"."id" as "shooter_event_id"
               FROM "squad_trap"
               JOIN "squad" ON "squad_trap"."squad_id" = "squad"."id"
-              JOIN "shooter_squad" ON "squad"."id" = "shooter_squad"."squad_id"
               JOIN "event" ON "squad"."event_id" = "event"."id"
-              JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id"
-              JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id" AND "shooter_squad"."shooter_id" = "shooter"."id"
+              JOIN "shooter_event" ON "event"."id" = "shooter_event"."event_id" AND "squad"."id" = "shooter_event"."squad_id"
+              JOIN "shooter" ON "shooter_event"."shooter_id" = "shooter"."id"
               WHERE "squad_trap"."id" = $1;`, [squad_trap_id])
       .then(results => {
         shooterList = results.rows;
