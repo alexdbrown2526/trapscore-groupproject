@@ -1,6 +1,7 @@
 const express = require("express");
 const pool = require("../../modules/pool");
 const router = express.Router();
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 
 /* sub-route requires */
 const shooterRouter = require("./shooter.router");
@@ -15,7 +16,7 @@ const scoresRouter = require("./scores.router");
 /**
  * GET list of all competitions
  */
-router.get("/", (req, res) => {
+router.get("/", rejectUnauthenticated, (req, res) => {
   console.log(
     "User is logged in with competition ID=",
     req.user.competition_id
