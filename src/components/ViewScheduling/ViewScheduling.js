@@ -180,10 +180,11 @@ class ViewScheduling extends Component {
               <Divider />
               <Button onClick={this.sendData}>Save</Button>
               <DndList
+                box
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {
                   item.mainText = item.name;
-                  item.avatar = item.handicap;
+                  item.avatar = item.box_number;
                   return item;
                 })}
               />

@@ -8,6 +8,7 @@ const styles = theme => ({
   card: {
     margin: theme.spacing.unit * 3,
     width: 300,
+    minHeight: 300,
   },
 });
 
