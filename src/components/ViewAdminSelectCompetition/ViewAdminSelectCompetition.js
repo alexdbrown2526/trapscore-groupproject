@@ -26,11 +26,14 @@ const styles = theme => ({
     width: '100%',
   },
   list: {
-    width: 240,
+    width: '50%',
     fontFamily: 'Roboto, sans-serif',
     borderStyle: 'solid',
     marginTop: '3%',
-    paddingBottom: '1%'
+    paddingBottom: '1%',
+    fontSize: '20px',
+    
+    
 
   },
   cancel: {
@@ -60,7 +63,7 @@ const styles = theme => ({
     borderStyle: 'solid'
   },
   logOutButton : {
-    marginTop: '3%'
+    marginLeft: '3%'
   },
 
   editButton:{
@@ -195,12 +198,13 @@ class ViewAdminSelectCompetition extends Component {
               </ListItem>
             );
           })}
-        </List>
+        
 
         <Button color="primary" variant="contained" onClick={this.addNewCompetition}>Add Competition</Button>
         <Button className={classes.logOutButton} color="secondary" variant="contained" onClick={this.handleLogOut}>Log Out</Button>
         {displayItem}
         {viewItem}
+        </List>
         
       </div>
       </center>

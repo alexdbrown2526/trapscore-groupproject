@@ -12,7 +12,7 @@ import { selectCompetitionRoute } from '../../navigationRoutes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   container: {
