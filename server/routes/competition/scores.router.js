@@ -54,6 +54,8 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
   //assumes that req.body.id is the trap id AND that the lowest value of 'place_in_line' is actually the next in line (i.e. when scores are submitted, place_in_line needs to be set to null)
   let selectedTrap;
   let squadTrap;
+  let currentRotation;
+  let squad_trap_id;
   let shooterList = [];
   let assembledResponse = {};
   console.log(req.query);
@@ -66,12 +68,18 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
     //query squad_trap by trap id and assigns the row with lowest value of place_in_line to response object
     await pool
       .query(
-        `SELECT * FROM "squad_trap" WHERE "trap_id" = $1 ORDER BY "place_in_line" ASC;`,
+        `SELECT * FROM "squad_trap" 
+        WHERE "trap_id" = $1 
+        AND "place_in_line" > 0
+        ORDER BY "place_in_line" ASC;`,
         [req.query.id]
       )
       .then(results => {
         //stores squad id for use by next query to get shooter list
         squad_trap_id = results.rows[0].id;
+        //store current_rotation for generating post positions in shooter list query below
+        currentRotation = results.rows[0].current_rotation;
+        //stores squadTrap data for the returned item that's first in line to add to the assembledResponse object
         squadTrap = results.rows[0];
       })
       .catch(error => next(error));
@@ -80,7 +88,7 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
       .query(
         `SELECT 
                 "shooter"."id" as "shooter_id", "shooter"."first_name", "shooter"."last_name",
-                "shooter_event"."id" as "shooter_event_id"
+                "shooter_event"."id" as "shooter_event_id", "shooter_event"."post_position" as "post_position"
               FROM "squad_trap"
               JOIN "squad" ON "squad_trap"."squad_id" = "squad"."id"
               JOIN "event" ON "squad"."event_id" = "event"."id"
@@ -93,12 +101,30 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
         shooterList = results.rows;
         //loop over each shooter, assigning empty score array for current round of shooting
         shooterList.forEach(shooter => {
+          //initializes a null set of 5 shots for each shooter
           shooter.shots = [null, null, null, null, null];
+          //sets new post_position based on current rotation
+          shooter.post_position = ((shooter.post_position + currentRotation - 1) % 5) === 0 ? 5 : ((shooter.post_position + currentRotation - 1) % 5);
         });
       })
       .catch(error => {
         next(error);
       });
+
+    console.log('unsorted shooterList:', shooterList)
+
+    //sorts shooterList array by new post_position property of each shooter object
+    shooterList.sort((a, b) => {
+      let comparison = 0;
+      if (a.post_position > b.post_position) {
+        comparison = 1;
+      } else if (a.post_position < b.post_position) {
+        comparison = -1;
+      }
+      return comparison
+    })
+
+    console.log('sorted shooterList:', shooterList)
 
     //assembles the response object from the three query results above
     assembledResponse = {
@@ -132,9 +158,13 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     pool
       .query(
         `UPDATE "squad_trap" 
-        SET "current_rotation" =  "current_rotation" + 1
-        WHERE "id" = ${squad_trap_id}
-        ;`
+        SET "current_rotation" =  "current_rotation" + 1,
+          "place_in_line" =
+          CASE
+            WHEN ("current_rotation" = 5) THEN '-1'
+            ELSE "place_in_line"
+            END
+        WHERE "id" = ${squad_trap_id};`
       )
       .then(() => {
         console.log("score POST succeeded");
