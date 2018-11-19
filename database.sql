@@ -58,7 +58,7 @@ CREATE TABLE "event" (
 CREATE TABLE "squad" (
     "id" serial PRIMARY KEY,
     "event_id" integer NOT NULL REFERENCES "event"("id"),
-    "name" varchar(50) NOT NULL
+    "name" varchar(50) NOT NULL DEFAULT "New Squad"
 );
 
 CREATE TABLE "shooter_event" (
@@ -72,7 +72,7 @@ CREATE TABLE "shooter_event" (
 CREATE TABLE "squad_trap" (
   "id" serial PRIMARY KEY,
   "squad_id" integer NOT NULL REFERENCES "squad"("id"),
-  "trap_id" integer NOT NULL REFERENCES "trap"("id"),
+  "trap_id" integer REFERENCES "trap"("id"),
   "box_number" integer,
   "place_in_line" integer,
 	"current_rotation" integer DEFAULT 1
