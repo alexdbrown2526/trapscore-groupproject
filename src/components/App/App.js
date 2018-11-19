@@ -19,7 +19,7 @@ import ViewCompetitionRoster from '../ViewCompetitionRoster/ViewCompetitionRoste
 import ViewResults from '../ViewResults/ViewResults';
 import ViewSquadding from '../ViewSquadding/ViewSquadding';
 import ViewScheduling from '../ViewScheduling/ViewScheduling';
-import Scoring from '../ViewScoring/Scoring';
+import Scoring from '../ViewScoring/ViewScoring';
 import TrapSelection from '../ViewTrapSelection/TrapSelection';
 import ViewShooterRegistration from '../ViewShooterRegistration/ViewShooterRegistration';
 
