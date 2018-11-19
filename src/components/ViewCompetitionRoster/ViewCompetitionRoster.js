@@ -72,8 +72,6 @@ class CompetitionRoster extends Component {
   //GET an individual shooters information
 
   editShooter = (id) => {
-    console.log('button working');
-
     axios({
       method: 'GET',
       url: `/api/competition/shooter/${id}`

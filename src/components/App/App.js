@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-
+import './App.css';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
@@ -22,6 +22,8 @@ import ViewScheduling from '../ViewScheduling/ViewScheduling';
 import Scoring from '../ViewScoring/ViewScoring';
 import TrapSelection from '../ViewTrapSelection/TrapSelection';
 import ViewShooterRegistration from '../ViewShooterRegistration/ViewShooterRegistration';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import {
   selectCompetitionRoute,
@@ -108,7 +110,7 @@ class App extends Component {
               <Route
                 path={'/registration/:id&:hash'}
                 component={ViewShooterRegistration}
-              />
+              />      
               {/* For protected routes, the view could show one of several things on the same route.
 
             Visiting localhost:3000/home will show the UserPage if the user is logged in.
@@ -120,6 +122,18 @@ class App extends Component {
               {/* If none of the other routes matched, we will show a 404. */}
               <Route render={() => <h1>404</h1>} />
             </Switch>
+            <ToastContainer 
+            position={toast.POSITION.BOTTOM_RIGHT}
+            className="black-toast"
+            transition={Slide}
+            autoClose={3500}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnVisibilityChange
+            draggable
+            pauseOnHover/>
           </MuiThemeProvider>
         </div>
       </Router>

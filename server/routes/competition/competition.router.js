@@ -12,6 +12,7 @@ const trapRouter = require("./trap.router");
 const resultsRouter = require("./results.router");
 const secretRouter = require("./secret.router");
 const scoresRouter = require("./scores.router");
+const editRouter = require("./edit.router");
 
 /**
  * GET list of all competitions
@@ -71,6 +72,7 @@ router.use("/trap", trapRouter);
 router.use("/results", resultsRouter);
 router.use("/secret", secretRouter);
 router.use("/scores", scoresRouter);
+router.use("/edit", editRouter)
 
 //GET a single competition by ID
 router.get("/:id", (req, res) => {

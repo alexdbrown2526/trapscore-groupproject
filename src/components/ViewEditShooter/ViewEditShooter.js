@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/List'
 import ListItemText from '@material-ui/core/ListItemText'
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({   
  
@@ -38,6 +40,7 @@ class ViewEditShooter extends Component {
 
 
   updateUser = () => {
+    toast('Changes saved')
     console.log("update button working");
     axios({
       method: "PUT",
