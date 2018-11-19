@@ -1,10 +1,11 @@
 const express = require('express');
 const pool = require("../../modules/pool");
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
 
 // GET a list of all shooters associated with a competition
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   pool
     .query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap" FROM "shooter"
               JOIN "shooter_event" on "shooter"."id" = "shooter_event"."shooter_id"
@@ -23,7 +24,7 @@ router.get('/', (req, res) => {
 
 //  GET a single shooter's details by id
 // TODO: also get all event and squad information associated with the shooter
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectUnauthenticated, (req, res) => {
   pool.query(
       `SELECT "id", "first_name", "last_name", "email", "phone", "handicap", "ata_number" 
       FROM "shooter"
@@ -41,7 +42,7 @@ router.get("/:id", (req, res) => {
 
 // PUT to edit an individual shooter's details by id
 //TODO: add ability to update event and squad associations
-router.put("/:id", (req, res) => {
+router.put("/:id", rejectUnauthenticated, (req, res) => {
   pool.query(`UPDATE "shooter"
     SET "first_name" = $1, "last_name" = $2, "email" = $3, "phone" = $4, "handicap" = $5, "ata_number" = $6
     WHERE "id" = $7;`, [req.body.first_name, req.body.last_name, req.body.email, req.body.phone, req.body.handicap, req.body.ata_number, req.params.id]
