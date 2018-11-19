@@ -1,6 +1,41 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import ViewEditShooter from '../ViewEditShooter/ViewEditShooter'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import SettingsIcon from'@material-ui/icons/Settings';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField'
+import Avatar from '@material-ui/core/Avatar'
+// import classes from '*.module.scss';
+
+
+const styles = theme => ({  
+
+  roster: {
+    // backgroundColor: 'red',
+    width: '30%',
+    minWidth: 100,
+    height: '61vh',
+    overflowY: 'scroll',
+    float: 'left',
+    marginLeft: '20%',
+    marginTop: '4%',
+    borderStyle: 'solid',
+    padding: '20px',
+    fontFamily: 'Roboto, sans-serif'
+
+  },
+  
+  searchField: {
+    height: '5vh',
+    fontFamily: 'Roboto, sans-serif'
+
+  },
+ 
+  
+});
 
 class CompetitionRoster extends Component {
   constructor(props){
@@ -80,15 +115,25 @@ class CompetitionRoster extends Component {
   //Able to filter roster by search field. Select a user and edit their information
 
   render() {
-    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
-        .map((shooter, index) => <li key={index}>{shooter.first_name} {shooter.last_name} <button onClick={()=>{this.editShooter(shooter.id)}}>Edit</button></li>);
+    const { classes } = this.props;
 
-    return (<div>
-      <input value={this.state.input} type="text" onChange={this.onFilterChange}/>
-        <ul>
+    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
+        .map((shooter, index) => <ListItem  key={index}>{shooter.first_name} {shooter.last_name} <IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton></ListItem>);
+
+    return (<div className={classes.root}> 
+      <div className={classes.editForm}>
+            <ViewEditShooter selectedShooter={this.state.selectedShooter} />
+            </div>
+            <div className={classes.roster}>
+
+      <TextField className={classes.searchField} variant="outlined" placeholder="Search by name"
+       value={this.state.input} type="text" onChange={this.onFilterChange}/>
+   
+        <List>
+          Competition Roster
       {list}
-      </ul>
-      <ViewEditShooter selectedShooter={this.state.selectedShooter} />
+      </List>
+      </div>
       </div>)
     
     
@@ -135,4 +180,4 @@ class CompetitionRoster extends Component {
 }
 
 
-export default CompetitionRoster;
+export default withStyles(styles) (CompetitionRoster);
