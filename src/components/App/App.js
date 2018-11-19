@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-
+import './App.css';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
@@ -124,7 +124,7 @@ class App extends Component {
             </Switch>
             <ToastContainer 
             position={toast.POSITION.BOTTOM_RIGHT}
-            toastClassName="dark-toast"
+            className="black-toast"
             transition={Slide}
             autoClose={3500}
             hideProgressBar
