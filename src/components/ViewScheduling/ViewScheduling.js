@@ -13,6 +13,7 @@ import DndLeftSide from '../DndLeftSide/DndLeftSide';
 import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
 import DndList from '../DndList/DndList';
+import DndAddButton from '../DndAddButton/DndAddButton';
 
 class ViewScheduling extends Component {
   state = {
@@ -158,6 +159,7 @@ class ViewScheduling extends Component {
   };
 
   addSquad = () => {
+    console.log('addSquad hits');
     let toAdd = {
       id: this.state.traps.length,
       name: 'squad' + this.state.traps.length,
@@ -209,7 +211,7 @@ class ViewScheduling extends Component {
                   </DndCard>
                 );
               })}
-              <pre>{JSON.stringify(this.state, null, 2)}</pre>
+              <DndAddButton onClick={this.addSquad} />
             </DndRightSide>
           </DragDropContext>
         </DndPage>

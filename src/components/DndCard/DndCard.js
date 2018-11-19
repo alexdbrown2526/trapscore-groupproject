@@ -24,8 +24,7 @@ const DndCard = props => {
         }
         title={title}
       />
-      {props.children}
-      <CardContent />
+      <CardContent>{props.children}</CardContent>
     </Card>
   );
 };
