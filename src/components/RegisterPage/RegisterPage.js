@@ -6,6 +6,8 @@ import Card from '@material-ui/core/Card'
 import Button from '@material-ui/core/Button'
 import TextField from '@material-ui/core/TextField'
 import { compose } from 'redux';
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import Lock from '@material-ui/icons/Lock'
 
 
 
@@ -15,7 +17,7 @@ const styles = theme => ({
     marginTop: '3%',
     paddingBottom: '10%',
     width: '30%',
-    paddingtop: '3%',
+    paddingTop: '3%',
 	  display: 'flex',
 	  overflow: 'hidden',
 	  flexDirection: 'column',
@@ -24,8 +26,10 @@ const styles = theme => ({
 },
 
   registerButton: {
-
-  },
+    marginTop:'4%',
+    marginBottom: '4%',
+  
+},
 
   loginButton: {
 
@@ -92,7 +96,7 @@ class RegisterPage extends Component {
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
-              />
+              /><AccountCircle />
             </label>
           </div>
           <div>
@@ -103,14 +107,14 @@ class RegisterPage extends Component {
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
-              />
+              /><Lock/>
             </label>
           </div>
           <div>
             <Button
             onClick={this.registerUser}
             variant="contained"
-            className="register"
+            className={classes.registerButton}
               type="button"
               name="submit"
               value="Register">
@@ -128,10 +132,10 @@ class RegisterPage extends Component {
           <Button
           variant="contained"
             type="button"
-            className="link-button"
+            className={classes.loginButton}
             onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_LOGIN_MODE})}}
           >
-            Login
+           Back to Login
           </Button>
           </div>
           </center>
