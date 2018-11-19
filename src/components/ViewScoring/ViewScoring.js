@@ -54,9 +54,10 @@ class Scoring extends Component {
 
 
   finalRound = () => {
+    alert('Scores Submitted!')
     this.props.dispatch({
-      type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: this.props.currentRound + 1
+      type: USER_ACTIONS.SUBMIT_SCORES,
+      payload: this.props.selectedTrap
     });
   };
 
