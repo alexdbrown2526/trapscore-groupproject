@@ -58,23 +58,33 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.put('/', (req, res) => {
   let newSchedule = req.body;
 
-  let unscheduled = { id: null, schedule: [] }
-  let trapsToLoop = [...req.body.traps, ]
-
+  let unscheduled = { id: null, schedule: req.body.unassigned };
+  let trapsToLoop = [...newSchedule.traps.slice(0), unscheduled ];
 
   let updateValues = [];
+  //loop through each trap within trapsToLoop array
+  for (let trap of trapsToLoop) {
+    //for each squad in a trap's schedule array, push '(place_in_line, trap_id, squad_id, and box_number)' to updateValues
+    trap.schedule.forEach(item => {
+      updateValues.push(`(${item.place_in_line}, ${trap.id}, ${item.squad_id}, ${item.box_number})`)
+    })
+  }
 
+  // res.send(updateValues);
   
   pool
     .query(`
       UPDATE "squad_trap"
-      SET "place_in_line" = $1, "trap_id" = $2
-      WHERE "squad_id" = $3 AND "box_number" = $4
-      RETURNING *
-    ;`, [req.body.place_in_line, req.body.trap_id, req.params.squad_id, req.body.box_number]
+      SET "place_in_line" = columns."place_in_line", 
+        "trap_id" = columns."trap_id"
+      FROM ( VALUES
+        ${updateValues.join(',')}
+      ) as columns("place_in_line", "trap_id", "squad_id", "box_number")
+      WHERE "squad_trap"."squad_id" = columns."squad_id" AND "squad_trap"."box_number" = columns."box_number"
+    ;`
     )
-    .then(results => {
-      res.send(results.rows);
+    .then(() => {
+      res.sendStatus(200);
     })
     .catch(error => {
       console.log('Error storing squad scheduling data:', error);
