@@ -124,7 +124,6 @@ class App extends Component {
             </Switch>
             <ToastContainer 
             position={toast.POSITION.BOTTOM_RIGHT}
-            className="black-toast"
             transition={Slide}
             autoClose={3500}
             hideProgressBar
