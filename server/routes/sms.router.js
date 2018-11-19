@@ -8,11 +8,12 @@ const client = require('twilio')(
     process.env.TWILIO_NOTIFY_SERVICE_SID,
     process.env.MY_NUMBER
   );
+const { rejectUnauthenticated } = require('../modules/authentication-middleware');
 
 /**
  * GET route template
  */
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   const name = req.query.name || 'World';
   res.setHeader('Content-Type', 'application/json');
   res.send(JSON.stringify({ greeting: `Hello ${name}!` })); 
@@ -21,7 +22,7 @@ router.get('/', (req, res) => {
 /**
  * POST route template
  */
-router.post('/', (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   res.header('Content-Type', 'application/json');
   client.messages
     .create({

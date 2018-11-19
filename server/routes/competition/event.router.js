@@ -1,9 +1,10 @@
 const express = require('express');
 const pool = require("../../modules/pool");
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
 // GET a list of all events associated with current competition
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     pool.query(`SELECT * FROM "event" WHERE "competition_id" = ${req.user.competition_id}`)
       .then(results => res.send(results.rows))
       .catch(error => {
@@ -13,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 // GET a list of all events associated with current competition
-router.get('/:comp_id', (req, res) => {
+router.get('/:comp_id', rejectUnauthenticated, (req, res) => {
   pool.query(`SELECT * FROM "event" WHERE "competition_id" = ${req.params.comp_id}`)
     .then(results => res.send(results.rows))
     .catch(error => {

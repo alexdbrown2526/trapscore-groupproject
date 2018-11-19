@@ -1,12 +1,13 @@
 const express = require('express');
 const pool = require('../../modules/pool');
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
 /**
  * GET a list of all UNSQUADDED shooters for a specific event
  * TODO: add another query to get individual squad lists and format the response
  */
-router.get('/:event_id', async (req, res) => {
+router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
   console.log('event_id:', req.params.event_id);
   let dataToSend = {};
   try {
@@ -63,7 +64,7 @@ router.get('/:event_id', async (req, res) => {
 /**
  * PUT to assign shooters to squads
  */
-router.put('/:event_id', (req, res) => {
+router.put('/:event_id', rejectUnauthenticated, (req, res) => {
   newSquadding = req.body;
   console.log('newSquadding:', newSquadding);
   
