@@ -43,12 +43,12 @@ import {
   createMuiTheme,
   MuiThemeProvider,
 } from '@material-ui/core';
-import { brown, green } from '@material-ui/core/colors/';
+import { deepOrange, lightGreen } from '@material-ui/core/colors/';
 
 const theme = createMuiTheme({
   palette: {
-    primary: brown,
-    secondary: green,
+    primary: { main: '#d84315',},
+    secondary: { main: '#205723',},
   },
   typography: {
     useNextVariants: true,

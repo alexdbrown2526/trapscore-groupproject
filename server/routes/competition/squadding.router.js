@@ -108,4 +108,25 @@ router.put('/:event_id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+//Create a new squad in the database with four new squad_trap entries for each of the four boxes
+router.post('/new/:event_id', (req, res) => {
+  let newSquadId;
+  pool.query(`INSERT INTO "squad" ("event_id", "name")
+              VALUES (${req.params.event_id}, DEFAULT)
+              RETURNING "id";`)
+    .then(results => {
+      newSquadId = results.rows[0].id
+      pool.query(`INSERT INTO "squad_trap" ("squad_id", "box_number")
+                  VALUES (${newSquadId}, 1),
+                        (${newSquadId}, 2),
+                        (${newSquadId}, 3),
+                        (${newSquadId}, 4);`)
+        .then(() => res.sendStatus(200));
+    })
+    .catch(error => {
+      console.log('Error posting new squad:', error)
+      res.sendStatus(500);
+    })
+})
+
 module.exports = router;

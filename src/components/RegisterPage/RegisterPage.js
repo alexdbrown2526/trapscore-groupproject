@@ -9,6 +9,8 @@ import AccountCircle from '@material-ui/icons/AccountCircle'
 import Lock from '@material-ui/icons/Lock'
 
 
+// let imgUrl = 'https://waiteparkrifleclub.com/wp-content/uploads/2016/04/Trap_Shooting.jpg'
+
 
 const styles = theme => ({
   adminRegister: {
@@ -33,6 +35,10 @@ const styles = theme => ({
   loginButton: {
 
   },
+
+  // background: {
+  //   backgroundImage: 'url(' + imgUrl + ')'
+  // }
 
  
     
@@ -72,7 +78,7 @@ class RegisterPage extends Component {
     const { classes } = this.props;
 
     return (
-      <div>
+      <div className={classes.background}>
         {this.props.errors.registrationMessage && (
           <h2
             className="alert"
