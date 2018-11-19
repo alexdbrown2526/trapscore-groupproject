@@ -11,12 +11,12 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   let dataToSend = {};
   try {
     promises.push(
-      pool.query(`SELECT * from "squad_trap"
+      pool.query(`SELECT "squad_trap"."id", "squad_trap"."box_number", "squad"."name", "squad_trap"."place_in_line", "squad_trap"."squad_id" from "squad_trap"
                               LEFT JOIN "squad" on "squad"."id" = "squad_trap"."squad_id"
-                              LEFT JOIN "trap" on "squad_trap"."trap_id" = "trap"."id"
-                              WHERE "squad_trap"."place_in_line" IS NULL
-                              AND "trap"."competition_id" = 1
-                              ORDER BY "squad"."id", "squad_trap"."box_number";`)
+                              JOIN "event" on "event"."id" = "squad"."event_id"
+                              WHERE "squad_trap"."trap_id" IS NULL
+                              AND "event"."competition_id" = $1
+                              ORDER BY "squad"."id", "squad_trap"."box_number";`, [req.user.competition_id])
     );
     promises.push(
       pool.query(`SELECT json_agg(row_to_json(tra)) as traps
@@ -53,8 +53,34 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 });
 
 /**
- * POST route template
+ * Changes a squad's trap_id and place_in_line from null to the correctly scheduled values
  */
-router.post('/', (req, res) => {});
+router.put('/', (req, res) => {
+  let newSchedule = req.body;
+
+  let unscheduled = { id: null, schedule: [] }
+  let trapsToLoop = [...req.body.traps, ]
+
+
+  let updateValues = [];
+
+  
+  pool
+    .query(`
+      UPDATE "squad_trap"
+      SET "place_in_line" = $1, "trap_id" = $2
+      WHERE "squad_id" = $3 AND "box_number" = $4
+      RETURNING *
+    ;`, [req.body.place_in_line, req.body.trap_id, req.params.squad_id, req.body.box_number]
+    )
+    .then(results => {
+      res.send(results.rows);
+    })
+    .catch(error => {
+      console.log('Error storing squad scheduling data:', error);
+      res.sendStatus(500);
+    })
+
+});
 
 module.exports = router;
