@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Lock from '@material-ui/icons/Lock'
 import Card from '@material-ui/core/Card'
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   loginCard: {
@@ -41,6 +43,7 @@ class LoginPage extends Component {
 
   login = (event) => {
     event.preventDefault();
+    toast('Welcome to TrapScore!')
 
     if (this.state.username && this.state.password) {
       this.props.dispatch({
@@ -65,7 +68,7 @@ class LoginPage extends Component {
       const {classes} = this.props;
 
     return (
-      <div>
+      <div>  
         {this.props.errors.loginMessage && (
           <h2
             className="alert"

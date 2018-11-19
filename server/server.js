@@ -13,6 +13,7 @@ const userRouter = require("./routes/user.router");
 const competitionRouter = require("./routes/competition/competition.router");
 const smsRouter = require("./routes/sms.router");
 const registrationRouter = require("./routes/registration.router");
+const editRouter = require("./routes/competition/edit.router");
 
 // Body parser middleware
 app.use(bodyParser.json());
@@ -31,6 +32,7 @@ app.use("/api/registration", registrationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/competition", competitionRouter);
 app.use("/api/sms", smsRouter);
+app.use("/api/competition/edit", editRouter);
 
 // Serve static files
 app.use(express.static("build"));

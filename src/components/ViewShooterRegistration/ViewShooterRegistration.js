@@ -6,6 +6,8 @@ import PropTypes from 'prop-types';
 import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
 import './ViewShooterRegistration.css';
+import { toast } from 'react-toastify';
+
 
 const styles = {
   registerCard: {
@@ -29,6 +31,8 @@ const styles = {
     listStyle: 'none',
   },
 };
+
+
 
 class ViewShooterRegistration extends Component {
   state = {
@@ -121,8 +125,9 @@ class ViewShooterRegistration extends Component {
       })
       .catch(error => {
         console.log('Error submitting registration:', error);
-        alert('Error submitting registration. Please try again');
+        alert('Please fill out all fields and try again.');
       });
+      toast('Shooter Registered')
 
     // axios({
     //   method: "POST",

@@ -12,6 +12,9 @@ import { selectCompetitionRoute } from '../../navigationRoutes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const styles = theme => ({
   container: {
     display: 'flex',
@@ -61,7 +64,7 @@ class ViewAdminEditCompetition extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    alert('Competition Submitted!');
+    toast('Competition Submitted!');
     const body = {
       id: this.props.edit.id,
       date: this.state.date,
