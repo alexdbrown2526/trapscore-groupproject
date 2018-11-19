@@ -1,21 +1,19 @@
-import React, { Component } from "react";
+import React from 'react';
 
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 
-class NavSide extends Component {
-  render() {
-    return (
-      <>
-        <SwipeableDrawer
-          open={this.props.open}
-          onClose={this.props.setDrawer(false)}
-          onOpen={this.props.setDrawer(true)}
-        >
-          {this.props.children}
-        </SwipeableDrawer>
-      </>
-    );
-  }
-}
+const NavSide = props => {
+  return (
+    <>
+      <SwipeableDrawer
+        open={props.open}
+        onClose={props.setDrawer(false)}
+        onOpen={props.setDrawer(true)}
+      >
+        {props.children}
+      </SwipeableDrawer>
+    </>
+  );
+};
 
 export default NavSide;

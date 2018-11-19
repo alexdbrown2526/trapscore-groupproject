@@ -1,5 +1,6 @@
 const express = require("express");
 const pool = require("../../modules/pool");
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
 const routerName = "results.router.js";
@@ -7,9 +8,8 @@ const routerName = "results.router.js";
 /**
  * GET route template
  */
-router.get("/", (req, res) => {
-  // let competition_id = req.user.competition_id;
-  let competition_id = 1;
+router.get("/", rejectUnauthenticated, (req, res) => {
+  let competition_id = req.user.competition_id;
   let toSend = [];
 
   // Get a list of all of the events for the specific competition

@@ -9,6 +9,7 @@ import squaddingDataSaga from "./squaddingData.saga";
 import schedulingDataSaga from "./schedulingData.saga";
 import selectedTrapSaga from "./selectedTrap.saga";
 import goToRegistrationPageSaga from "./goToRegistrationPage.saga";
+import submitScoresSaga from "./submitScores.saga";
 
 export default function* rootSaga() {
   yield all([
@@ -22,5 +23,6 @@ export default function* rootSaga() {
     schedulingDataSaga(),
     selectedTrapSaga(),
     goToRegistrationPageSaga(),
+    submitScoresSaga(),
   ]);
 }
