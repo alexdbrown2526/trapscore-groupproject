@@ -70,8 +70,7 @@ router.put('/', (req, res) => {
     })
   }
 
-  // res.send(updateValues);
-  
+  //updates squad_trap data from the updateValues array data
   pool
     .query(`
       UPDATE "squad_trap"
