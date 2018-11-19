@@ -12,11 +12,13 @@ import { selectCompetitionRoute } from '../../navigationRoutes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+
+
+
 const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
-
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -25,12 +27,7 @@ const styles = theme => ({
   dense: {
     marginTop: 16,
   },
-  menu: {
-    width: 200,
-  },
-  modal: {
-    overflowY: 'scroll'
-  }
+  
 });
 
 class ViewAdminEditCompetition extends Component {
@@ -88,6 +85,9 @@ class ViewAdminEditCompetition extends Component {
     this.props.data();
   };
 
+ 
+ 
+
   render() {
     //Conditional Rendering if statement/variable
     let viewItem;
@@ -96,7 +96,7 @@ class ViewAdminEditCompetition extends Component {
     }
     const { classes } = this.props;
     return (
-      <div className={classes.modal}>
+      <div  className={classes.modal}>
         <h1>Edit Competition</h1>
         {JSON.stringify(this.props.edit)}
 
@@ -159,5 +159,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles(styles)
+  withStyles(styles), 
 )(ViewAdminEditCompetition);
