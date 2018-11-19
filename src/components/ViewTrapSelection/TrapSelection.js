@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { scoringRoute } from '../../navigationRoutes';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 class TrapSelection extends Component {
   state = {
@@ -17,6 +19,7 @@ class TrapSelection extends Component {
   }
 
   handleChangeFor = propertyName => event => {
+    toast('Trap Selected')
     this.setState({
       ...this.state,
       [propertyName]: event.target.value
@@ -71,7 +74,8 @@ class TrapSelection extends Component {
 
 const mapStateToProps = reduxState => ({
   reduxState,
-  traps: reduxState.traps
+  traps: reduxState.traps,
+  user: reduxState.user
 });
 
 export default connect(mapStateToProps)(TrapSelection);

@@ -12,8 +12,11 @@ import DndPage from '../DndPage/DndPage';
 import DndLeftSide from '../DndLeftSide/DndLeftSide';
 import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
+import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
 import DndAddButton from '../DndAddButton/DndAddButton';
+
+import { toast } from 'react-toastify';
 
 class ViewScheduling extends Component {
   state = {
@@ -29,10 +32,6 @@ class ViewScheduling extends Component {
 
   componentDidMount() {
     this.getData();
-  }
-
-  componentWillUnmount() {
-    this.sendData();
   }
 
   getData = () => {
@@ -59,6 +58,7 @@ class ViewScheduling extends Component {
       url: `/api/competition/scheduling/`,
       data: this.state,
     }).then(() => {
+      toast('Scheduling saved');
       this.getData();
     });
   };
@@ -161,20 +161,23 @@ class ViewScheduling extends Component {
     }
   };
 
-  addSquad = () => {
-    console.log('addSquad hit');
+  addTrap = () => {
+    // TODO FIX ME
+  };
 
-    const sent = this.getData();
-    console.log(sent);
+  editTrap = (trapId, newName) => {
+    axios({
+      method: 'PUT',
+      url: `/api/competition/edit/trap/${trapId}`,
+      data: { name: newName },
+    }).then(() => {
+      this.getData();
+    });
+    toast('Trap name updated!');
+  };
 
-    // let toAdd = {
-    //   id: this.state.traps.length,
-    //   name: 'squad' + this.state.traps.length,
-    //   schedule: [],
-    // };
-    // let newtraps = [...this.state.traps, toAdd];
-
-    // this.setState({ traps: newtraps });
+  deleteTrap = trapId => {
+    console.log('This is where we would delete: ', trapId);
   };
 
   render() {
@@ -184,10 +187,10 @@ class ViewScheduling extends Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             <DndLeftSide>
               <HeaderMargins>
-                <Typography variant="h4">Unsquadded</Typography>
+                <Typography variant="h4">Unscheduled</Typography>
               </HeaderMargins>
               <Divider />
-              <Button onClick={this.sendData}>Save</Button>
+              {/* <Button onClick={this.sendData}>Save</Button> */}
               <DndList
                 box
                 droppableId="unassigned"
@@ -204,7 +207,18 @@ class ViewScheduling extends Component {
               </Typography> */}
               {this.state.traps.map((trap, index) => {
                 return (
-                  <DndCard key={trap.id} title={trap.name}>
+                  <DndCard
+                    key={trap.id}
+                    title={trap.name}
+                    cornerButton={
+                      <DndEditModal
+                        id={trap.id}
+                        field={trap.name}
+                        edit={this.editTrap}
+                        delete={this.deleteTrap}
+                      />
+                    }
+                  >
                     <DndList
                       box
                       droppableId={index.toString()}

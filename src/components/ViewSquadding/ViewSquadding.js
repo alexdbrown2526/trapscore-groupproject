@@ -12,13 +12,17 @@ import DndPage from '../DndPage/DndPage';
 import DndLeftSide from '../DndLeftSide/DndLeftSide';
 import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
+import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
+
+import { toast } from 'react-toastify';
 
 class ViewSquadding extends Component {
   state = {
     unassigned: [],
     squads: [
       {
+        name: '',
         id: 0,
         members: [],
       },
@@ -27,10 +31,6 @@ class ViewSquadding extends Component {
 
   componentDidMount() {
     this.getData();
-  }
-
-  componentWillUnmount() {
-    this.sendData();
   }
 
   getData = () => {
@@ -53,6 +53,7 @@ class ViewSquadding extends Component {
 
   sendData = () => {
     let event_id = 4;
+    toast('Squads saved');
     axios({
       method: 'PUT',
       url: `/api/competition/squadding/${event_id}`,
@@ -165,14 +166,29 @@ class ViewSquadding extends Component {
   };
 
   addSquad = () => {
-    let toAdd = {
-      id: this.state.squads.length,
-      name: 'squad' + this.state.squads.length,
-      members: [],
-    };
-    let newSquads = [...this.state.squads, toAdd];
+    let eventId = 4;
+    axios({
+      method: 'POST',
+      url: `/api/competition/squadding/new/${eventId}`,
+    }).then(() => {
+      this.getData();
+    });
+    toast('Squad name updated!');
+  };
 
-    this.setState({ squads: newSquads });
+  editSquad = (squadId, newName) => {
+    axios({
+      method: 'PUT',
+      url: `/api/competition/edit/squad/${squadId}`,
+      data: { name: newName },
+    }).then(() => {
+      this.getData();
+    });
+    toast('Squad name updated!');
+  };
+
+  deleteSquad = squadId => {
+    console.log('This is where we would delete: ', squadId);
   };
 
   render() {
@@ -185,7 +201,7 @@ class ViewSquadding extends Component {
                 <Typography variant="h4">Unsquadded</Typography>
               </HeaderMargins>
               <Divider />
-              <Button onClick={this.getData}>Save</Button>
+              {/* <Button onClick={this.getData}>Save</Button> */}
               <DndList
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {
@@ -201,7 +217,18 @@ class ViewSquadding extends Component {
               </Typography> */}
               {this.state.squads.map((squad, index) => {
                 return (
-                  <DndCard title={squad.name}>
+                  <DndCard
+                    key={squad.id}
+                    title={squad.name}
+                    cornerButton={
+                      <DndEditModal
+                        id={squad.id}
+                        field={squad.name}
+                        edit={this.editSquad}
+                        delete={this.deleteSquad}
+                      />
+                    }
+                  >
                     <DndList
                       droppableId={index.toString()}
                       data={squad.members.map(item => {
