@@ -39,21 +39,25 @@ class Scoring extends Component {
   };
 
   selectRound = (event, value) => {
-    this.setState({ ...this.state, selectedRound: value });
+    this.props.dispatch({
+      type: USER_ACTIONS.SET_CURRENT_ROUND,
+      payload: value
+    });
   };
 
   nextRound = () => {
-    this.setState({
-      ...this.state,
-      selectedRound: this.state.selectedRound + 1
+    this.props.dispatch({
+      type: USER_ACTIONS.SET_CURRENT_ROUND,
+      payload: this.props.currentRound + 1
     });
-    if (this.state.selectedRound === 5) {
-      this.setState({
-        ...this.state,
-        selectedRound: this.state.selectedRound,
-        ToggleButton: true
-      });
-    }
+  };
+
+
+  finalRound = () => {
+    this.props.dispatch({
+      type: USER_ACTIONS.SET_CURRENT_ROUND,
+      payload: this.props.currentRound + 1
+    });
   };
 
   setScore = (index, round, value) => {
@@ -68,22 +72,11 @@ class Scoring extends Component {
   };
 
   render() {
-    let roundItem;
-    if (this.state.selectedRound <= 4) {
-      roundItem = (
-        <Button value={this.state.selectedRound} onClick={this.nextRound}>
-          Next Round
-        </Button>
-      );
-    } else {
-      roundItem = <Button>Submit Scores</Button>;
-    }
-
     return (
       <div>
         <h1>Scoring</h1>
         {/* <pre> {JSON.stringify(this.props, null, 2)}</pre>  */}
-        <pre> {JSON.stringify(this.props, null, 2)}</pre>
+        <pre> {JSON.stringify(this.props.selectedTrap, null, 2)}</pre>
         <h2>{this.props.selectedTrap.name}</h2>
         <h2>Rounds</h2>
         <ToggleButtonGroup
@@ -111,7 +104,6 @@ class Scoring extends Component {
             );
           })}
         </List>
-        {roundItem}
 
         {this.props.selectedTrap.shooters.reduce((sum, current) => {
           if (current.shots[this.props.currentRound - 1] === null) {
@@ -120,9 +112,17 @@ class Scoring extends Component {
             return sum + 1;
           }
         }, 0) < this.props.selectedTrap.shooters.length ? (
-          <h1>CLICK MOAR STUFF</h1>
+          this.props.currentRound < 5 ? (
+            <Button disabled={true}>Next Round</Button>
+          ) : (
+            <Button disabled={true}>Submit Scores</Button>
+          )
         ) : (
-          <h1>GOOD TU GO</h1>
+          this.props.currentRound < 5
+          ?
+          <Button onClick={this.nextRound}>Next Round</Button>
+          :
+          <Button onClick={this.finalRound}>Submit Scores</Button>
         )}
       </div>
     );
