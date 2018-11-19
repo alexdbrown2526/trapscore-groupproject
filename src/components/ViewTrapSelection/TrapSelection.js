@@ -46,7 +46,7 @@ class TrapSelection extends Component {
     return (
       <div>
         <h1>Trap Selection</h1>
-        {JSON.stringify(this.state.trap)}
+        {/* {JSON.stringify(this.state.trap)} */}
         <form onSubmit={this.handleSubmit}>
           <label>
             <select onChange={this.handleChangeFor("trap")}>

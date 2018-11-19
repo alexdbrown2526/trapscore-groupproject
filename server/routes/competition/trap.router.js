@@ -1,11 +1,12 @@
 const express = require('express');
 const pool = require("../../modules/pool");
 const router = express.Router();
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 
 /**
  * GET a list of all traps from currently selected competition
  */
-router.get('/', (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
     pool.query(`SELECT "id", "name" FROM "trap"
                 WHERE "competition_id" = ${req.user.competition_id};`)
       .then( results => res.send(results.rows))
@@ -17,7 +18,7 @@ router.get('/', (req, res) => {
 
 // Gets id and name of selected trap into the redux state (selectedTrap reducer) for the scoring view so it can be accessed in the selectedTrap array.
 
-router.get('/:id', (req, res) => {
+router.get('/:id', rejectUnauthenticated, (req, res) => {
   pool.query(`SELECT "id", "name" FROM "trap" WHERE "id" = $1;`, [req.params.id])
     .then(results => res.send(results.rows[0]))
     .catch(error => {
