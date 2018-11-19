@@ -12,16 +12,18 @@ import DndPage from '../DndPage/DndPage';
 import DndLeftSide from '../DndLeftSide/DndLeftSide';
 import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
+import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
+import DndAddButton from '../DndAddButton/DndAddButton';
 
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 class ViewScheduling extends Component {
   state = {
     unassigned: [],
     traps: [
       {
+        name: '',
         id: 0,
         schedule: [],
       },
@@ -32,10 +34,6 @@ class ViewScheduling extends Component {
     this.getData();
   }
 
-  componentWillUnmount() {
-    this.sendData();
-  }
-
   getData = () => {
     axios({
       method: 'GET',
@@ -44,6 +42,7 @@ class ViewScheduling extends Component {
       .then(response => {
         console.log(response);
         this.setState({ ...response.data });
+        return response;
       })
       .catch(error => {
         alert(
@@ -54,13 +53,14 @@ class ViewScheduling extends Component {
   };
 
   sendData = () => {
-    toast('Scheduling saved')
-    // let event_id = 4;
-    // axios({
-    //   method: 'PUT',
-    //   url: `/api/competition/squadding/${event_id}`,
-    //   data: this.state,
-    // });
+    axios({
+      method: 'PUT',
+      url: `/api/competition/scheduling/`,
+      data: this.state,
+    }).then(() => {
+      toast('Scheduling saved');
+      this.getData();
+    });
   };
 
   getList = id => {
@@ -161,15 +161,23 @@ class ViewScheduling extends Component {
     }
   };
 
-  addSquad = () => {
-    let toAdd = {
-      id: this.state.traps.length,
-      name: 'squad' + this.state.traps.length,
-      schedule: [],
-    };
-    let newtraps = [...this.state.traps, toAdd];
+  addTrap = () => {
+    // TODO FIX ME
+  };
 
-    this.setState({ traps: newtraps });
+  editTrap = (trapId, newName) => {
+    axios({
+      method: 'PUT',
+      url: `/api/competition/edit/trap/${trapId}`,
+      data: { name: newName },
+    }).then(() => {
+      this.getData();
+    });
+    toast('Trap name updated!');
+  };
+
+  deleteTrap = trapId => {
+    console.log('This is where we would delete: ', trapId);
   };
 
   render() {
@@ -179,15 +187,16 @@ class ViewScheduling extends Component {
           <DragDropContext onDragEnd={this.onDragEnd}>
             <DndLeftSide>
               <HeaderMargins>
-                <Typography variant="h4">Unsquadded</Typography>
+                <Typography variant="h4">Unscheduled</Typography>
               </HeaderMargins>
               <Divider />
-              <Button onClick={this.sendData}>Save</Button>
+              {/* <Button onClick={this.sendData}>Save</Button> */}
               <DndList
+                box
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {
                   item.mainText = item.name;
-                  item.avatar = item.handicap;
+                  item.avatar = item.box_number;
                   return item;
                 })}
               />
@@ -198,7 +207,18 @@ class ViewScheduling extends Component {
               </Typography> */}
               {this.state.traps.map((trap, index) => {
                 return (
-                  <DndCard title={trap.name}>
+                  <DndCard
+                    key={trap.id}
+                    title={trap.name}
+                    cornerButton={
+                      <DndEditModal
+                        id={trap.id}
+                        field={trap.name}
+                        edit={this.editTrap}
+                        delete={this.deleteTrap}
+                      />
+                    }
+                  >
                     <DndList
                       box
                       droppableId={index.toString()}
@@ -212,7 +232,7 @@ class ViewScheduling extends Component {
                   </DndCard>
                 );
               })}
-              <pre>{JSON.stringify(this.state, null, 2)}</pre>
+              <DndAddButton onClick={this.addSquad} />
             </DndRightSide>
           </DragDropContext>
         </DndPage>

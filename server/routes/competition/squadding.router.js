@@ -1,6 +1,8 @@
 const express = require('express');
 const pool = require('../../modules/pool');
-const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
+const {
+  rejectUnauthenticated,
+} = require('../../modules/authentication-middleware');
 const router = express.Router();
 
 /**
@@ -14,7 +16,9 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
     //Returns an array of all unsquadded shooters associated with the currently selected event
     const getUnsquadded = pool.query(`SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_event"."post_position" FROM "shooter"
       JOIN "shooter_event" ON "shooter_event"."shooter_id" = "shooter"."id"
-      WHERE "shooter_event"."event_id" = ${req.params.event_id} AND "shooter_event"."squad_id" IS NULL;`);
+      WHERE "shooter_event"."event_id" = ${
+        req.params.event_id
+      } AND "shooter_event"."squad_id" IS NULL;`);
     //Returns event id and event name
     const getEventDetails = pool.query(
       `SELECT * FROM "event" WHERE "id" = ${req.params.event_id};`
@@ -67,30 +71,39 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
 router.put('/:event_id', rejectUnauthenticated, (req, res) => {
   newSquadding = req.body;
   console.log('newSquadding:', newSquadding);
-  
+
+  let unassigned = { members: [...newSquadding.unassigned], id: null };
+  let squadsToLoop = [...newSquadding.squads.slice(0), unassigned];
+
   let updateValues = [];
   //for each squad in req.body.squads:
-  for (let squad of req.body.squads) {
+  for (let squad of squadsToLoop) {
     //loop through squad.members
     //push (squad_id, calculated post_position from index within array, shooter_id, and event_id) to updateValues array for each squad member
     squad.members.forEach(member => {
-      updateValues.push(`(${squad.id}, ${squad.members.indexOf(member) + 1}, ${member.id}, ${req.params.event_id})`);
-    })
+      updateValues.push(
+        `(${squad.id}, ${squad.members.indexOf(member) + 1}, ${member.id}, ${
+          req.params.event_id
+        })`
+      );
+    });
   }
   //update shooter_event table with new squad_id and post_position for each shooter_id/event_id pair
   pool
-    .query(`
+    .query(
+      `
     UPDATE "shooter_event"
     SET "squad_id" = columns."squad_id",
       "post_position" = columns."post_position"
     FROM( VALUES
-      ${updateValues.join(",")}
+      ${updateValues.join(',')}
       ) as columns("squad_id", "post_position", "shooter_id", "event_id")
       WHERE columns."shooter_id" = "shooter_event"."shooter_id" AND columns."event_id" = "shooter_event"."event_id";
-    `)
+    `
+    )
     .then(() => res.sendStatus(200))
     .catch(error => {
-      console.log("Error updating shooter_event:", error);
+      console.log('Error updating shooter_event:', error);
       res.sendStatus(500);
     });
 });
