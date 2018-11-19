@@ -146,15 +146,15 @@ class ViewAdminSelectCompetition extends Component {
           {this.state.competitions.map(comp => {
             return (
               <ListItem key={comp.id} value={comp.id}>
-                <Button onClick={() => this.editCompetition(comp)}>Edit</Button>
+                <Button variant="contained" color="secondary" onClick={() => this.editCompetition(comp)}>Edit</Button>
                 {comp.name}
               </ListItem>
             );
           })}
         </List>
 
-        <Button onClick={this.addNewCompetition}>Add Competition</Button>
-        <Button onClick={this.handleLogOut}>Log Out</Button>
+        <Button color="primary" variant="contained" onClick={this.addNewCompetition}>Add Competition</Button>
+        <Button className={classes} color="secondary" variant="contained" onClick={this.handleLogOut}>Log Out</Button>
         {displayItem}
         {viewItem}
       </div>

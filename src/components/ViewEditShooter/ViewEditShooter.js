@@ -5,24 +5,20 @@ import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/List'
+import ListItemText from '@material-ui/core/ListItemText'
 
 const styles = theme => ({   
  
+
+
   editform: {
-    width: '50%',
-    height: '60vh',
-    minWidth: 100,
-    // display: 'flex',
-    flexDirection: 'column',
-    flexWrap: 'wrap',
-    // alignItems: 'start',
-    backgroundColor: 'blue',
-    marginLeft: '50%',
-    postition: 'relative',
     float: 'right',
-  },
-  searchButton :{
-      backgroundColor: 'red'
+    marginRight: '20%',
+    marginTop: '4%',
+    borderStyle: 'solid',
+    padding: '20px',
+    backgroundColor: 'lightgray',
+    fontFamily: 'Roboto, sans-serif'
   }
   
 });

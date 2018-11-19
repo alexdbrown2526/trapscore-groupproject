@@ -1,8 +1,45 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import { compose } from 'redux';
+
+
+
+const styles = theme => ({
+  adminRegister: {
+    fontFamily: 'Roboto, sans-serif',
+    marginTop: '3%',
+    paddingBottom: '10%',
+    width: '30%',
+    paddingtop: '3%',
+	  display: 'flex',
+	  overflow: 'hidden',
+	  flexDirection: 'column',
+	  margin: 'auto',
+
+},
+
+  registerButton: {
+
+  },
+
+  loginButton: {
+
+  },
+
+  Checkbox: {
+    listStyle: 'none',
+}
+    
+})
 
 class RegisterPage extends Component {
+
+  
   state = {
     username: '',
     password: '',
@@ -31,6 +68,8 @@ class RegisterPage extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     return (
       <div>
         {this.props.errors.registrationMessage && (
@@ -41,12 +80,14 @@ class RegisterPage extends Component {
             {this.props.errors.registrationMessage}
           </h2>
         )}
+        <Card className={classes.adminRegister}>
         <form onSubmit={this.registerUser}>
+          <center>
           <h1>Register User</h1>
           <div>
             <label htmlFor="username">
-              Username:
-              <input
+              <TextField
+              placeholder="Username"
                 type="text"
                 name="username"
                 value={this.state.username}
@@ -56,8 +97,8 @@ class RegisterPage extends Component {
           </div>
           <div>
             <label htmlFor="password">
-              Password:
-              <input
+              <TextField
+              placeholder="Password"
                 type="password"
                 name="password"
                 value={this.state.password}
@@ -66,24 +107,39 @@ class RegisterPage extends Component {
             </label>
           </div>
           <div>
-            <input
+            <Button
+            onClick={this.registerUser}
+            variant="contained"
+            className="register"
+              type="button"
+              name="submit"
+              value="Register">
+              Register
+              
+            </Button>
+            {/* <input
               className="register"
               type="submit"
               name="submit"
               value="Register"
-            />
-          </div>
-        </form>
-        <center>
-          <button
+            /> */}
+          
+        <br/>
+          <Button
+          variant="contained"
             type="button"
             className="link-button"
             onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_LOGIN_MODE})}}
           >
             Login
-          </button>
-        </center>
+          </Button>
+          </div>
+          </center>
+
+        </form>
+        </Card>
       </div>
+     
     );
   }
 }
@@ -95,5 +151,8 @@ const mapStateToProps = state => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps)(RegisterPage);
+
+
+ export default withStyles(styles)(connect(mapStateToProps)(RegisterPage));
+
 

@@ -7,36 +7,34 @@ import SettingsIcon from'@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
+import Avatar from '@material-ui/core/Avatar'
 // import classes from '*.module.scss';
 
 
 const styles = theme => ({  
 
   roster: {
-    backgroundColor: 'red',
-    width: '50%',
+    // backgroundColor: 'red',
+    width: '30%',
     minWidth: 100,
-    height: '50vh',
+    height: '61vh',
     overflowY: 'scroll',
     float: 'left',
-    
-    
-  },
+    marginLeft: '20%',
+    marginTop: '4%',
+    borderStyle: 'solid',
+    padding: '20px',
+    backgroundColor: 'lightgray',
+    fontFamily: 'Roboto, sans-serif'
 
+  },
+  
   searchField: {
-    backgroundColor: 'blue',
-    height: '5vh'
-  }
-  // editForm: {
-  //   width: '50%',
-  //   height: '30vh',
-  //   minWidth: 100,
-  //   // display: 'flex',
-  //   flexDirection: 'row',
-  //   flexWrap: 'wrap',
-  //   // alignItems: 'start',
-  //   backgroundColor: 'red',
-  // }
+    height: '5vh',
+    fontFamily: 'Roboto, sans-serif'
+
+  },
+ 
   
 });
 
@@ -121,7 +119,7 @@ class CompetitionRoster extends Component {
     const { classes } = this.props;
 
     const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
-        .map((shooter, index) => <ListItem key={index}>{shooter.first_name} {shooter.last_name} <IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton></ListItem>);
+        .map((shooter, index) => <ListItem  key={index}>{shooter.first_name} {shooter.last_name} <IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton></ListItem>);
 
     return (<div className={classes.root}> 
       <div className={classes.editForm}>
