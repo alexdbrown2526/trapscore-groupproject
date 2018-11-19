@@ -9,6 +9,9 @@ import ScoringItem from "../ScoringItem/ScoringItem";
 
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // TO POST: SHOOTER EVENT ID , SQUAD EVENT ID, SCORE
 // SQUAD HAS THE EVENT ID
 
@@ -54,7 +57,7 @@ class Scoring extends Component {
 
 
   finalRound = () => {
-    alert('Scores Submitted!')
+    toast('Scores Submitted!')
     this.props.dispatch({
       type: USER_ACTIONS.SUBMIT_SCORES,
       payload: this.props.selectedTrap
@@ -76,8 +79,6 @@ class Scoring extends Component {
     return (
       <div>
         <h1>Scoring</h1>
-        {/* <pre> {JSON.stringify(this.props, null, 2)}</pre>  */}
-        <pre> {JSON.stringify(this.props.selectedTrap, null, 2)}</pre>
         <h2>{this.props.selectedTrap.name}</h2>
         <h2>Rounds</h2>
         <ToggleButtonGroup
