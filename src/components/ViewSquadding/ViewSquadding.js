@@ -40,6 +40,7 @@ class ViewSquadding extends Component {
       url: `/api/competition/squadding/${event_id}`,
     })
       .then(response => {
+        console.log(response.data);
         this.setState({ ...response.data });
       })
       .catch(error => {
@@ -56,6 +57,8 @@ class ViewSquadding extends Component {
       method: 'PUT',
       url: `/api/competition/squadding/${event_id}`,
       data: this.state,
+    }).then(() => {
+      this.getData();
     });
   };
 
@@ -78,7 +81,10 @@ class ViewSquadding extends Component {
       return;
     }
 
-    if (destination.droppableId != 'unassigned') {
+    if (
+      destination.droppableId != 'unassigned' &&
+      destination.droppableId != source.droppableId
+    ) {
       // if destination is already full
       if (
         this.state.squads[Number(destination.droppableId)].members.length > 4
@@ -154,6 +160,7 @@ class ViewSquadding extends Component {
           ],
         });
       }
+      this.sendData();
     }
   };
 
@@ -178,7 +185,7 @@ class ViewSquadding extends Component {
                 <Typography variant="h4">Unsquadded</Typography>
               </HeaderMargins>
               <Divider />
-              <Button onClick={this.sendData}>Save</Button>
+              <Button onClick={this.getData}>Save</Button>
               <DndList
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {

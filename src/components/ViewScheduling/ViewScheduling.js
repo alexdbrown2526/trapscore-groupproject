@@ -20,6 +20,7 @@ class ViewScheduling extends Component {
     unassigned: [],
     traps: [
       {
+        name: '',
         id: 0,
         schedule: [],
       },
@@ -42,6 +43,7 @@ class ViewScheduling extends Component {
       .then(response => {
         console.log(response);
         this.setState({ ...response.data });
+        return response;
       })
       .catch(error => {
         alert(
@@ -52,12 +54,13 @@ class ViewScheduling extends Component {
   };
 
   sendData = () => {
-    // let event_id = 4;
-    // axios({
-    //   method: 'PUT',
-    //   url: `/api/competition/squadding/${event_id}`,
-    //   data: this.state,
-    // });
+    axios({
+      method: 'PUT',
+      url: `/api/competition/scheduling/`,
+      data: this.state,
+    }).then(() => {
+      this.getData();
+    });
   };
 
   getList = id => {
@@ -159,15 +162,19 @@ class ViewScheduling extends Component {
   };
 
   addSquad = () => {
-    console.log('addSquad hits');
-    let toAdd = {
-      id: this.state.traps.length,
-      name: 'squad' + this.state.traps.length,
-      schedule: [],
-    };
-    let newtraps = [...this.state.traps, toAdd];
+    console.log('addSquad hit');
 
-    this.setState({ traps: newtraps });
+    const sent = this.getData();
+    console.log(sent);
+
+    // let toAdd = {
+    //   id: this.state.traps.length,
+    //   name: 'squad' + this.state.traps.length,
+    //   schedule: [],
+    // };
+    // let newtraps = [...this.state.traps, toAdd];
+
+    // this.setState({ traps: newtraps });
   };
 
   render() {
@@ -197,7 +204,7 @@ class ViewScheduling extends Component {
               </Typography> */}
               {this.state.traps.map((trap, index) => {
                 return (
-                  <DndCard title={trap.name}>
+                  <DndCard key={trap.id} title={trap.name}>
                     <DndList
                       box
                       droppableId={index.toString()}

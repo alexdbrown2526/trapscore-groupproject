@@ -25,7 +25,14 @@ const DndList = props => {
             // style={getListStyle(snapshot.isDraggingOver)}
           >
             {props.data.map((item, index) => {
-              return <DndItem item={item} index={index} box={props.box} />;
+              return (
+                <DndItem
+                  key={item.id}
+                  item={item}
+                  index={index}
+                  box={props.box}
+                />
+              );
             })}
             {provided.placeholder}
           </div>
