@@ -1,6 +1,7 @@
 const express = require("express");
 const pool = require("../../modules/pool");
 const router = express.Router();
+const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 
 /**
  * GET route template
@@ -49,7 +50,7 @@ const router = express.Router();
   ]
 }
  */
-router.get("/", async (req, res, next) => {
+router.get("/", rejectUnauthenticated, async (req, res, next) => {
   //assumes that req.body.id is the trap id AND that the lowest value of 'place_in_line' is actually the next in line (i.e. when scores are submitted, place_in_line needs to be set to null)
   let selectedTrap;
   let squadTrap;
@@ -124,7 +125,7 @@ router.get("/", async (req, res, next) => {
  * inserts 5 scores for each member of a squad into the score table
  * increment current_rotation in squad_trap (up to a maximum of 6)
  */
-router.post("/", (req, res) => {
+router.post("/", rejectUnauthenticated, (req, res) => {
   const squad_trap_id = req.body.squad_trap.id;
   console.log("squad_trap_id=", squad_trap_id);
   try {
