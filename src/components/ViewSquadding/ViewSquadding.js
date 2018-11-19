@@ -14,6 +14,9 @@ import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
 import DndList from '../DndList/DndList';
 
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 class ViewSquadding extends Component {
   state = {
     unassigned: [],
@@ -52,6 +55,7 @@ class ViewSquadding extends Component {
 
   sendData = () => {
     let event_id = 4;
+    toast('Squads saved')
     axios({
       method: 'PUT',
       url: `/api/competition/squadding/${event_id}`,

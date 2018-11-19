@@ -14,6 +14,9 @@ import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
 import DndList from '../DndList/DndList';
 
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 class ViewScheduling extends Component {
   state = {
     unassigned: [],
@@ -51,6 +54,7 @@ class ViewScheduling extends Component {
   };
 
   sendData = () => {
+    toast('Scheduling saved')
     // let event_id = 4;
     // axios({
     //   method: 'PUT',

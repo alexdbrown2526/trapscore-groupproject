@@ -14,6 +14,7 @@ const competitionRouter = require("./routes/competition/competition.router");
 const smsRouter = require("./routes/sms.router");
 const registrationRouter = require("./routes/registration.router");
 
+
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
