@@ -1,6 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
+import { withStyles } from '@material-ui/core'
+import Button from '@material-ui/core/Button'
+import TextField from '@material-ui/core/TextField'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import Lock from '@material-ui/icons/Lock'
+import Card from '@material-ui/core/Card'
+
+const styles = theme => ({
+  loginCard: {
+    fontFamily: 'Roboto, sans-serif',
+    marginTop: '3%',
+    paddingBottom: '10%',
+    width: '30%',
+    paddingTop: '3%',
+	  display: 'flex',
+	  overflow: 'hidden',
+	  flexDirection: 'column',
+	  margin: 'auto',
+
+},
+
+  loginButton: {
+    marginTop:'4%',
+    marginBottom: '4%',
+  
+},
+
+
+ 
+    
+})
 
 class LoginPage extends Component {
   state = {
@@ -31,6 +62,8 @@ class LoginPage extends Component {
   }
 
   render() {
+      const {classes} = this.props;
+
     return (
       <div>
         {this.props.errors.loginMessage && (
@@ -41,48 +74,59 @@ class LoginPage extends Component {
             {this.props.errors.loginMessage}
           </h2>
         )}
+        <Card className={classes.loginCard}>
         <form onSubmit={this.login}>
+        <center>
           <h1>Login</h1>
           <div>
             <label htmlFor="username">
-              Username:
-              <input
+              <TextField
+              placeholder="Username"
                 type="text"
                 name="username"
                 value={this.state.username}
                 onChange={this.handleInputChangeFor('username')}
-              />
+              /> <AccountCircle />
             </label>
           </div>
           <div>
             <label htmlFor="password">
-              Password:
-              <input
+              <TextField
+              placeholder="Password"
                 type="password"
                 name="password"
                 value={this.state.password}
                 onChange={this.handleInputChangeFor('password')}
-              />
+              /> <Lock />
             </label>
           </div>
           <div>
-            <input
-              className="log-in"
+            <Button
+            onClick={this.login}
+            variant="contained"
+            className={classes.loginButton}>
+              Login
+            </Button>
+            {/* <input
+             className="log-in"
               type="submit"
               name="submit"
               value="Log In"
-            />
+            /> */}
           </div>
-        </form>
-        <center>
-          <button
+        
+          <Button
+          variant="contained"
             type="button"
             className="link-button"
             onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_REGISTER_MODE})}}
           >
             Register
-          </button>
-        </center>
+          </Button>
+          </center>
+        </form>
+        </Card>
+        
       </div>
     );
   }
@@ -95,4 +139,4 @@ const mapStateToProps = state => ({
   errors: state.errors,
 });
 
-export default connect(mapStateToProps)(LoginPage);
+export default withStyles(styles)(connect(mapStateToProps)(LoginPage));

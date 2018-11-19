@@ -17,7 +17,6 @@ const styles = theme => ({
     marginTop: '4%',
     borderStyle: 'solid',
     padding: '20px',
-    backgroundColor: 'lightgray',
     fontFamily: 'Roboto, sans-serif'
   }
   
