@@ -24,14 +24,10 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
     )
     .then(results => {
       console.log("squad_trap list:", results.rows);
-      if (
-        results.rows[0].squad_id !== 0
-        // results.rows[results.rows.length - 1].squad_id
-      ) {
+      if (results.rows[0].squad_id !== results.rows[results.rows.length - 1].squad_id || results.rows[1].squad_id !== results.rows[results.rows.length - 1].squad_id) {
         const squad_id = results.rows[results.rows.length - 1].squad_id;
         pool
-          .query(
-            `SELECT "shooter"."phone", "shooter"."first_name", "event"."name" as "event_name", "trap"."name" as "trap_name"
+          .query(`SELECT "shooter"."phone", "shooter"."first_name", "event"."name" as "event_name", "trap"."name" as "trap_name"
               FROM "shooter"
               JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
               JOIN "event" ON "shooter_event"."event_id" = "event"."id"
@@ -39,12 +35,11 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
               JOIN "squad_trap" ON "squad_trap"."squad_id" = "squad"."id"
               JOIN "trap" ON "squad_trap"."trap_id" = "trap"."id"
               WHERE "squad_trap"."squad_id" = ${squad_id} 
-                AND "squad_trap"."place_in_line" = ${place_in_line};`
-          )
+                AND "squad_trap"."place_in_line" = ${place_in_line};`)
           .then(results => {
-            results.rows.forEach((shooter => {
+            results.rows.forEach(shooter => {
               let body = `Hi, ${shooter.first_name}. Your squad is next in line to shoot ${shooter.event_name.toLowerCase()} at ${shooter.trap_name}`;
-              console.log('message body:', body)
+              console.log("message body:", body);
               //FYI: Twilio's concurrency limit is 100.
               client.messages
                 .create({
@@ -60,9 +55,13 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
                   console.log(err);
                   res.send({ success: false });
                 });
-            }))
+            });
           })
-      }
+          .catch(error => {
+            console.log('Error sending shooter notifications:', error);
+            res.sendStatus(500);
+          });
+      } 
     });
 
   

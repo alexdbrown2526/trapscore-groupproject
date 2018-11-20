@@ -23,7 +23,8 @@ const sendTwilioNotification = require('../../modules/twilio-notifications');
   "shooters": [
     {
       "id": 32,
-      "name": "Alex",
+      "first_name": "Alex",
+      "last_name": "Buck"
       "shooter_event_id": 75,
       "shots" : 
         [
@@ -36,7 +37,8 @@ const sendTwilioNotification = require('../../modules/twilio-notifications');
     },
     {
       "id": 38,
-      "name": "Chris",
+      "first_name": "Chris",
+      "last_name": "Cross"
       "shooter_event_id": 61,
       "shots" :
         [
