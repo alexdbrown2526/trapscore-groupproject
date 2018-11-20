@@ -209,7 +209,7 @@ class ViewShooterRegistration extends Component {
               <div>
                 <TextField
                   placeholder="Last Name"
-                  type="text"
+                  type="last-name"
                   name="last_name"
                   value={this.state.last_name}
                   onChange={this.handleChangeFor('last_name')}
