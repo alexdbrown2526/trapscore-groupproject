@@ -5,9 +5,10 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import { Button, Divider, Typography } from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 
 import HeaderMargins from '../HeaderMargins/HeaderMargins';
+import EventSelect from '../EventSelect/EventSelect';
 import DndPage from '../DndPage/DndPage';
 import DndLeftSide from '../DndLeftSide/DndLeftSide';
 import DndRightSide from '../DndRightSide/DndRightSide';
@@ -16,9 +17,11 @@ import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
 
 import { toast } from 'react-toastify';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 class ViewSquadding extends Component {
   state = {
+    selectedEvent: 0,
     unassigned: [],
     squads: [
       {
@@ -31,36 +34,50 @@ class ViewSquadding extends Component {
 
   componentDidMount() {
     this.getData();
+    this.getEvents();
   }
 
+  getEvents = () => {
+    this.props.dispatch({ type: USER_ACTIONS.FETCH_EVENTS });
+  };
+
+  setEvent = async event => {
+    console.log(event.target.value);
+    await this.setState({ selectedEvent: event.target.value });
+    this.getEvents();
+    this.getData();
+  };
+
   getData = () => {
-    let event_id = 4;
-    axios({
-      method: 'GET',
-      url: `/api/competition/squadding/${event_id}`,
-    })
-      .then(response => {
-        console.log(response.data);
-        this.setState({ ...response.data });
+    if (this.state.selectedEvent !== 0) {
+      axios({
+        method: 'GET',
+        url: `/api/competition/squadding/${this.state.selectedEvent}`,
       })
-      .catch(error => {
-        alert(
-          'Something went wrong getting the squadding data from the server.'
-        );
-        console.log(error);
-      });
+        .then(response => {
+          console.log(response.data);
+          this.setState({ ...response.data });
+        })
+        .catch(error => {
+          alert(
+            'Something went wrong getting the squadding data from the server.'
+          );
+          console.log(error);
+        });
+    }
   };
 
   sendData = () => {
-    let event_id = 4;
-    toast('Squads saved');
-    axios({
-      method: 'PUT',
-      url: `/api/competition/squadding/${event_id}`,
-      data: this.state,
-    }).then(() => {
-      this.getData();
-    });
+    if (this.state.selectedEvent !== 0) {
+      toast('Squads saved');
+      axios({
+        method: 'PUT',
+        url: `/api/competition/squadding/${this.state.selectedEvent}`,
+        data: this.state,
+      }).then(() => {
+        this.getData();
+      });
+    }
   };
 
   getList = id => {
@@ -90,6 +107,7 @@ class ViewSquadding extends Component {
       if (
         this.state.squads[Number(destination.droppableId)].members.length > 4
       ) {
+        toast('Squads can only have five people!');
         return;
       }
     }
@@ -199,6 +217,11 @@ class ViewSquadding extends Component {
             <DndLeftSide>
               <HeaderMargins>
                 <Typography variant="h4">Unsquadded</Typography>
+                <EventSelect
+                  selectedEvent={this.state.selectedEvent}
+                  events={this.props.events}
+                  setEvent={this.setEvent}
+                />
               </HeaderMargins>
               <Divider />
               {/* <Button onClick={this.getData}>Save</Button> */}
@@ -215,34 +238,37 @@ class ViewSquadding extends Component {
               {/* <Typography variant="h4" className={classes.subheader}>
                 Squads
               </Typography> */}
-              {this.state.squads.map((squad, index) => {
-                return (
-                  <DndCard
-                    key={squad.id}
-                    title={squad.name}
-                    cornerButton={
-                      <DndEditModal
-                        id={squad.id}
-                        field={squad.name}
-                        edit={this.editSquad}
-                        delete={this.deleteSquad}
+              {this.state.squads.length > 1 &&
+                this.state.squads.map((squad, index) => {
+                  return (
+                    <DndCard
+                      key={squad.id}
+                      title={squad.name}
+                      cornerButton={
+                        <DndEditModal
+                          id={squad.id}
+                          field={squad.name}
+                          edit={this.editSquad}
+                          delete={this.deleteSquad}
+                        />
+                      }
+                    >
+                      <DndList
+                        disableGutters
+                        droppableId={index.toString()}
+                        data={squad.members.map(item => {
+                          item.mainText =
+                            item.first_name + ' ' + item.last_name;
+                          item.avatar = item.handicap;
+                          return item;
+                        })}
                       />
-                    }
-                  >
-                    <DndList
-                      disableGutters
-                      droppableId={index.toString()}
-                      data={squad.members.map(item => {
-                        item.mainText = item.first_name + ' ' + item.last_name;
-                        item.avatar = item.handicap;
-                        return item;
-                      })}
-                    />
-                  </DndCard>
-                );
-              })}
+                    </DndCard>
+                  );
+                })}
             </DndRightSide>
           </DragDropContext>
+          <pre>{JSON.stringify(this.props, null, 2)}</pre>
         </DndPage>
       </>
     );
@@ -251,6 +277,7 @@ class ViewSquadding extends Component {
 
 const mapStateToProps = state => ({
   user: state.user,
+  events: state.events,
 });
 
 export default connect(mapStateToProps)(ViewSquadding);
