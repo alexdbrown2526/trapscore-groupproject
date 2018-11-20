@@ -114,6 +114,11 @@ class ViewShooterRegistration extends Component {
       return false;
     }
 
+
+    if (this.state.phone.includes('-')) {
+      alert('Enter a phone number without dashes')
+    }
+
     axios({
       method: 'POST',
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
@@ -240,6 +245,7 @@ class ViewShooterRegistration extends Component {
               <div>
                 <TextField
                   label="Phone Number"
+                  placeholder="1234567890"
                   type="text"
                   name="phone"
                   value={this.state.phone}
