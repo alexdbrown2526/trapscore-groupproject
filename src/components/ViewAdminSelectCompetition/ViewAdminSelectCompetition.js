@@ -58,7 +58,7 @@ const styles = theme => ({
     transform: `translate(-50%, -50%)`,
     overflowY: 'scroll',
     height: '80%',
-    width:'67%',
+    width:'60%',
     fontFamily: 'Roboto, sans-serif',
     borderStyle: 'solid'
   },

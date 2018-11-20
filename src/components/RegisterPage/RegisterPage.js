@@ -31,16 +31,6 @@ const styles = theme => ({
     marginBottom: '4%',
   
 },
-
-  loginButton: {
-
-  },
-
-  // background: {
-  //   backgroundImage: 'url(' + imgUrl + ')'
-  // }
-
- 
     
 })
 
@@ -118,19 +108,13 @@ class RegisterPage extends Component {
             onClick={this.registerUser}
             variant="contained"
             className={classes.registerButton}
-              type="button"
+              type="submit"
               name="submit"
               value="Register">
               Register
               
             </Button>
-            {/* <input
-              className="register"
-              type="submit"
-              name="submit"
-              value="Register"
-            /> */}
-          
+           
         <br/>
           <Button
           variant="contained"
