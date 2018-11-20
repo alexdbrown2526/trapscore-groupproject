@@ -73,18 +73,6 @@ class ViewResults extends Component {
     })
   };
 
-  // Toggles between event views every 10 seconds (doesn't restart at 1 after finishing)
-  // scheduleEventToggle = () => {
-  //   if (this.state.indexOfSelectedEvent < this.props.events.length - 1) {
-  //     this.toggleNextEvent();
-  //   } else {
-  //     this.setState({
-  //       ...this.state,
-  //       indexOfSelectedEvent: 0
-  //     });
-  //   }
-  // };
-
   //sets event ID to local state from toggle buttons above table
   selectEvent = (event, value) => {
     this.setState({
