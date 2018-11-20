@@ -128,7 +128,7 @@ class CompetitionRoster extends Component {
       <TextField className={classes.searchField} variant="outlined" placeholder="Search by name"
        value={this.state.input} type="text" onChange={this.onFilterChange}/>
    
-        <List>
+        <List dense>
           Competition Roster
       {list}
       </List>
