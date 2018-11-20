@@ -27,7 +27,7 @@ const styles = theme => ({
   loginButton: {
     marginTop:'4%',
     marginBottom: '4%',
-  
+    variant: 'contained'
 },
 
 
@@ -107,15 +107,11 @@ class LoginPage extends Component {
             <Button
             onClick={this.login}
             variant="contained"
+            type="submit"
             className={classes.loginButton}>
               Login
             </Button>
-            {/* <input
-             className="log-in"
-              type="submit"
-              name="submit"
-              value="Log In"
-            /> */}
+            
           </div>
         
           <Button
