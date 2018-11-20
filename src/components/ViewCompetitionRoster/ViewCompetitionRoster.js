@@ -115,7 +115,7 @@ class CompetitionRoster extends Component {
   render() {
     const { classes } = this.props;
 
-    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
+    const list = this.state.shooters.filter(shooter => this.state.input.toUpperCase() === '' || shooter.last_name.toUpperCase().includes(this.state.input.toUpperCase()) || shooter.first_name.toUpperCase().includes(this.state.input.toUpperCase()))
         .map((shooter, index) => <ListItem  key={index}>{shooter.first_name} {shooter.last_name} <IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton></ListItem>);
 
     return (<div className={classes.root}> 
