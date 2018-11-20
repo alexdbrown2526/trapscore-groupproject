@@ -122,19 +122,6 @@ class App extends Component {
               {/* If none of the other routes matched, we will show a 404. */}
               <Route render={() => <h1>404</h1>} />
             </Switch>
-            <ToastContainer
-              position={toast.POSITION.BOTTOM_RIGHT}
-              toastClassName="black-toast"
-              transition={Slide}
-              autoClose={3500}
-              hideProgressBar
-              newestOnTop={false}
-              closeOnClick
-              rtl={false}
-              pauseOnVisibilityChange
-              draggable
-              pauseOnHover
-            />
           </MuiThemeProvider>
         </div>
       </Router>
