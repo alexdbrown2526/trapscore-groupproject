@@ -230,6 +230,7 @@ class ViewSquadding extends Component {
                     }
                   >
                     <DndList
+                      disableGutters
                       droppableId={index.toString()}
                       data={squad.members.map(item => {
                         item.mainText = item.first_name + ' ' + item.last_name;

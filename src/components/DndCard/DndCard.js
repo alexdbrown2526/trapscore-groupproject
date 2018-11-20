@@ -5,12 +5,12 @@ import { Card, CardActions, CardContent, CardHeader } from '@material-ui/core';
 
 const styles = theme => ({
   card: {
-    margin: theme.spacing.unit * 3,
-    width: theme.spacing.unit * 50,
+    margin: theme.spacing.unit * 2,
+    minWidth: theme.spacing.unit * 30,
   },
   cardNoMargin: {
     // margin: theme.spacing.unit * 3,
-    width: theme.spacing.unit * 50,
+    minWidth: theme.spacing.unit * 30,
   },
 });
 

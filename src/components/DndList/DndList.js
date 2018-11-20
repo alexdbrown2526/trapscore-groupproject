@@ -8,6 +8,7 @@ import { List } from '@material-ui/core';
 import DndItem from '../DndItem/DndItem';
 
 const styles = theme => ({
+  list: {},
   dndContainer: {
     minHeight: 200,
   },
@@ -16,7 +17,7 @@ const styles = theme => ({
 const DndList = props => {
   const { classes } = props;
   return (
-    <List>
+    <List dense="true" disablePadding="true">
       <Droppable droppableId={props.droppableId}>
         {(provided, snapshot) => (
           <div
@@ -31,6 +32,7 @@ const DndList = props => {
                   item={item}
                   index={index}
                   box={props.box}
+                  disableGutters={props.disableGutters}
                 />
               );
             })}

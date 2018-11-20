@@ -5,7 +5,7 @@ import { DragDropContext } from 'react-beautiful-dnd';
 
 import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import { Button, Divider, Typography } from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 
 import HeaderMargins from '../HeaderMargins/HeaderMargins';
 import DndPage from '../DndPage/DndPage';
@@ -221,6 +221,7 @@ class ViewScheduling extends Component {
                   >
                     <DndList
                       box
+                      // disableGutters
                       droppableId={index.toString()}
                       data={trap.schedule.map(item => {
                         item.mainText = item.name;
