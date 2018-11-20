@@ -38,10 +38,8 @@ const styles = theme => ({
 
   },
 
-  checkBox :{
-    textAlign: 'right',
-    postiton: 'relative',
-    display: 'inline-block'
+  header: {
+    marginTop: '10%'
   }
   
 });
@@ -268,7 +266,9 @@ class ViewShooterRegistration extends Component {
                   onChange={this.handleChangeFor('ata_number')}
                 />
               </div>
-              {/* {JSON.stringify(this.state.competitionEvents)} */}
+              <div className={classes.header}>
+                <h2 className={classes.header}>Available Events</h2>
+              </div>
               <div>
                 {this.state.competition.events.map(ev => {
                   return (
@@ -276,7 +276,6 @@ class ViewShooterRegistration extends Component {
                       <li>
                         {ev.name}
                         <Checkbox
-                          className={classes.checkBox}
                           value={ev.id}
                           onChange={this.handleChangeCheckBox}
                         />
