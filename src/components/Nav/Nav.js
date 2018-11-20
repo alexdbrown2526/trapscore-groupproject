@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router-dom";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import NavTop from "../NavTop/NavTop";
-import NavSide from "../NavSide/NavSide";
-import NavSideHeader from "../NavSideHeader/NavSideHeader";
-import NavList from "../NavList/NavList";
-import NavSideBottomActions from "../NavSideBottomActions/NavSideBottomActions";
-import { LOGIN_ACTIONS } from "../../redux/actions/loginActions";
-import { USER_ACTIONS } from "../../redux/actions/userActions";
+import NavTop from '../NavTop/NavTop';
+import NavSide from '../NavSide/NavSide';
+import NavSideHeader from '../NavSideHeader/NavSideHeader';
+import NavList from '../NavList/NavList';
+import NavSideBottom from '../NavSideBottom/NavSideBottom';
+import NavSideBottomActions from '../NavSideBottomActions/NavSideBottomActions';
+import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,7 +20,7 @@ class Nav extends Component {
   };
 
   setDrawer = open => () => {
-    console.log("setDrawer:", open);
+    console.log('setDrawer:', open);
     this.setState({
       sidenavOpen: open,
     });
@@ -33,7 +34,7 @@ class Nav extends Component {
       sidenavOpen: false,
     });
 
-    console.log("navigateTo");
+    console.log('navigateTo');
 
     this.props.history.push(`${destination}`);
 
@@ -44,7 +45,7 @@ class Nav extends Component {
   };
 
   logout = () => {
-    toast('Logged Out')
+    toast('Logged Out');
     this.setDrawer(false);
     // TODO: have Joe ask Luke why this doesn't work
 
@@ -71,10 +72,12 @@ class Nav extends Component {
         <NavSide open={this.state.sidenavOpen} setDrawer={this.setDrawer}>
           <NavSideHeader user={this.props.user} />
           <NavList navigateTo={this.navigateTo} />
-          <NavSideBottomActions
-            logout={this.logout}
-            toRegistrationPage={this.toRegistrationPage}
-          />
+          <NavSideBottom>
+            <NavSideBottomActions
+              logout={this.logout}
+              toRegistrationPage={this.toRegistrationPage}
+            />
+          </NavSideBottom>
         </NavSide>
       </>
     );
