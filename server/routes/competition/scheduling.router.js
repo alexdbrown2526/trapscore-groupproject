@@ -1,22 +1,24 @@
 const express = require('express');
 const pool = require('../../modules/pool');
-const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
+const {
+  rejectUnauthenticated,
+} = require('../../modules/authentication-middleware');
 const router = express.Router();
 
-/**
- * GET route template
- */
 router.get('/', rejectUnauthenticated, (req, res) => {
   let promises = [];
   let dataToSend = {};
   try {
     promises.push(
-      pool.query(`SELECT "squad_trap"."id", "squad_trap"."box_number", "squad"."name", "squad_trap"."place_in_line", "squad_trap"."squad_id" from "squad_trap"
+      pool.query(
+        `SELECT "squad_trap"."id", "squad_trap"."box_number", "squad"."name", "squad_trap"."place_in_line", "squad_trap"."squad_id" from "squad_trap"
                               LEFT JOIN "squad" on "squad"."id" = "squad_trap"."squad_id"
                               JOIN "event" on "event"."id" = "squad"."event_id"
                               WHERE "squad_trap"."trap_id" IS NULL
                               AND "event"."competition_id" = $1
-                              ORDER BY "squad"."id", "squad_trap"."box_number";`, [req.user.competition_id])
+                              ORDER BY "squad"."id", "squad_trap"."box_number";`,
+        [req.user.competition_id]
+      )
     );
     promises.push(
       pool.query(`SELECT json_agg(row_to_json(tra)) as traps
@@ -42,12 +44,10 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   }
 
   Promise.all(promises).then(values => {
-    console.log(values);
     dataToSend = {
       unassigned: values[0].rows,
       traps: values[1].rows[0].traps,
     };
-    console.log('dataToSend: ', dataToSend);
     res.send(dataToSend);
   });
 });
@@ -59,20 +59,25 @@ router.put('/', (req, res) => {
   let newSchedule = req.body;
 
   let unscheduled = { id: null, schedule: req.body.unassigned };
-  let trapsToLoop = [...newSchedule.traps.slice(0), unscheduled ];
+  let trapsToLoop = [...newSchedule.traps.slice(0), unscheduled];
 
   let updateValues = [];
   //loop through each trap within trapsToLoop array
   for (let trap of trapsToLoop) {
     //for each squad in a trap's schedule array, push '(place_in_line, trap_id, squad_id, and box_number)' to updateValues
     trap.schedule.forEach(item => {
-      updateValues.push(`(${item.place_in_line}, ${trap.id}, ${item.squad_id}, ${item.box_number})`)
-    })
+      updateValues.push(
+        `(${item.place_in_line}, ${trap.id}, ${item.squad_id}, ${
+          item.box_number
+        })`
+      );
+    });
   }
 
   //updates squad_trap data from the updateValues array data
   pool
-    .query(`
+    .query(
+      `
       UPDATE "squad_trap"
       SET "place_in_line" = columns."place_in_line", 
         "trap_id" = columns."trap_id"
@@ -88,8 +93,7 @@ router.put('/', (req, res) => {
     .catch(error => {
       console.log('Error storing squad scheduling data:', error);
       res.sendStatus(500);
-    })
-
+    });
 });
 
 module.exports = router;

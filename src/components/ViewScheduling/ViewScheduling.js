@@ -183,7 +183,13 @@ class ViewScheduling extends Component {
   };
 
   deleteTrap = trapId => {
-    console.log('This is where we would delete: ', trapId);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/trap/${trapId}`,
+    }).then(() => {
+      this.getData();
+    });
+    toast('Trap deleted.');
   };
 
   render() {

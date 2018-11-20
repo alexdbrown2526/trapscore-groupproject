@@ -111,22 +111,58 @@ router.put('/:event_id', rejectUnauthenticated, (req, res) => {
 //Create a new squad in the database with four new squad_trap entries for each of the four boxes
 router.post('/new/:event_id', (req, res) => {
   let newSquadId;
-  pool.query(`INSERT INTO "squad" ("event_id", "name")
+  pool
+    .query(
+      `INSERT INTO "squad" ("event_id", "name")
               VALUES (${req.params.event_id}, DEFAULT)
-              RETURNING "id";`)
+              RETURNING "id";`
+    )
     .then(results => {
-      newSquadId = results.rows[0].id
-      pool.query(`INSERT INTO "squad_trap" ("squad_id", "box_number")
+      newSquadId = results.rows[0].id;
+      pool
+        .query(
+          `INSERT INTO "squad_trap" ("squad_id", "box_number")
                   VALUES (${newSquadId}, 1),
                         (${newSquadId}, 2),
                         (${newSquadId}, 3),
-                        (${newSquadId}, 4);`)
+                        (${newSquadId}, 4);`
+        )
         .then(() => res.sendStatus(200));
     })
     .catch(error => {
-      console.log('Error posting new squad:', error)
+      console.log('Error posting new squad:', error);
       res.sendStatus(500);
-    })
-})
+    });
+});
+
+router.delete('/squad/:id', (req, res) => {
+  console.log('delete hit:', req.params.id);
+  pool
+    .query(
+      `
+      UPDATE "shooter_event"
+      SET "squad_id" = null
+      WHERE "squad_id" = $1;
+    `,
+      [req.params.id]
+    )
+    .then(() => {
+      pool
+        .query(
+          `
+          DELETE FROM "squad"
+          WHERE "id"=$1;
+      `,
+          [req.params.id]
+        )
+        .then(() => {
+          res.sendStatus(200);
+        })
+        .catch(error => {
+          console.log('Error deleting trap:', error);
+          res.sendStatus(500);
+        });
+    });
+});
 
 module.exports = router;

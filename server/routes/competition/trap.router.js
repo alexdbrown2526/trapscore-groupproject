@@ -54,4 +54,23 @@ router.post('/new/', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.delete('/:id', rejectUnauthenticated, (req, res) => {
+  console.log('delete hit:', req.params.id);
+  pool
+    .query(
+      `
+      DELETE FROM "trap"
+      WHERE "id"=$1;
+  `,
+      [req.params.id]
+    )
+    .then(() => {
+      res.sendStatus(200);
+    })
+    .catch(error => {
+      console.log('Error deleting trap:', error);
+      res.sendStatus(500);
+    });
+});
+
 module.exports = router;
