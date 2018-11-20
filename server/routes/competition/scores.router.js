@@ -2,6 +2,7 @@ const express = require("express");
 const pool = require("../../modules/pool");
 const router = express.Router();
 const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
+const sendTwilioNotification = require('../../modules/twilio-notifications');
 
 /**
  * GET route template
@@ -22,7 +23,8 @@ const { rejectUnauthenticated } = require('../../modules/authentication-middlewa
   "shooters": [
     {
       "id": 32,
-      "name": "Alex",
+      "first_name": "Alex",
+      "last_name": "Buck"
       "shooter_event_id": 75,
       "shots" : 
         [
@@ -35,7 +37,8 @@ const { rejectUnauthenticated } = require('../../modules/authentication-middlewa
     },
     {
       "id": 38,
-      "name": "Chris",
+      "first_name": "Chris",
+      "last_name": "Cross"
       "shooter_event_id": 61,
       "shots" :
         [
@@ -58,7 +61,6 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
   let squad_trap_id;
   let shooterList = [];
   let assembledResponse = {};
-  console.log(req.query);
   try {
     //query trap * by id
     pool
@@ -111,7 +113,6 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
         next(error);
       });
 
-    console.log('unsorted shooterList:', shooterList)
 
     //sorts shooterList array by new post_position property of each shooter object
     shooterList.sort((a, b) => {
@@ -124,7 +125,6 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
       return comparison
     })
 
-    console.log('sorted shooterList:', shooterList)
 
     //assembles the response object from the three query results above
     assembledResponse = {
@@ -132,10 +132,10 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
       squad_trap: squadTrap,
       shooters: shooterList
     };
-    console.log(
-      "assembled response ready to send to client:",
-      assembledResponse
-    );
+    // console.log(
+    //   "assembled response ready to send to client:",
+    //   assembledResponse
+    // );
 
     res.send(assembledResponse);
   } catch (error) {
@@ -153,7 +153,6 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
  */
 router.post("/", rejectUnauthenticated, (req, res) => {
   const squad_trap_id = req.body.squad_trap.id;
-  console.log("squad_trap_id=", squad_trap_id);
   try {
     pool
       .query(
@@ -164,10 +163,16 @@ router.post("/", rejectUnauthenticated, (req, res) => {
             WHEN ("current_rotation" = 5) THEN '-1'
             ELSE "place_in_line"
             END
-        WHERE "id" = ${squad_trap_id};`
+        WHERE "id" = ${squad_trap_id}
+        RETURNING "current_rotation";`
       )
-      .then(() => {
-        console.log("score POST succeeded");
+      .then((results) => {
+        console.log("current rotation update succeeded", results.rows[0]);
+        //posts a message to Twilio API at beginning of current_rotation passed in
+        if (results.rows[0].current_rotation === 4) {
+          console.log('sending twilio notification');
+          sendTwilioNotification(req.body.squad_trap.trap_id, req.body.squad_trap.place_in_line);
+        }
       });
 
     let formattedShotData = [];
