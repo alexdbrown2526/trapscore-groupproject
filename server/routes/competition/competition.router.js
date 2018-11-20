@@ -35,7 +35,7 @@ router.get("/", rejectUnauthenticated, (req, res) => {
  * create a new competition with default values
  * returns id of new competition as results.rows
  */
-router.post("/", (req, res) => {
+router.post("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(`INSERT INTO "competition" DEFAULT VALUES RETURNING *;`)
     .then(results => {
@@ -49,7 +49,7 @@ router.post("/", (req, res) => {
 });
 
 // update an existing competition's name, location, and/or date
-router.put("/", (req, res) => {
+router.put("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(
       `UPDATE "competition" SET "name" = $1, "location" = $2, "date"=$3
@@ -75,7 +75,7 @@ router.use("/scores", scoresRouter);
 router.use("/edit", editRouter)
 
 //GET a single competition by ID
-router.get("/:id", (req, res) => {
+router.get("/:id", rejectUnauthenticated, (req, res) => {
   pool
     .query(`SELECT * FROM "competition" WHERE "id" = $1;`, [req.params.id])
     .then(results => res.send(results.rows))

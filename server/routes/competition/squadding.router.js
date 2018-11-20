@@ -108,7 +108,7 @@ router.put('/:event_id', rejectUnauthenticated, (req, res) => {
 });
 
 //Create a new squad in the database with four new squad_trap entries for each of the four boxes
-router.post('/new/:event_id', (req, res) => {
+router.post('/new/:event_id', rejectUnauthenticated, (req, res) => {
   let newSquadId;
   pool
     .query(
