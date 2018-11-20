@@ -1,0 +1,71 @@
+const twilio = require("twilio");
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+
+(
+  process.env.TWILIO_ACCOUNT_SID,
+  process.env.TWILIO_AUTH_TOKEN,
+  process.env.TWILIO_NUMBER,
+  process.env.TWILIO_MESSAGING_SERVICE_SID,
+  process.env.TWILIO_NOTIFY_SERVICE_SID,
+  process.env.MY_NUMBER
+);
+const pool = require("../modules/pool");
+
+const sendTwilioNotification = (trap_id, place_in_line) => {
+  //gets a list of next scheduled squads
+  pool
+    .query(
+      `SELECT * FROM "squad_trap" 
+        WHERE "trap_id" = ${trap_id}
+          AND "place_in_line" >= ${place_in_line}
+        ORDER BY "place_in_line"
+        LIMIT 3;`
+    )
+    .then(results => {
+      console.log("squad_trap list:", results.rows);
+      if (
+        results.rows[0].squad_id !== 0
+        // results.rows[results.rows.length - 1].squad_id
+      ) {
+        const squad_id = results.rows[results.rows.length - 1].squad_id;
+        pool
+          .query(
+            `SELECT "shooter"."phone", "shooter"."first_name", "event"."name" as "event_name", "trap"."name" as "trap_name"
+              FROM "shooter"
+              JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
+              JOIN "event" ON "shooter_event"."event_id" = "event"."id"
+              JOIN "squad" ON "shooter_event"."squad_id" = "squad"."id"
+              JOIN "squad_trap" ON "squad_trap"."squad_id" = "squad"."id"
+              JOIN "trap" ON "squad_trap"."trap_id" = "trap"."id"
+              WHERE "squad_trap"."squad_id" = ${squad_id} 
+                AND "squad_trap"."place_in_line" = ${place_in_line};`
+          )
+          .then(results => {
+            results.rows.forEach((shooter => {
+              let body = `Hi, ${shooter.first_name}. Your squad is next in line to shoot ${shooter.event_name.toLowerCase()} at ${shooter.trap_name}`;
+              console.log('message body:', body)
+              //FYI: Twilio's concurrency limit is 100.
+              client.messages
+                .create({
+                  from: process.env.TWILIO_NUMBER,
+                  //MAY NEED TO FORMAT PHONE NUMBERS
+                  to: `+1${shooter.phone}`,
+                  body: body
+                })
+                .then(() => {
+                  res.send({ success: true });
+                })
+                .catch(err => {
+                  console.log(err);
+                  res.send({ success: false });
+                });
+            }))
+          })
+      }
+    });
+
+  
+};
+
+module.exports = sendTwilioNotification;
