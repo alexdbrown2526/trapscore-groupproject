@@ -43,7 +43,6 @@ class ViewSquadding extends Component {
   };
 
   setEvent = async event => {
-    console.log(event.target.value);
     await this.setState({ selectedEvent: event.target.value });
     this.getEvents();
     this.getData();
@@ -56,7 +55,6 @@ class ViewSquadding extends Component {
         url: `/api/competition/squadding/${this.state.selectedEvent}`,
       })
         .then(response => {
-          console.log(response.data);
           this.setState({ ...response.data });
         })
         .catch(error => {
@@ -203,12 +201,18 @@ class ViewSquadding extends Component {
       data: { name: newName },
     }).then(() => {
       this.getData();
+      toast('Squad name updated!');
     });
-    toast('Squad name updated!');
   };
 
   deleteSquad = squadId => {
-    console.log('This is where we would delete: ', squadId);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/squadding/squad/${squadId}`,
+    }).then(() => {
+      this.getData();
+      toast('Squad deleted.');
+    });
   };
 
   render() {
