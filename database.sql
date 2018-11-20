@@ -58,7 +58,7 @@ CREATE TABLE "event" (
 CREATE TABLE "squad" (
     "id" serial PRIMARY KEY,
     "event_id" integer NOT NULL REFERENCES "event"("id"),
-    "name" varchar(50) NOT NULL DEFAULT "New Squad"
+    "name" varchar(50) NOT NULL DEFAULT 'New Squad'
 );
 
 CREATE TABLE "shooter_event" (
