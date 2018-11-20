@@ -7,7 +7,7 @@ import PlusIcon from '@material-ui/icons/Add';
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit * 3,
-    width: 300,
+    width: theme.spacing.unit * 30,
   },
 });
 

@@ -32,7 +32,7 @@ const DndItem = props => {
           //   provided.draggableProps.style
           // )}
         >
-          <ListItem button>
+          <ListItem button disableGutters={props.disableGutters}>
             <Avatar className={props.box ? classes.avatarBox : classes.avatar}>
               {item.avatar}
             </Avatar>
