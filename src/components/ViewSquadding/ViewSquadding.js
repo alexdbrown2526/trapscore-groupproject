@@ -185,14 +185,15 @@ class ViewSquadding extends Component {
   };
 
   addSquad = () => {
-    let eventId = 4;
-    axios({
-      method: 'POST',
-      url: `/api/competition/squadding/new/${eventId}`,
-    }).then(() => {
-      this.getData();
-    });
-    toast('Squad name updated!');
+    if (this.state.selectedEvent !== 0) {
+      axios({
+        method: 'POST',
+        url: `/api/competition/squadding/new/${this.state.selectedEvent}`,
+      }).then(() => {
+        this.getData();
+      });
+      toast('Squad added!');
+    }
   };
 
   editSquad = (squadId, newName) => {
