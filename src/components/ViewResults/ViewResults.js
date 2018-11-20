@@ -91,6 +91,7 @@ class ViewResults extends Component {
       ...this.state,
       indexOfSelectedEvent: value,
       totalPages: Math.ceil(this.state.resultsData[value].results.length / 20),
+      page: 0,
     });
   };
 
