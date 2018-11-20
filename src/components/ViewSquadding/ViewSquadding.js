@@ -15,6 +15,7 @@ import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
 import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
+import DndAddButton from '../DndAddButton/DndAddButton';
 
 import { toast } from 'react-toastify';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -268,7 +269,7 @@ class ViewSquadding extends Component {
                 })}
             </DndRightSide>
           </DragDropContext>
-          <pre>{JSON.stringify(this.props, null, 2)}</pre>
+          <DndAddButton onClick={this.addSquad} />
         </DndPage>
       </>
     );
