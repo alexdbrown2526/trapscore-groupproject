@@ -162,7 +162,13 @@ class ViewScheduling extends Component {
   };
 
   addTrap = () => {
-    // TODO FIX ME
+    axios({
+      method: 'POST',
+      url: `/api/competition/trap/new/`,
+    }).then(() => {
+      this.getData();
+    });
+    toast('New trap created!');
   };
 
   editTrap = (trapId, newName) => {
