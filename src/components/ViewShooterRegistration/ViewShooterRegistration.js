@@ -21,7 +21,7 @@ const styles = theme => ({
     backfaceVisibility: 'hidden',
     flexDirection: 'column',
     margin: '0 auto',
-    maxWidth: 260,
+    maxWidth: 530,
     border: 0,
     borderRadius: 2,
     marginTop: '2%',
@@ -30,6 +30,19 @@ const styles = theme => ({
     //           0 3px 3px -3px fade(rgb(59, 41, 41), 20%),
     //           0 2px 8px 0 fade(brown, 12%)",
   },
+
+  eventList: {
+    listStyle: 'none',
+    textAlign: 'left',
+    verticalAlign: 'top'
+
+  },
+
+  checkBox :{
+    textAlign: 'right',
+    postiton: 'relative',
+    display: 'inline-block'
+  }
   
 });
 
@@ -259,10 +272,11 @@ class ViewShooterRegistration extends Component {
               <div>
                 {this.state.competition.events.map(ev => {
                   return (
-                    <ul className="Checkbox" key={ev.id}>
+                    <ul className={classes.eventList} key={ev.id}>
                       <li>
                         {ev.name}
                         <Checkbox
+                          className={classes.checkBox}
                           value={ev.id}
                           onChange={this.handleChangeCheckBox}
                         />
@@ -271,7 +285,6 @@ class ViewShooterRegistration extends Component {
                   );
                 })}
               </div>
-              
               <div>
                 <Button
                   variant="contained"
