@@ -10,8 +10,14 @@ import { ToastContainer, toast, Slide } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({   
- 
 
+  field: {
+    float: 'right',
+    
+   },
+   saveButton: {
+      marginTop: '8%'
+   },
 
   editform: {
     float: 'right',
@@ -40,8 +46,16 @@ class ViewEditShooter extends Component {
 
 
   updateUser = () => {
-    toast('Changes saved')
     console.log("update button working");
+
+    if(this.state.handicap < 16 || this.state.handicap > 27) {
+      toast('Handicap must be between 16 and 27 yards');
+      return false
+    } else {
+      toast('Changes saved')
+
+
+    }
     axios({
       method: "PUT",
       url: `/api/competition/shooter/${this.state.id}`,
@@ -82,10 +96,9 @@ class ViewEditShooter extends Component {
         <form className={classes.editform}>
         <List>
           <ListItem>
-          First Name:
           <TextField
-            
-            className="textfield"
+            label="First Name"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.first_name}
@@ -93,9 +106,9 @@ class ViewEditShooter extends Component {
           />
           </ListItem>
           <ListItem>
-          Last Name:
           <TextField
-            className="textfield"
+          label="Last Name"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.last_name}
@@ -103,9 +116,9 @@ class ViewEditShooter extends Component {
           />
           </ListItem>
           <ListItem>
-          E-Mail:
           <TextField
-            className="textfield"
+            label="Email"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.email}
@@ -113,9 +126,9 @@ class ViewEditShooter extends Component {
           />
           </ListItem>
           <ListItem>
-          Phone Number:
           <TextField
-            className="textfield"
+          label="Phone Number"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.phone}
@@ -123,9 +136,9 @@ class ViewEditShooter extends Component {
           />
           </ListItem>
           <ListItem>
-          Handicap (yds):
           <TextField
-            className="textfield"
+          label="Handicap (yds)"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.handicap}
@@ -133,16 +146,16 @@ class ViewEditShooter extends Component {
           />
           </ListItem>
           <ListItem>
-          ATA Number:
           <TextField
-            className="textfield"
+            label="ATA #"
+            className={classes.field}
             type="text"
             name="searchText"
             value={this.state.ata_number}
             onChange={this.handleChangeFor("ata_number")}
           />
           </ListItem>
-                <Button className={classes.searchButton} variant="contained" color="primary" onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</Button>
+                <Button className={classes.saveButton} variant="contained" color="primary" onClick={()=>{this.updateUser(this.state.id)}}>Save Changes</Button>
                 </List>
         </form>
       

@@ -106,13 +106,10 @@ class ViewShooterRegistration extends Component {
       hash: this.props.match.params.hash,
     };
 
-    if (this.state.handicap < 16) {
+    if (this.state.handicap < 16 || this.state.handicap > 27) {
       alert('You must choose a number between 16 and 27');
       return false;
-    } else if (this.state.handicap > 27) {
-      alert('You must choose a number between 16 and 27');
-      return false;
-    }
+    } 
 
 
     if (this.state.phone.includes('-')) {
