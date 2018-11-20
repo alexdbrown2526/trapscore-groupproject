@@ -55,7 +55,7 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 /**
  * Changes a squad's trap_id and place_in_line from null to the correctly scheduled values
  */
-router.put('/', (req, res) => {
+router.put('/', rejectUnauthenticated, (req, res) => {
   let newSchedule = req.body;
 
   let unscheduled = { id: null, schedule: req.body.unassigned };
