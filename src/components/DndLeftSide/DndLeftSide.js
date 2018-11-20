@@ -6,7 +6,7 @@ const styles = theme => ({
   leftSide: {
     backgroundColor: 'lightgray',
     width: '20%',
-    minWidth: 100,
+    minWidth: 250,
     height: '100vh',
     overflowY: 'scroll',
   },
