@@ -47,7 +47,7 @@ const styles = theme => ({
   },
   modal: {
     top: '10%',
-    left: '25%',
+    left: '20%',
     overflowY: 'scroll',
     height: '575px',
     width: '60%',
