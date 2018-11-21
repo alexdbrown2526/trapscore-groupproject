@@ -1,5 +1,8 @@
 import { USER_ACTIONS } from "../actions/userActions";
 const defaultState = {
+  squad_trap: {
+    current_rotation: 0,
+  },
   shooters: [{ shots: [null] }]
 };
 

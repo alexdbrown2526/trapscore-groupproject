@@ -10,14 +10,14 @@ const styles = theme => ({
   centerButtonFixed: {
     position: 'fixed',
     left: '50%',
-    bottom: theme.spacing.unit * 1,
+    bottom: theme.spacing.unit * 2,
     transform: `translate(-50%, 0%)`,
     width: '85%',
   },
   centerButtonRelative: {
     position: 'relative',
     left: '50%',
-    bottom: theme.spacing.unit * 1,
+    bottom: theme.spacing.unit * 2,
     transform: `translate(-50%, 0%)`,
     width: '85%',
   },
