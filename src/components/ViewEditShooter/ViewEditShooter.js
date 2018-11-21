@@ -66,8 +66,8 @@ class ViewEditShooter extends Component {
         <form className={classes.editform}>
           <List>
             <ListItem>
-              First Name:
               <TextField
+                label="First Name"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -76,8 +76,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Last Name:
               <TextField
+                 label="Last Name"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -86,8 +86,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              E-Mail:
               <TextField
+              label="E-mail"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -96,8 +96,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Phone Number:
               <TextField
+                label="Phone Number"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -106,8 +106,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Handicap (yds):
               <TextField
+                label="Handicap"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -116,8 +116,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              ATA Number:
               <TextField
+                label="ATA Number"
                 className="textfield"
                 type="text"
                 name="searchText"
