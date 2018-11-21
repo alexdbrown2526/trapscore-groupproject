@@ -111,8 +111,8 @@ class ViewAdminSelectCompetition extends Component {
       method: 'POST',
       url: '/api/competition',
     }).then(response => {
-      console.log(response.data[0]);
-      this.editCompetition(response.data[0]);
+      console.log(response.data);
+      this.editCompetition(response.data);
     });
   };
 
@@ -175,7 +175,6 @@ class ViewAdminSelectCompetition extends Component {
       <center>
         <div className={classes.list}>
           <h1>Select Competition</h1>
-
           <List>
             {this.state.competitions.map(comp => {
               return (
