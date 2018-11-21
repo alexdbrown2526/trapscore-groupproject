@@ -33,6 +33,11 @@ const styles = theme => ({
   scoreDetailContainer: {
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+  },
+  optionsContainer: {
+    display: "flex",
+    flexDirection: "row", 
+    justifyContent: "space-between",
   }
 });
 
@@ -209,79 +214,48 @@ class ViewResults extends Component {
 
     
 
-    return this.state.finishedLoading ? (
-      <div className={classes.container}>
+    return this.state.finishedLoading ? <div className={classes.container}>
         <Typography variant="h3">Results</Typography>
-        <FormControlLabel
-          control={<Switch onChange={this.togglePagination} />}
-          label="Scroll Results"
-        />
-        <Button onClick={this.fetchCSV}>Download CSV</Button>
-        <ToggleButtonGroup
-          value={this.state.indexOfSelectedEvent}
-          exclusive
-          onChange={this.selectEvent}
-        >
+        <div className={classes.optionsContainer}>
+          <FormControlLabel control={<Switch onChange={this.togglePagination} />} label="Scroll Results" />
+          <Button onClick={this.fetchCSV}>Download CSV</Button>
+        </div>
+        <ToggleButtonGroup value={this.state.indexOfSelectedEvent} exclusive onChange={this.selectEvent}>
           {this.props.events.map(ev => {
-            return (
-              <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
+            return <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
                 {ev.name}
-              </ToggleButton>
-            );
+              </ToggleButton>;
           })}
         </ToggleButtonGroup>
-        <ReactTable
-          getProps={() => {
-            return {
-              style: {
-                fontFamily: "Roboto, sans-serif",
-                textAlign: "center",
-              }
-            };
-          }}
-          columns={columns}
-          data={data}
-          pageSizeOptions={[20]}
-          pageSize={20}
-          page={this.state.page}
-          className="-striped -highlight"
-          onPageChange={pageIndex => {
+        <ReactTable getProps={() => {
+            return { style: { fontFamily: "Roboto, sans-serif", textAlign: "center" } };
+          }} columns={columns} data={data} pageSizeOptions={[20]} pageSize={20} page={this.state.page} className="-striped -highlight" onPageChange={pageIndex => {
             this.setState({ ...this.state, page: pageIndex });
-          }}
-          SubComponent={row => {
+          }} SubComponent={row => {
             let scoreSlices = [];
 
-            for (let i = 0; i < row.original.raw_scores.length; i+=25) {
+            for (let i = 0; i < row.original.raw_scores.length; i += 25) {
               scoreSlices.push(row.original.raw_scores.slice(i, i + 25));
             }
-            return (
-              <Paper className={classes.scoreDetailContainer}>
-              <Typography variant={'h5'}>Score Details: {row.original.first_name} {row.original.last_name}</Typography>
-              <div className={classes.boxScoreContainer}>
-                <div>
-                  {scoreSlices.map(boxScore => {
-                    return (
-                      <ResultsDetail
-                        key={row.original.id}
-                        boxScore={boxScore}
-                      />
-                    );
-                  })}
-                </div>
-                <div >
-                  <Typography className={classes.totalScore} variant={"h2"}>
-                  {row.original.total_hits}
+            return <Paper className={classes.scoreDetailContainer}>
+                <Typography variant={"h5"}>
+                  Score Details: {row.original.first_name} {row.original.last_name}
                 </Typography>
+                <div className={classes.boxScoreContainer}>
+                  <div>
+                    {scoreSlices.map(boxScore => {
+                      return <ResultsDetail key={row.original.id} boxScore={boxScore} />;
+                    })}
+                  </div>
+                  <div>
+                    <Typography className={classes.totalScore} variant={"h2"}>
+                      {row.original.total_hits}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
-              </Paper>
-            );
-          }}
-        />
-      </div>
-    ) : (
-      <div>Loading...</div>
-    );
+              </Paper>;
+          }} />
+      </div> : <div>Loading...</div>;
   }
 }
 

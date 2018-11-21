@@ -79,8 +79,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.get('/export', (req, res) => {
-  console.log('/api/competition/results/export GET hit')
+router.get('/export', rejectUnauthenticated, (req, res) => {
+  console.log('/api/competition/results/export GET hit for competition id:', req.user.competition_id)
+  const compId = req.user.competition_id
   pool.connect(function(err, client, done) {
     if (err) {
       console.log("error exporting csv:", err);
@@ -101,7 +102,7 @@ router.get('/export', (req, res) => {
         JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
         JOIN "event" ON "shooter_event"."event_id" = "event"."id"
         JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
-      WHERE "event"."competition_id" = 1
+      WHERE "event"."competition_id" = ${compId}
       GROUP BY "shooter"."id", "event"."id"
     ) 
     TO STDOUT WITH (FORMAT csv, HEADER true);
