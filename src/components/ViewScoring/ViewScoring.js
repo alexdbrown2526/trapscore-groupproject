@@ -1,17 +1,16 @@
-import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { connect } from "react-redux";
-import { List } from "@material-ui/core/";
-import ScoringItem from "../ScoringItem/ScoringItem";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import { connect } from 'react-redux';
+import { List } from '@material-ui/core/';
+import ScoringItem from '../ScoringItem/ScoringItem';
+import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
 
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-import { USER_ACTIONS } from "../../redux/actions/userActions";
-
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 // TO POST: SHOOTER EVENT ID , SQUAD EVENT ID, SCORE
 // SQUAD HAS THE EVENT ID
@@ -26,12 +25,12 @@ const styles = theme => ({
   toggleContainer: {
     height: 56,
     padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     margin: `${theme.spacing.unit}px 0`,
-    background: theme.palette.background.default
-  }
+    background: theme.palette.background.default,
+  },
 });
 
 class Scoring extends Component {
@@ -39,30 +38,29 @@ class Scoring extends Component {
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
-    NextRoundButton: false
+    NextRoundButton: false,
   };
 
   selectRound = (event, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: value
+      payload: value,
     });
   };
 
   nextRound = () => {
-    this.props.dispatch({
-      type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: this.props.currentRound + 1
-    });
-  };
-
-
-  finalRound = () => {
-    toast('Scores Submitted!')
-    this.props.dispatch({
-      type: USER_ACTIONS.SUBMIT_SCORES,
-      payload: this.props.selectedTrap
-    });
+    if (this.props.currentRound < 5) {
+      this.props.dispatch({
+        type: USER_ACTIONS.SET_CURRENT_ROUND,
+        payload: this.props.currentRound + 1,
+      });
+    } else {
+      toast('Scores Submitted!');
+      this.props.dispatch({
+        type: USER_ACTIONS.SUBMIT_SCORES,
+        payload: this.props.selectedTrap,
+      });
+    }
   };
 
   setScore = (index, round, value) => {
@@ -71,8 +69,8 @@ class Scoring extends Component {
       payload: {
         index: index,
         round: round,
-        score: value
-      }
+        score: value,
+      },
     });
   };
 
@@ -107,26 +105,11 @@ class Scoring extends Component {
             );
           })}
         </List>
-
-        {this.props.selectedTrap.shooters.reduce((sum, current) => {
-          if (current.shots[this.props.currentRound - 1] === null) {
-            return sum;
-          } else {
-            return sum + 1;
-          }
-        }, 0) < this.props.selectedTrap.shooters.length ? (
-          this.props.currentRound < 5 ? (
-            <Button disabled={true}>Next Round</Button>
-          ) : (
-            <Button disabled={true}>Submit Scores</Button>
-          )
-        ) : (
-          this.props.currentRound < 5
-          ?
-          <Button onClick={this.nextRound}>Next Round</Button>
-          :
-          <Button onClick={this.finalRound}>Submit Scores</Button>
-        )}
+        <ScoringAdvanceButton
+          shooters={this.props.selectedTrap.shooters}
+          currentRound={this.props.currentRound}
+          nextRound={this.nextRound}
+        />
       </div>
     );
   }
@@ -134,8 +117,7 @@ class Scoring extends Component {
 
 const mapStateToProps = reduxState => ({
   currentRound: reduxState.currentRound,
-  // reduxState: reduxState,
-  selectedTrap: reduxState.selectedTrap
+  selectedTrap: reduxState.selectedTrap,
 });
 
 const Scores = withStyles(styles)(Scoring);
