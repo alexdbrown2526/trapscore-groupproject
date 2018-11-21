@@ -218,7 +218,7 @@ class ViewScheduling extends Component {
               {/* <Typography variant="h4" className={classes.subheader}>
                 traps
               </Typography> */}
-              {this.state.traps.length > 1 &&
+              {this.state.traps.length > 0 &&
                 this.state.traps.map((trap, index) => {
                   return (
                     <DndCard
