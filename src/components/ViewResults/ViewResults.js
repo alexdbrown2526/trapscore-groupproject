@@ -59,7 +59,6 @@ class ViewResults extends Component {
   fetchCSV = () => {
     axios.get('/api/competition/results/export')
       .then(response => {
-        console.log('back from results export with:', response.data);
         fileDownload(response.data, 'competition-results.csv');
       })
       .catch(error => {
