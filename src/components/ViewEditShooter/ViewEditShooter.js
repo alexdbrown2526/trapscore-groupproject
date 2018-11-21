@@ -1,32 +1,21 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+
 import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField'
-import Button from '@material-ui/core/Button'
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/List'
-import ListItemText from '@material-ui/core/ListItemText'
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/List';
-import ListItemText from '@material-ui/core/ListItemText';
-import { toast } from 'react-toastify';
-import { timingSafeEqual } from 'crypto';
+import {
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@material-ui/core';
 
-const styles = theme => ({   
-
+const styles = theme => ({
   field: {
     float: 'right',
-    
-   },
-   saveButton: {
-      marginTop: '8%'
-   },
-
-
+  },
+  saveButton: {
+    marginTop: '8%',
+  },
 
   editform: {
     float: 'right',
