@@ -12,7 +12,6 @@ import { selectCompetitionRoute } from '../../navigationRoutes';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   container: {
@@ -26,7 +25,6 @@ const styles = theme => ({
   dense: {
     marginTop: 16,
   },
-  
 });
 
 class ViewAdminEditCompetition extends Component {
@@ -84,9 +82,6 @@ class ViewAdminEditCompetition extends Component {
     this.props.data();
   };
 
- 
- 
-
   render() {
     //Conditional Rendering if statement/variable
     let viewItem;
@@ -94,48 +89,73 @@ class ViewAdminEditCompetition extends Component {
       viewItem = this.props.history.push(selectCompetitionRoute);
     }
     const { classes } = this.props;
-    return <div className={classes.modal}>
+    return (
+      <div className={classes.modal}>
         <h1>Edit Competition</h1>
         {/* {JSON.stringify(this.props.edit)} */}
 
         <h2>{this.props.edit.name} </h2>
-        <h3>
+        <h3>Shareable Registration URL:</h3>
+        <p>
+          http://localhost:3000/#/registration/
+          {this.props.edit.id}&{this.props.edit.secret_url}
+        </p>
+        {/* <h3>
           Shareable Registration URL: https://trapscore/{this.props.edit.name
             .toLowerCase()
             .split(" ")
             .join("-")}
-        </h3>
+        </h3> */}
         <p>
-          Staff Username: {this.props.edit.name
+          Staff Username:{' '}
+          {this.props.edit.name
             .toLowerCase()
-            .split(" ")
-            .join("")}
+            .split(' ')
+            .join('')}
         </p>
         <p>
-        Default Password: {this.props.edit.name
-          .toLowerCase()
-          .split(" ")
-          .join("") + '-admin'}
+          Default Password:{' '}
+          {this.props.edit.name
+            .toLowerCase()
+            .split(' ')
+            .join('') + '-admin'}
         </p>
         <h3>Change Password</h3>
         <p>
-          To change the password, type the default password and the new
-          desired password into the text fields below.
+          To change the password, type the default password and the new desired
+          password into the text fields below.
         </p>
         <form>
-          <input value={this.state.defaultPassword} onChange={this.handleChangeFor("defaultPassword")} placeholder="Default Password" />
-          <input value={this.state.newPassword} onChange={this.handleChangeFor("newPassword")} placeholder="New Password" />
+          <input
+            value={this.state.defaultPassword}
+            onChange={this.handleChangeFor('defaultPassword')}
+            placeholder="Default Password"
+          />
+          <input
+            value={this.state.newPassword}
+            onChange={this.handleChangeFor('newPassword')}
+            placeholder="New Password"
+          />
 
           <h3>Add or Edit Competition</h3>
 
-          <input value={this.state.name} onChange={this.handleChangeFor("name")} placeholder={this.props.edit.name} />
-          <input value={this.state.location} onChange={this.handleChangeFor("location")} placeholder={this.props.edit.location} />
+          <input
+            value={this.state.name}
+            onChange={this.handleChangeFor('name')}
+            placeholder={this.props.edit.name}
+          />
+          <input
+            value={this.state.location}
+            onChange={this.handleChangeFor('location')}
+            placeholder={this.props.edit.location}
+          />
         </form>
         <h2>Select Date</h2>
         <DatePicker selected={this.state.date} onChange={this.handleChange} />
         <button onClick={this.handleSubmit}>Submit</button>
         {viewItem}
-      </div>;
+      </div>
+    );
   }
 }
 ViewAdminEditCompetition.propTypes = {
@@ -153,5 +173,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles(styles), 
+  withStyles(styles)
 )(ViewAdminEditCompetition);
