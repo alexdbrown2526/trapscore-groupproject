@@ -17,10 +17,14 @@ const styles = theme => ({
     marginTop: '8%',
   },
 
+  editHeader: {
+      marginLeft: '7%'
+  },
+
   editform: {
     float: 'right',
-    marginRight: '20%',
-    marginTop: '4%',
+    marginRight: '10%',
+    marginTop: '.125vh',
     borderStyle: 'solid',
     padding: '20px',
     fontFamily: 'Roboto, sans-serif',
@@ -64,7 +68,9 @@ class ViewEditShooter extends Component {
     return (
       <div>
         <form className={classes.editform}>
-          <List>
+        <h2 className={classes.editHeader}>Edit Shooter</h2>
+
+          <List dense>
             <ListItem>
               <TextField
                 label="First Name"
