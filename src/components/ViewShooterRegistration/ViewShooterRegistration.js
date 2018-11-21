@@ -7,7 +7,9 @@ import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
 import './ViewShooterRegistration.css';
 import { toast } from 'react-toastify';
-
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
 const styles = theme => ({
   registerCard: {
@@ -106,13 +108,10 @@ class ViewShooterRegistration extends Component {
       hash: this.props.match.params.hash,
     };
 
-    if (this.state.handicap < 16) {
+    if (this.state.handicap < 16 || this.state.handicap > 27) {
       alert('You must choose a number between 16 and 27');
       return false;
-    } else if (this.state.handicap > 27) {
-      alert('You must choose a number between 16 and 27');
-      return false;
-    }
+    } 
 
 
     if (this.state.phone.includes('-')) {
@@ -278,15 +277,17 @@ class ViewShooterRegistration extends Component {
               <div>
                 {this.state.competition.events.map(ev => {
                   return (
-                    <ul className={classes.eventList} key={ev.id}>
-                      <li>
+                    <List className={classes.eventList} key={ev.id}>
+                      <ListItem>
                         {ev.name}
+                        <ListItemSecondaryAction> 
                         <Checkbox
                           value={ev.id}
                           onChange={this.handleChangeCheckBox}
                         />
-                      </li>
-                    </ul>
+                        </ListItemSecondaryAction> 
+                      </ListItem>
+                    </List>
                   );
                 })}
               </div>
