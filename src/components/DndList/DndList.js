@@ -17,7 +17,7 @@ const styles = theme => ({
 const DndList = props => {
   const { classes } = props;
   return (
-    <List dense="true" disablePadding="true">
+    <List dense={true} disablePadding={true}>
       <Droppable droppableId={props.droppableId}>
         {(provided, snapshot) => (
           <div
