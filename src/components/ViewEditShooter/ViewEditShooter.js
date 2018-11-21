@@ -17,13 +17,18 @@ const styles = theme => ({
     marginTop: '8%',
   },
 
+  editHeader: {
+      marginLeft: '7%'
+  },
+
   editform: {
     float: 'right',
-    marginRight: '20%',
-    marginTop: '4%',
+    marginRight: '10%',
+    marginTop: '.125vh',
     borderStyle: 'solid',
     padding: '20px',
     fontFamily: 'Roboto, sans-serif',
+    height: '83vh',
   },
 });
 
@@ -64,10 +69,12 @@ class ViewEditShooter extends Component {
     return (
       <div>
         <form className={classes.editform}>
-          <List>
+        <h2 className={classes.editHeader}>Edit Shooter</h2>
+
+          <List dense>
             <ListItem>
-              First Name:
               <TextField
+                label="First Name"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -76,8 +83,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Last Name:
               <TextField
+                 label="Last Name"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -86,8 +93,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              E-Mail:
               <TextField
+              label="E-mail"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -96,8 +103,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Phone Number:
               <TextField
+                label="Phone Number"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -106,8 +113,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              Handicap (yds):
               <TextField
+                label="Handicap"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -116,8 +123,8 @@ class ViewEditShooter extends Component {
               />
             </ListItem>
             <ListItem>
-              ATA Number:
               <TextField
+                label="ATA Number"
                 className="textfield"
                 type="text"
                 name="searchText"

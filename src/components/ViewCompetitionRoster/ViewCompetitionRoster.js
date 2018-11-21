@@ -1,32 +1,40 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem, TextField } from '@material-ui/core';
+import { List, ListItem, TextField, ListItemSecondaryAction } from '@material-ui/core';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
 
 import ViewEditShooter from '../ViewEditShooter/ViewEditShooter';
 
+
 const styles = theme => ({
   roster: {
     // backgroundColor: 'red',
-    width: '30%',
+    width: '30vw',
     minWidth: 100,
-    height: '61vh',
-    overflowY: 'scroll',
-    float: 'left',
-    marginLeft: '20%',
-    marginTop: '4%',
+    height: '83vh',
+    overflowY: 'auto',
+    // float: 'left',
+    marginLeft: '10vw',
+    marginTop: '5vh',
     borderStyle: 'solid',
     padding: '20px',
     fontFamily: 'Roboto, sans-serif',
+
   },
 
   searchField: {
     height: '5vh',
     fontFamily: 'Roboto, sans-serif',
+    marginLeft: '22px',
   },
+
+  header: {
+    marginLeft: '22px',
+    
+  }
 });
 
 class CompetitionRoster extends Component {
@@ -130,6 +138,7 @@ class CompetitionRoster extends Component {
       .map((shooter, index) => (
         <ListItem key={index}>
           {shooter.first_name} {shooter.last_name}{' '}
+          <ListItemSecondaryAction>
           <IconButton
             onClick={() => {
               this.editShooter(shooter.id);
@@ -137,12 +146,13 @@ class CompetitionRoster extends Component {
           >
             <SettingsIcon />
           </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
       ));
 
     return (
       <div className={classes.root}>
-        <div className={classes.editForm}>
+        <div>
           <ViewEditShooter
             selectedShooter={this.state.selectedShooter}
             updateUser={this.updateUser}
@@ -150,62 +160,29 @@ class CompetitionRoster extends Component {
           />
         </div>
         <div className={classes.roster}>
+        <div >
+        <h2 className={classes.header}>Competition Roster</h2>
+        
+
           <TextField
             className={classes.searchField}
-            variant="outlined"
             placeholder="Search by name"
+            variant="outlined"
             value={this.state.input}
             type="text"
             onChange={this.onFilterChange}
           />
-
+          </div>
+          <div className={classes.scrollable}>
           <List>
-            Competition Roster
             {list}
           </List>
+          </div>
         </div>
       </div>
     );
 
-    // return (
-    //
-
-    //  <div>
-
-    // <h2>Competition Roster</h2>
-    // <div>
-    //   <input type="text" id="filter" placeholder="Search" value={this.state.input}
-    //   onChange={this.onFilterChange} />
-    // </div><div>
-    // {/* <ul>{list}</ul> */}
-    // {/* </div> */}
-    {
-      /* <table>
-    <thead>
-      <tr>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Handicap</th>
-        <th>Edit</th>
-      </tr>
-    </thead>
-    <tbody>
-      {this.state.shooters.map((person) => {
-        return(<tr key={person.id}>
-        <td>{person.first_name}</td>
-        <td>{person.last_name}</td>
-        <td>{person.handicap}</td>
-        <td><button onClick={()=>{this.editShooter(person.id)}}>Edit</button></td>
-        </tr>)
-      })}
-    </tbody>
-  </table> */
-    }
-
-    // <ViewEditShooter selectedShooter={this.state.selectedShooter}
-    // />
-    // </div>
-    // )
+    
   }
 }
 
