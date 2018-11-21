@@ -34,7 +34,8 @@ router.get('/', rejectUnauthenticated, (req, res) => {
                                   ORDER BY "squad_trap"."place_in_line"
                                 ) sq_tr
                               ) as schedule
-                              FROM "trap" as tr) tra
+                              FROM "trap" as tr
+                              ORDER BY tr."id") tra
                               WHERE tra."competition_id" = ${
                                 req.user.competition_id
                               };`)
