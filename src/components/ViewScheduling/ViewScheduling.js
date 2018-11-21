@@ -158,6 +158,7 @@ class ViewScheduling extends Component {
           ],
         });
       }
+      this.sendData();
     }
   };
 
