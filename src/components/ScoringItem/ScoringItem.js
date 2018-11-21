@@ -3,6 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { ListItem, ListItemText } from "@material-ui/core/";
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
   score: {
@@ -10,18 +11,20 @@ const styles = theme => ({
     width: '16vw',
     lineHeight: '9vw',
     fontSize: '7vw',
+    paddingRight: '15%',
   },
   buttons: {
     height: '80%',
     width: '17.5vw',
-    lineHeight: '13.5vw',
+    lineHeight: '13vw',
     fontSize: '10vw',
   },
   shooter: {
-    height: '10%',
-    width: '16vw',
-    lineHeight: '15vw',
-    fontSize: '5vw',
+    fontSize: '7vw',
+    marginLeft: '7%',
+    fontFamily: 'Roboto, sans-serif'
+   
+    
   },
 });
 
@@ -29,8 +32,8 @@ const ScoringItem = props => {
   const { classes } = props;
   return (
     <ListItem>
-      <ListItemText className={classes.shooter}>{props.shooter.first_name}</ListItemText>
-      <ListItemText className={classes.score}>
+      <ListItemText disableTypography className={classes.shooter}>{props.shooter.first_name}</ListItemText>
+      <Typography className={classes.score}>
       {props.shooter.shots.reduce((sumOfShots, currentShot) => {
         return sumOfShots + currentShot;
       }, 0)}
@@ -42,7 +45,7 @@ const ScoringItem = props => {
           return sumOfShots + 1;
         }
       }, 0)}
-      </ListItemText>
+      </Typography>
       <ToggleButtonGroup
         value={props.shooter.shots[props.round - 1]}
         exclusive

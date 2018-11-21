@@ -1,14 +1,15 @@
 import React, { Component } from "react";
-import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { connect } from "react-redux";
-import { List } from "@material-ui/core/";
+import { List, ListItemText } from "@material-ui/core/";
 import ScoringItem from "../ScoringItem/ScoringItem";
 import PropTypes from "prop-types";
 import { Typography } from '@material-ui/core';
 import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
+
+import './ViewScoring.css';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
@@ -35,14 +36,16 @@ const styles = theme => ({
   },
   headers: {
     alignItems: "center",
+    display: 'flex',
     paddingTop: '1%',
-    paddingBottom: '5%'
+    paddingBottom: '5%',
+    paddingLeft: '35%'
   },
   headersTwo: {
     alignItems: "center",
     paddingTop: '5%',
-
-
+    paddingLeft: '35%',
+    fontSize: '8vw',
   },
 });
 
@@ -104,8 +107,8 @@ class Scoring extends Component {
           <ToggleButton className={classes.buttons} value={4}>4</ToggleButton>
           <ToggleButton className={classes.buttons} value={5}>5</ToggleButton>
         </ToggleButtonGroup>
-        <Typography className={classes.headersTwo} variant="h5"> Shooters</Typography>
-        <hr></hr>
+        <Typography disableTypography className={classes.headersTwo} variant="h5"> Shooters</Typography>
+        <hr className="hr"></hr>
         <List>
           {this.props.selectedTrap.shooters.map((shooter, index) => {
             return (
