@@ -2,6 +2,7 @@ import axios from 'axios';
 import { put, takeLatest } from 'redux-saga/effects';
 import { USER_ACTIONS } from '../actions/userActions';
 
+
 const sagaName = 'selectedTrapSaga'
 
 function* fetchSelectedTrap(action) {

@@ -11,18 +11,23 @@ const styles = theme => ({
     width: '16vw',
     lineHeight: '9vw',
     fontSize: '7vw',
-    paddingRight: '15%',
+    textAlign: 'left'
   },
   buttons: {
     height: '80%',
-    width: '17.5vw',
+    width: '16vw',
     lineHeight: '13vw',
     fontSize: '10vw',
+    maxWidth: '20vw'
   },
   shooter: {
     fontSize: '7vw',
     marginLeft: '7%',
-    fontFamily: 'Roboto, sans-serif'
+    fontFamily: 'Roboto, sans-serif',
+    maxWidth: '35vw',
+    overflow: 'hidden',
+    textOverflow: 'ellipses'
+    
    
     
   },
@@ -54,8 +59,8 @@ const ScoringItem = props => {
           props.setScore(props.index, props.round, value);
         }}
       >
-        <ToggleButton className={classes.buttons}value={1}>O</ToggleButton>
-        <ToggleButton className={classes.buttons}value={0}>/</ToggleButton>
+        <ToggleButton className={classes.buttons}value={1}>/</ToggleButton>
+        <ToggleButton className={classes.buttons}value={0}>O</ToggleButton> 
       </ToggleButtonGroup>
     </ListItem>
   );
