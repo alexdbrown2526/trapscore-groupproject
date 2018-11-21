@@ -162,7 +162,13 @@ class ViewScheduling extends Component {
   };
 
   addTrap = () => {
-    // TODO FIX ME
+    axios({
+      method: 'POST',
+      url: `/api/competition/trap/new/`,
+    }).then(() => {
+      this.getData();
+    });
+    toast('New trap created!');
   };
 
   editTrap = (trapId, newName) => {
@@ -177,7 +183,13 @@ class ViewScheduling extends Component {
   };
 
   deleteTrap = trapId => {
-    console.log('This is where we would delete: ', trapId);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/trap/${trapId}`,
+    }).then(() => {
+      this.getData();
+    });
+    toast('Trap deleted.');
   };
 
   render() {
@@ -205,37 +217,38 @@ class ViewScheduling extends Component {
               {/* <Typography variant="h4" className={classes.subheader}>
                 traps
               </Typography> */}
-              {this.state.traps.map((trap, index) => {
-                return (
-                  <DndCard
-                    key={trap.id}
-                    title={trap.name}
-                    cornerButton={
-                      <DndEditModal
-                        id={trap.id}
-                        field={trap.name}
-                        edit={this.editTrap}
-                        delete={this.deleteTrap}
+              {this.state.traps.length > 1 &&
+                this.state.traps.map((trap, index) => {
+                  return (
+                    <DndCard
+                      key={trap.id}
+                      title={trap.name}
+                      cornerButton={
+                        <DndEditModal
+                          id={trap.id}
+                          field={trap.name}
+                          edit={this.editTrap}
+                          delete={this.deleteTrap}
+                        />
+                      }
+                    >
+                      <DndList
+                        box
+                        // disableGutters
+                        droppableId={index.toString()}
+                        data={trap.schedule.map(item => {
+                          item.mainText = item.name;
+                          // item.secondaryText = item.box_number;
+                          item.avatar = item.box_number;
+                          return item;
+                        })}
                       />
-                    }
-                  >
-                    <DndList
-                      box
-                      // disableGutters
-                      droppableId={index.toString()}
-                      data={trap.schedule.map(item => {
-                        item.mainText = item.name;
-                        // item.secondaryText = item.box_number;
-                        item.avatar = item.box_number;
-                        return item;
-                      })}
-                    />
-                  </DndCard>
-                );
-              })}
-              <DndAddButton onClick={this.addSquad} />
+                    </DndCard>
+                  );
+                })}
             </DndRightSide>
           </DragDropContext>
+          <DndAddButton onClick={this.addTrap} />
         </DndPage>
       </>
     );

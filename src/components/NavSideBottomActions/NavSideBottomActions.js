@@ -1,9 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-
-import { registrationRoute } from "../../navigationRoutes";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import {
   Divider,
@@ -12,23 +10,13 @@ import {
   ListItemIcon,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core/";
+} from '@material-ui/core/';
 
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-
-const styles = {
-  list: {
-    position: "fixed",
-    left: 0,
-    bottom: 0,
-    width: "100%",
-  },
-};
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 const NavSideBottomActions = props => {
-  const { classes } = props;
   return (
-    <div className={classes.list}>
+    <>
       <Divider />
       <List>
         <ListItem
@@ -53,12 +41,8 @@ const NavSideBottomActions = props => {
           </ListItemSecondaryAction>
         </ListItem>
       </List>
-    </div>
+    </>
   );
 };
 
-NavSideBottomActions.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-export default withStyles(styles)(NavSideBottomActions);
+export default NavSideBottomActions;

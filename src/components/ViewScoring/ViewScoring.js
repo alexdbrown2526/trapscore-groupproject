@@ -8,12 +8,11 @@ import { List } from "@material-ui/core/";
 import ScoringItem from "../ScoringItem/ScoringItem";
 import PropTypes from "prop-types";
 import { Typography } from '@material-ui/core';
+import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
 
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-import { USER_ACTIONS } from "../../redux/actions/userActions";
-
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 
 const styles = theme => ({
   toggleContainer: {
@@ -42,6 +41,8 @@ const styles = theme => ({
   headersTwo: {
     alignItems: "center",
     paddingTop: '5%',
+
+
   },
 });
 
@@ -50,30 +51,29 @@ class Scoring extends Component {
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
-    NextRoundButton: false
+    NextRoundButton: false,
   };
 
   selectRound = (event, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: value
+      payload: value,
     });
   };
 
   nextRound = () => {
-    this.props.dispatch({
-      type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: this.props.currentRound + 1
-    });
-  };
-
-
-  finalRound = () => {
-    toast('Scores Submitted!')
-    this.props.dispatch({
-      type: USER_ACTIONS.SUBMIT_SCORES,
-      payload: this.props.selectedTrap
-    });
+    if (this.props.currentRound < 5) {
+      this.props.dispatch({
+        type: USER_ACTIONS.SET_CURRENT_ROUND,
+        payload: this.props.currentRound + 1,
+      });
+    } else {
+      toast('Scores Submitted!');
+      this.props.dispatch({
+        type: USER_ACTIONS.SUBMIT_SCORES,
+        payload: this.props.selectedTrap,
+      });
+    }
   };
 
   setScore = (index, round, value) => {
@@ -82,8 +82,8 @@ class Scoring extends Component {
       payload: {
         index: index,
         round: round,
-        score: value
-      }
+        score: value,
+      },
     });
   };
 
@@ -119,26 +119,11 @@ class Scoring extends Component {
             );
           })}
         </List>
-
-        {this.props.selectedTrap.shooters.reduce((sum, current) => {
-          if (current.shots[this.props.currentRound - 1] === null) {
-            return sum;
-          } else {
-            return sum + 1;
-          }
-        }, 0) < this.props.selectedTrap.shooters.length ? (
-          this.props.currentRound < 5 ? (
-            <Button disabled={true}>Next Round</Button>
-          ) : (
-            <Button disabled={true}>Submit Scores</Button>
-          )
-        ) : (
-          this.props.currentRound < 5
-          ?
-          <Button onClick={this.nextRound}>Next Round</Button>
-          :
-          <Button onClick={this.finalRound}>Submit Scores</Button>
-        )}
+        <ScoringAdvanceButton
+          shooters={this.props.selectedTrap.shooters}
+          currentRound={this.props.currentRound}
+          nextRound={this.nextRound}
+        />
       </div>
     );
   }
@@ -151,8 +136,7 @@ Scoring.propTypes = {
 
 const mapStateToProps = reduxState => ({
   currentRound: reduxState.currentRound,
-  // reduxState: reduxState,
-  selectedTrap: reduxState.selectedTrap
+  selectedTrap: reduxState.selectedTrap,
 });
 
 const Scores = withStyles(styles)(Scoring);

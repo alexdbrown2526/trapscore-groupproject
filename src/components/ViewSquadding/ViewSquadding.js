@@ -15,6 +15,7 @@ import DndRightSide from '../DndRightSide/DndRightSide';
 import DndCard from '../DndCard/DndCard';
 import DndEditModal from '../DndEditModal/DndEditModal';
 import DndList from '../DndList/DndList';
+import DndAddButton from '../DndAddButton/DndAddButton';
 
 import { toast } from 'react-toastify';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
@@ -42,7 +43,6 @@ class ViewSquadding extends Component {
   };
 
   setEvent = async event => {
-    console.log(event.target.value);
     await this.setState({ selectedEvent: event.target.value });
     this.getEvents();
     this.getData();
@@ -55,7 +55,6 @@ class ViewSquadding extends Component {
         url: `/api/competition/squadding/${this.state.selectedEvent}`,
       })
         .then(response => {
-          console.log(response.data);
           this.setState({ ...response.data });
         })
         .catch(error => {
@@ -184,14 +183,15 @@ class ViewSquadding extends Component {
   };
 
   addSquad = () => {
-    let eventId = 4;
-    axios({
-      method: 'POST',
-      url: `/api/competition/squadding/new/${eventId}`,
-    }).then(() => {
-      this.getData();
-    });
-    toast('Squad name updated!');
+    if (this.state.selectedEvent !== 0) {
+      axios({
+        method: 'POST',
+        url: `/api/competition/squadding/new/${this.state.selectedEvent}`,
+      }).then(() => {
+        this.getData();
+      });
+      toast('Squad added!');
+    }
   };
 
   editSquad = (squadId, newName) => {
@@ -201,12 +201,18 @@ class ViewSquadding extends Component {
       data: { name: newName },
     }).then(() => {
       this.getData();
+      toast('Squad name updated!');
     });
-    toast('Squad name updated!');
   };
 
   deleteSquad = squadId => {
-    console.log('This is where we would delete: ', squadId);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/squadding/squad/${squadId}`,
+    }).then(() => {
+      this.getData();
+      toast('Squad deleted.');
+    });
   };
 
   render() {
@@ -268,7 +274,7 @@ class ViewSquadding extends Component {
                 })}
             </DndRightSide>
           </DragDropContext>
-          <pre>{JSON.stringify(this.props, null, 2)}</pre>
+          <DndAddButton onClick={this.addSquad} />
         </DndPage>
       </>
     );

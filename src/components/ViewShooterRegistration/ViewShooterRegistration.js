@@ -7,10 +7,13 @@ import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
 import './ViewShooterRegistration.css';
 import { toast } from 'react-toastify';
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
-
-const styles = {
+const styles = theme => ({
   registerCard: {
+    fontFamily: 'Roboto, sans-serif',
     paddingBottom: '3%',
     paddingTop: '3%',
     position: 'relative',
@@ -20,17 +23,28 @@ const styles = {
     backfaceVisibility: 'hidden',
     flexDirection: 'column',
     margin: '0 auto',
-    maxWidth: 260,
+    maxWidth: 530,
     border: 0,
     borderRadius: 2,
+    marginTop: '2%',
+    listStyle: 'none'
     // boxShadow: "0 3px 4px 0 fade(brown, 14%),
     //           0 3px 3px -3px fade(rgb(59, 41, 41), 20%),
     //           0 2px 8px 0 fade(brown, 12%)",
   },
-  Checkbox: {
+
+  eventList: {
     listStyle: 'none',
+    textAlign: 'left',
+    verticalAlign: 'top'
+
   },
-};
+
+  header: {
+    marginTop: '10%'
+  }
+  
+});
 
 
 
@@ -39,9 +53,9 @@ class ViewShooterRegistration extends Component {
     first_name: '',
     last_name: '',
     email: '',
-    phone: Number,
-    handicap: Number,
-    ata_number: Number,
+    phone: '',
+    handicap: '',
+    ata_number: '',
     //array of event IDs from checkboxes.
     competition: {
       events: [],
@@ -94,12 +108,14 @@ class ViewShooterRegistration extends Component {
       hash: this.props.match.params.hash,
     };
 
-    if (this.state.handicap < 16) {
+    if (this.state.handicap < 16 || this.state.handicap > 27) {
       alert('You must choose a number between 16 and 27');
       return false;
-    } else if (this.state.handicap > 27) {
-      alert('You must choose a number between 16 and 27');
-      return false;
+    } 
+
+
+    if (this.state.phone.includes('-')) {
+      alert('Enter a phone number without dashes')
     }
 
     axios({
@@ -113,9 +129,9 @@ class ViewShooterRegistration extends Component {
           first_name: '',
           last_name: '',
           email: '',
-          phone: Number,
-          handicap: Number,
-          ata_number: Number,
+          phone: '',
+          handicap: '',
+          ata_number: '',
           //array of event IDs from checkboxes.
           competition: {
             events: [],
@@ -199,7 +215,7 @@ class ViewShooterRegistration extends Component {
               <h1>Shooter Registration</h1>
               <div>
                 <TextField
-                  placeholder="First Name"
+                label="First Name"
                   type="text"
                   name="first_name"
                   value={this.state.first_name}
@@ -208,8 +224,8 @@ class ViewShooterRegistration extends Component {
               </div>
               <div>
                 <TextField
-                  placeholder="Last Name"
-                  type="last-name"
+                  label="Last Name"
+                  type="text"
                   name="last_name"
                   value={this.state.last_name}
                   onChange={this.handleChangeFor('last_name')}
@@ -217,17 +233,19 @@ class ViewShooterRegistration extends Component {
               </div>
               <div>
                 <TextField
-                  placeholder="email"
+                  label="Email"
                   type="text"
                   name="email"
                   value={this.state.email}
                   onChange={this.handleChangeFor('email')}
                 />
+              
               </div>
               <div>
                 <TextField
-                  placeholder="Phone Number"
-                  type="number"
+                  label="Phone Number"
+                  placeholder="1234567890"
+                  type="text"
                   name="phone"
                   value={this.state.phone}
                   onChange={this.handleChangeFor('phone')}
@@ -235,8 +253,8 @@ class ViewShooterRegistration extends Component {
               </div>
               <div>
                 <TextField
-                  placeholder="Handicap (yds)"
-                  type="number"
+                label="Handicap"
+                  type="text"
                   name="handicap"
                   min="16"
                   max="27"
@@ -246,55 +264,33 @@ class ViewShooterRegistration extends Component {
               </div>
               <div>
                 <TextField
-                  placeholder="ATA #"
-                  type="number"
+                  label="ATA #"
+                  type="text"
                   name="ata_number"
                   value={this.state.ata_number}
                   onChange={this.handleChangeFor('ata_number')}
                 />
               </div>
-              {/* {JSON.stringify(this.state.competitionEvents)} */}
+              <div className={classes.header}>
+                <h2 className={classes.header}>Available Events</h2>
+              </div>
               <div>
                 {this.state.competition.events.map(ev => {
                   return (
-                    <ul className="Checkbox" key={ev.id}>
-                      <li>
+                    <List className={classes.eventList} key={ev.id}>
+                      <ListItem>
                         {ev.name}
+                        <ListItemSecondaryAction> 
                         <Checkbox
                           value={ev.id}
                           onChange={this.handleChangeCheckBox}
                         />
-                      </li>
-                    </ul>
+                        </ListItemSecondaryAction> 
+                      </ListItem>
+                    </List>
                   );
                 })}
               </div>
-              {/* <div>
-                <ul className="Checkbox">
-                    <li>
-                        Singles
-                        <Checkbox
-                        value="checkedSingles"
-                        checked={this.state.checkedSingles}
-                        onChange={this.handleChangeCheckBox('checkedSingles')} />
-                    </li>
-                    <li>
-                        Doubles
-                        <Checkbox
-                        value="checkedDoubles"
-                        checked={this.state.checkedDoubles}
-                        onChange={this.handleChangeCheckBox('checkedDoubles')} />
-                    </li>
-                    <li>
-                        Handicap
-                        <Checkbox
-                        
-                        value="checkedHandicap"
-                        checked={this.state.checkedHandicap}
-                        onChange={this.handleChangeCheckBox('checkedHandicap')} />
-                    </li>
-                </ul>
-            </div> */}
               <div>
                 <Button
                   variant="contained"
