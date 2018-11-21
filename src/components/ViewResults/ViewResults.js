@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Switch, FormControlLabel, Typography, Paper } from "@material-ui/core";
+import { Switch, FormControlLabel, Typography, Paper, Button } from "@material-ui/core";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
 import { withStyles } from "@material-ui/core/styles";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import ResultsDetail from "../ResultsDetail/ResultsDetail";
+import fileDownload from 'js-file-download';
 
 //JSS Styles object
 const styles = theme => ({
@@ -49,6 +50,18 @@ class ViewResults extends Component {
   };
   //creates a reference to the react-table child component
   tableRef = null;
+
+  fetchCSV = () => {
+    axios.get('/api/competition/results/export')
+      .then(response => {
+        console.log('back from results export with:', response.data);
+        fileDownload(response.data, 'competition-results.csv');
+      })
+      .catch(error => {
+        console.log('Error downloading CSV', error);
+        alert("Error downloading CSV file");
+      })
+  }
 
   //increments selected event in local state
   toggleNextEvent = () => {
@@ -203,6 +216,7 @@ class ViewResults extends Component {
           control={<Switch onChange={this.togglePagination} />}
           label="Scroll Results"
         />
+        <Button onClick={this.fetchCSV}>Download CSV</Button>
         <ToggleButtonGroup
           value={this.state.indexOfSelectedEvent}
           exclusive
