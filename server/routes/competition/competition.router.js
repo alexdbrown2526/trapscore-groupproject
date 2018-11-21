@@ -92,19 +92,45 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
     });
 
   // create events for that competition; for now, just give it the defaults
-  await pool.query(
+  let results2 = await pool.query(
     `
       INSERT INTO "event" ("name", "competition_id")
       VALUES
         ('Singles', $1),
         ('Handicap', $1),
-        ('Doubles', $1);
+        ('Doubles', $1)
+        RETURNING "id"
+        ;
+    `,
+    [newCompetitionInfo.id]
+  );
+
+  let eventIds = results2.rows.map(row => {
+    return row.id;
+  });
+
+  let defaultSquadPromises = eventIds.map(id => {
+    return pool.query(
+      `
+        INSERT INTO "squad" ("name", "event_id")
+        VALUES ($1, $2);
+      `,
+      ['Squad ' + id, id]
+    );
+  });
+
+  await Promise.all(defaultSquadPromises);
+
+  await pool.query(
+    `
+      INSERT INTO "trap" ("name", "competition_id")
+      VALUES ('Trap 1', $1)
     `,
     [newCompetitionInfo.id]
   );
 
   // get the information to send back to the client
-  let results2 = await pool
+  let results3 = await pool
     .query(
       `
       SELECT * FROM "competition"
@@ -116,8 +142,8 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       console.log('Error getting new competition details:', error);
       res.sendStatus(500);
     });
-  console.log(results2.rows[0]);
-  res.send(results2.rows[0]);
+  console.log(results3.rows[0]);
+  res.send(results3.rows[0]);
 });
 
 // update an existing competition's name, location, and/or date

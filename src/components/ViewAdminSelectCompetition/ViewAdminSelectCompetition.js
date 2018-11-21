@@ -154,10 +154,17 @@ class ViewAdminSelectCompetition extends Component {
         method: 'POST',
         url: '/api/competition',
         data: { name: this.state.newCompetitionName },
-      }).then(response => {
-        console.log(response.data);
-        this.editCompetition(response.data);
-      });
+      })
+        .then(response => {
+          console.log(response.data);
+          this.editCompetition(response.data);
+        })
+        .catch(error => {
+          alert(
+            'Something went wrong adding the competition. Are you sure the name is unique?'
+          );
+          console.log('Error:', error);
+        });
     }
   };
 
