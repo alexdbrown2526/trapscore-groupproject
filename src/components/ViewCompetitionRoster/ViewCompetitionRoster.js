@@ -14,7 +14,7 @@ const styles = theme => ({
     // backgroundColor: 'red',
     width: '30vw',
     minWidth: 100,
-    height: '86vh',
+    height: '83vh',
     overflowY: 'auto',
     // float: 'left',
     marginLeft: '10vw',

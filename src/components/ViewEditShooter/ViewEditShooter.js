@@ -28,6 +28,7 @@ const styles = theme => ({
     borderStyle: 'solid',
     padding: '20px',
     fontFamily: 'Roboto, sans-serif',
+    height: '83vh',
   },
 });
 
