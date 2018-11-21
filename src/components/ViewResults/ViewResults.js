@@ -12,19 +12,26 @@ import ResultsDetail from "../ResultsDetail/ResultsDetail";
 //JSS Styles object
 const styles = theme => ({
   boxScoreContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'nowrap',
-    margin: '0 1vw',
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "nowrap",
+    margin: "0 1vw"
   },
   totalScore: {
-    height: '100%',
-    width: '18vw',
-    lineHeight: '16vw',
-    fontSize: '8vw',
+    height: "100%",
+    width: "18vw",
+    lineHeight: "16vw",
+    fontSize: "8vw"
   },
   container: {
-    padding: '10px 0'
+    paddingTop: theme.spacing.unit * 3,
+    paddingBottom: theme.spacing.unit * 1,
+    paddingLeft: theme.spacing.unit * 3,
+    paddingRight: theme.spacing.unit * 3
+  },
+  scoreDetailContainer: {
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
   }
 });
 
@@ -37,8 +44,11 @@ class ViewResults extends Component {
     //populates on componentDidMount
     resultsData: [],
     //boolean stops table from rendering before server response
-    finishedLoading: false
+    finishedLoading: false,
+    totalPages: 0,
   };
+  //creates a reference to the react-table child component
+  tableRef = null;
 
   //increments selected event in local state
   toggleNextEvent = () => {
@@ -48,42 +58,49 @@ class ViewResults extends Component {
     });
   };
 
+  incrementPage = () => {
+    this.setState({
+      ...this.state,
+      page: this.state.page + 1
+    })
+  }
+
   //toggles pagination boolean in local state
   togglePagination = () => {
     this.setState({
       ...this.state,
       resultsShouldPaginate: !this.state.resultsShouldPaginate
-    });
-    this.paginate();
-  };
-
-  // Toggles between event views every 10 seconds (doesn't restart at 1 after finishing)
-  scheduleEventToggle = () => {
-    if (this.state.indexOfSelectedEvent < this.props.events.length - 1) {
-      this.toggleNextEvent();
-    } else {
-      this.setState({
-        ...this.state,
-        indexOfSelectedEvent: 0
-      });
-    }
+    })
   };
 
   //sets event ID to local state from toggle buttons above table
   selectEvent = (event, value) => {
     this.setState({
       ...this.state,
-      indexOfSelectedEvent: value
+      indexOfSelectedEvent: value,
+      totalPages: Math.ceil(this.state.resultsData[value].results.length / 20),
+      page: 0,
     });
   };
 
   paginate = () => {
-    if (!this.state.resultsShouldPaginate) {
-      //schedules toggling between events every 10 seconds
-      //TODO: write subroutine of paging through all event results before switching between events
-      this.isScrolling = setInterval(this.scheduleEventToggle, 10000);
-    } else {
-      clearInterval(this.isScrolling);
+    if (this.state.resultsShouldPaginate) {
+      if (this.state.page < this.state.totalPages - 1) {
+        this.incrementPage();
+      }
+      else if (this.state.indexOfSelectedEvent < this.props.events.length - 1) {
+        this.toggleNextEvent();
+        this.setState({
+          ...this.state,
+          page: 0,
+        })
+      }
+      else {
+        this.setState({
+          indexOfSelectedEvent: 0,
+          page: 0
+        })
+      }
     }
   };
 
@@ -98,7 +115,8 @@ class ViewResults extends Component {
       .then(response => {
         this.setState({
           ...this.state,
-          resultsData: response.data
+          resultsData: response.data,
+          totalPages: Math.ceil(response.data[0].results.length / 20),
         });
       })
       .catch(error => {
@@ -110,14 +128,12 @@ class ViewResults extends Component {
     //pulls list of events from redux to populate toggle buttons at top
     await this.props.dispatch({ type: USER_ACTIONS.FETCH_EVENTS });
     await this.fetchResultsData();
-    console.log(this.props.events);
     await this.setState({
       ...this.state,
-      finishedLoading: true
+      finishedLoading: true,
     });
+    this.paginate = setInterval(this.paginate, 8000)
   }
-
-  
 
   render() {
     const { classes } = this.props;
@@ -131,7 +147,7 @@ class ViewResults extends Component {
       },
       {
         Header: "Shooter Name",
-        accessor: "name",
+        accessor: "last_name",
         maxWidth: "150",
         Cell: row => (
           <div>{row.original.first_name + " " + row.original.last_name}</div>
@@ -178,8 +194,10 @@ class ViewResults extends Component {
       ? this.state.resultsData[this.state.indexOfSelectedEvent].results
       : [];
 
+    
+
     return this.state.finishedLoading ? (
-      <>
+      <div className={classes.container}>
         <Typography variant="h3">Results</Typography>
         <FormControlLabel
           control={<Switch onChange={this.togglePagination} />}
@@ -203,19 +221,19 @@ class ViewResults extends Component {
             return {
               style: {
                 fontFamily: "Roboto, sans-serif",
-                textAlign: "center"
+                textAlign: "center",
               }
             };
           }}
           columns={columns}
           data={data}
-          pageSizeOptions={[5, 10, 15, 20, 25, 50, 100]}
-          defaultPageSize={15}
+          pageSizeOptions={[20]}
+          pageSize={20}
           page={this.state.page}
           className="-striped -highlight"
-          onPageChange={pageIndex =>
-            this.setState({ ...this.state, page: pageIndex })
-          }
+          onPageChange={pageIndex => {
+            this.setState({ ...this.state, page: pageIndex });
+          }}
           SubComponent={row => {
             let scoreSlices = [];
 
@@ -223,7 +241,7 @@ class ViewResults extends Component {
               scoreSlices.push(row.original.raw_scores.slice(i, i + 25));
             }
             return (
-              <Paper className={classes.container}>
+              <Paper className={classes.scoreDetailContainer}>
               <Typography variant={'h5'}>Score Details: {row.original.first_name} {row.original.last_name}</Typography>
               <div className={classes.boxScoreContainer}>
                 <div>
@@ -246,7 +264,7 @@ class ViewResults extends Component {
             );
           }}
         />
-      </>
+      </div>
     ) : (
       <div>Loading...</div>
     );

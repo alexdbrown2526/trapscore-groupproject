@@ -10,7 +10,6 @@ const router = express.Router();
  * TODO: add another query to get individual squad lists and format the response
  */
 router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
-  console.log('event_id:', req.params.event_id);
   let dataToSend = {};
   try {
     //Returns an array of all unsquadded shooters associated with the currently selected event
@@ -111,22 +110,90 @@ router.put('/:event_id', rejectUnauthenticated, (req, res) => {
 //Create a new squad in the database with four new squad_trap entries for each of the four boxes
 router.post('/new/:event_id', rejectUnauthenticated, (req, res) => {
   let newSquadId;
-  pool.query(`INSERT INTO "squad" ("event_id", "name")
+  pool
+    .query(
+      `INSERT INTO "squad" ("event_id", "name")
               VALUES (${req.params.event_id}, DEFAULT)
-              RETURNING "id";`)
+              RETURNING "id";`
+    )
     .then(results => {
-      newSquadId = results.rows[0].id
-      pool.query(`INSERT INTO "squad_trap" ("squad_id", "box_number")
+      newSquadId = results.rows[0].id;
+      pool
+        .query(
+          `INSERT INTO "squad_trap" ("squad_id", "box_number")
                   VALUES (${newSquadId}, 1),
                         (${newSquadId}, 2),
                         (${newSquadId}, 3),
-                        (${newSquadId}, 4);`)
+                        (${newSquadId}, 4);`
+        )
         .then(() => res.sendStatus(200));
     })
     .catch(error => {
-      console.log('Error posting new squad:', error)
+      console.log('Error posting new squad:', error);
       res.sendStatus(500);
+    });
+});
+
+router.delete('/squad/:id', async (req, res) => {
+  squadToDeleteId = req.params.id;
+
+  // unsquad the shooters in the squad
+  await pool.query(
+    `
+      UPDATE "shooter_event"
+      SET "squad_id" = null
+      WHERE "squad_id" = $1;
+    `,
+    [squadToDeleteId]
+  );
+
+  // get the ids of the squad_traps associated with that trap
+  let response = await pool.query(
+    `
+      SELECT "id" FROM "squad_trap"
+      WHERE "squad_id" = $1;
+      `,
+    [squadToDeleteId]
+  );
+  let squadTrapIdsToClear = response.rows.map(row => row.id);
+
+  // disassociate the scores associated with that trap
+  let promises = squadTrapIdsToClear.map(squadTrapId => {
+    return pool.query(
+      `
+          UPDATE "score"
+          SET "squad_trap_id" = null
+          WHERE "squad_trap_id" = $1;
+        `,
+      [squadTrapId]
+    );
+  });
+
+  await Promise.all(promises);
+
+  await pool.query(
+    `
+      DELETE FROM "squad_trap"
+      WHERE "squad_id"=$1;
+    `,
+    [squadToDeleteId]
+  );
+
+  await pool
+    .query(
+      `
+          DELETE FROM "squad"
+          WHERE "id"=$1;
+      `,
+      [squadToDeleteId]
+    )
+    .then(() => {
+      res.sendStatus(200);
     })
-})
+    .catch(error => {
+      console.log('Error deleting trap:', error);
+      res.sendStatus(500);
+    });
+});
 
 module.exports = router;

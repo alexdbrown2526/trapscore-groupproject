@@ -82,7 +82,7 @@ CREATE TABLE "squad_trap" (
 CREATE TABLE "score" (
     "id" serial PRIMARY KEY,
     "shooter_event_id" integer NOT NULL REFERENCES "shooter_event"("id"),
-    "squad_trap_id" integer NOT NULL REFERENCES "squad_trap"("id"),
+    "squad_trap_id" integer REFERENCES "squad_trap"("id"),
     "score" integer NOT NULL
 );
 

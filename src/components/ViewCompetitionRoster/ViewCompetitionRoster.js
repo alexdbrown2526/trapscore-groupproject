@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField'
 import Avatar from '@material-ui/core/Avatar'
-import { ListItemSecondaryAction } from '@material-ui/core';
 // import classes from '*.module.scss';
 
 
@@ -116,8 +115,8 @@ class CompetitionRoster extends Component {
   render() {
     const { classes } = this.props;
 
-    const list = this.state.shooters.filter(shooter => this.state.input.toUpperCase() === '' || shooter.last_name.toUpperCase().includes(this.state.input.toUpperCase()) || shooter.first_name.toUpperCase().includes(this.state.input.toUpperCase()))
-        .map((shooter, index) => <ListItem  key={index}>{shooter.first_name} {shooter.last_name} <ListItemSecondaryAction><IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton> </ListItemSecondaryAction> </ListItem>);
+    const list = this.state.shooters.filter(shooter => this.state.input === '' || shooter.last_name.includes(this.state.input) || shooter.first_name.includes(this.state.input))
+        .map((shooter, index) => <ListItem  key={index}>{shooter.first_name} {shooter.last_name} <IconButton  onClick={()=>{this.editShooter(shooter.id)}}><SettingsIcon></SettingsIcon></IconButton></ListItem>);
 
     return (<div className={classes.root}> 
       <div className={classes.editForm}>
@@ -128,7 +127,7 @@ class CompetitionRoster extends Component {
       <TextField className={classes.searchField} variant="outlined" placeholder="Search by name"
        value={this.state.input} type="text" onChange={this.onFilterChange}/>
    
-        <List dense>
+        <List>
           Competition Roster
       {list}
       </List>

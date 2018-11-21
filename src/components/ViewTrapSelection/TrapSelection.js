@@ -1,9 +1,23 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
-import { scoringRoute } from '../../navigationRoutes';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { scoringRoute } from "../../navigationRoutes";
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Button, Card, Checkbox, TextField } from "@material-ui/core/";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import { Select, MenuItem } from "@material-ui/core/";
+
+const styles = theme => ({
+  selectBox: {
+    width: "100%",
+    // marginLeft: theme.spacing.unit,
+    // marginRight: theme.spacing.unit,
+    marginTop: theme.spacing.unit * 2,
+    marginBottom: theme.spacing.unit * 2
+  }
+});
 
 class TrapSelection extends Component {
   state = {
@@ -11,7 +25,9 @@ class TrapSelection extends Component {
     value: "",
     // Conditional Rendering Variable
     isVisible: false,
-    trap: ""
+    trap: "",
+    counter: 0
+
   };
   // Get available Traps
   componentDidMount() {
@@ -19,10 +35,11 @@ class TrapSelection extends Component {
   }
 
   handleChangeFor = propertyName => event => {
-    toast('Trap Selected')
+    toast("Trap Selected");
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value
+      [propertyName]: event.target.value,
+      counter: 0
     });
   };
   // Conditional Rendering function
@@ -46,31 +63,48 @@ class TrapSelection extends Component {
     if (this.state.isVisible) {
       displayItem = this.props.history.push(scoringRoute);
     }
+    const { classes } = this.props;
     return (
       <div>
         <h1>Trap Selection</h1>
         {/* {JSON.stringify(this.state.trap)} */}
         <form onSubmit={this.handleSubmit}>
-          <label>
-            <select onChange={this.handleChangeFor("trap")}>
-              <option>Select Trap</option>
+          <>
+            <Select
+              className={classes.selectBox}
+              value={this.state.trap}
+              onChange={this.handleChangeFor("trap")}
+            
+            >
+            <MenuItem value={0}>Select</MenuItem>
               {this.props.traps.map(trap => {
                 return (
-                  // value={trap id} gets the id of selected trap to be passed to the saga, saga triggers axios get call to return name and id.
-                  <option key={trap.id} value={trap.id}>
+                  <MenuItem key={trap.id} value={trap.id}>
                     {trap.name}
-                  </option>
+                  </MenuItem>
                 );
               })}
-            </select>
-          </label>
-          <input type="submit" value="Confirm" />
+            </Select>
+          </>
+          <Button
+            variant="contained"
+            color="primary"
+            type="submit"
+            name="submit"
+            value="Register"
+          >
+            Confirm
+          </Button>
+          {displayItem}
         </form>
-        {displayItem}
       </div>
     );
   }
 }
+
+TrapSelection.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
 const mapStateToProps = reduxState => ({
   reduxState,
@@ -78,4 +112,6 @@ const mapStateToProps = reduxState => ({
   user: reduxState.user
 });
 
-export default connect(mapStateToProps)(TrapSelection);
+const Traps = withStyles(styles)(TrapSelection);
+
+export default connect(mapStateToProps)(Traps);

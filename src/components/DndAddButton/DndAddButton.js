@@ -6,8 +6,10 @@ import PlusIcon from '@material-ui/icons/Add';
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit * 3,
-    width: theme.spacing.unit * 30,
+    margin: theme.spacing.unit * 5,
+    bottom: 0,
+    right: 0,
+    position: 'fixed',
   },
 });
 
@@ -15,12 +17,12 @@ const DndAddButton = props => {
   const { classes } = props;
   return (
     <Button
+      variant="fab"
       color="primary"
-      variant="contained"
       className={classes.button}
       onClick={props.onClick}
     >
-      <PlusIcon fontSize="large" />
+      <PlusIcon />
     </Button>
   );
 };
