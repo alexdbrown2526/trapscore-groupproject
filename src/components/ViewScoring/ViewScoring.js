@@ -1,35 +1,51 @@
-import React, { Component } from 'react';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { connect } from 'react-redux';
-import { List } from '@material-ui/core/';
-import ScoringItem from '../ScoringItem/ScoringItem';
+import React, { Component } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { connect } from "react-redux";
+import { List, ListItemText } from "@material-ui/core/";
+import ScoringItem from "../ScoringItem/ScoringItem";
+import PropTypes from "prop-types";
+import { Typography } from '@material-ui/core';
 import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
+
+import './ViewScoring.css';
 
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 import { toast } from 'react-toastify';
 
-// TO POST: SHOOTER EVENT ID , SQUAD EVENT ID, SCORE
-// SQUAD HAS THE EVENT ID
-
-//TODO: []Make every hit or missed function send the result to a saga. Make this saga axios.post to server
-//TODO: []Make IF statements actually do what it says in the console logs
-//TODO: []Make Toggle Buttons actually toggle
-//TODO: []Make Round Switching toggles store the current scores
-//TODO: []Make conditonal render on last round for Submit button, make this send all scores to the saga and axios.post to server.
-
 const styles = theme => ({
   toggleContainer: {
-    height: 56,
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    margin: `${theme.spacing.unit}px 0`,
-    background: theme.palette.background.default,
+    overflow: 'hidden',
+    backfaceVisibility: 'hidden',
+    flexDirection: 'row',
+    margin: '0',
+    width: '100vw',
+    border: 0,
+    borderRadius: 2,
+  },
+  buttons: {
+    height: '60%',
+    width: '20vw',
+    lineHeight: '4vw',
+    fontSize: '4vw',
+    alignItems: "right",
+    display: 'flex'
+  },
+  headers: {
+    alignItems: "center",
+    display: 'flex',
+    paddingTop: '1%',
+    paddingBottom: '5%',
+    paddingLeft: '35%'
+  },
+  headersTwo: {
+    alignItems: "center",
+    paddingTop: '5%',
+    paddingLeft: '35%',
+    fontSize: '8vw',
   },
 });
 
@@ -75,23 +91,24 @@ class Scoring extends Component {
   };
 
   render() {
+    const { classes } = this.props;
     return (
       <div>
-        <h1>Scoring</h1>
-        <h2>{this.props.selectedTrap.name}</h2>
-        <h2>Rounds</h2>
+        <Typography className={classes.headers} variant="h4">Rounds</Typography>
         <ToggleButtonGroup
           value={this.props.currentRound}
           exclusive
           onChange={this.selectRound}
+          className={classes.toggleContainer}
         >
-          <ToggleButton value={1}>1</ToggleButton>
-          <ToggleButton value={2}>2</ToggleButton>
-          <ToggleButton value={3}>3</ToggleButton>
-          <ToggleButton value={4}>4</ToggleButton>
-          <ToggleButton value={5}>5</ToggleButton>
+          <ToggleButton className={classes.buttons} value={1}>1</ToggleButton>
+          <ToggleButton className={classes.buttons} value={2}>2</ToggleButton>
+          <ToggleButton className={classes.buttons} value={3}>3</ToggleButton>
+          <ToggleButton className={classes.buttons} value={4}>4</ToggleButton>
+          <ToggleButton className={classes.buttons} value={5}>5</ToggleButton>
         </ToggleButtonGroup>
-        <h2>Shooters</h2>
+        <Typography disableTypography className={classes.headersTwo} variant="h5"> Shooters</Typography>
+        <hr className="hr"></hr>
         <List>
           {this.props.selectedTrap.shooters.map((shooter, index) => {
             return (
@@ -114,6 +131,11 @@ class Scoring extends Component {
     );
   }
 }
+
+Scoring.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
 
 const mapStateToProps = reduxState => ({
   currentRound: reduxState.currentRound,

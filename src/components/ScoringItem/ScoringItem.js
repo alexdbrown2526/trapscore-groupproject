@@ -3,26 +3,37 @@ import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { ListItem, ListItemText } from "@material-ui/core/";
+import { Typography } from '@material-ui/core';
 
 const styles = theme => ({
-  toggleContainer: {
-    height: 56,
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    margin: `${theme.spacing.unit}px 0`,
-    background: theme.palette.background.default
-  }
+  score: {
+    height: '70%',
+    width: '16vw',
+    lineHeight: '9vw',
+    fontSize: '7vw',
+    paddingRight: '15%',
+  },
+  buttons: {
+    height: '80%',
+    width: '17.5vw',
+    lineHeight: '13vw',
+    fontSize: '10vw',
+  },
+  shooter: {
+    fontSize: '7vw',
+    marginLeft: '7%',
+    fontFamily: 'Roboto, sans-serif'
+   
+    
+  },
 });
 
 const ScoringItem = props => {
   const { classes } = props;
   return (
     <ListItem>
-      <ListItemText>
-      {props.shooter.first_name}
-        </ListItemText>
+      <ListItemText disableTypography className={classes.shooter}>{props.shooter.first_name}</ListItemText>
+      <Typography className={classes.score}>
       {props.shooter.shots.reduce((sumOfShots, currentShot) => {
         return sumOfShots + currentShot;
       }, 0)}
@@ -34,8 +45,8 @@ const ScoringItem = props => {
           return sumOfShots + 1;
         }
       }, 0)}
+      </Typography>
       <ToggleButtonGroup
-        classes = {classes.toggleContainer}
         value={props.shooter.shots[props.round - 1]}
         exclusive
         selected
@@ -43,8 +54,8 @@ const ScoringItem = props => {
           props.setScore(props.index, props.round, value);
         }}
       >
-        <ToggleButton value={0}>Miss</ToggleButton>
-        <ToggleButton value={1}>Hit</ToggleButton>
+        <ToggleButton className={classes.buttons}value={1}>O</ToggleButton>
+        <ToggleButton className={classes.buttons}value={0}>/</ToggleButton>
       </ToggleButtonGroup>
     </ListItem>
   );
