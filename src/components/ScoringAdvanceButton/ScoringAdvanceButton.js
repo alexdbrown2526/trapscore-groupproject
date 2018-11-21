@@ -3,33 +3,72 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-  advanceButton: {
-    margin: theme.spacing.unit,
+  spacer: {
     width: '100%',
+    height: theme.spacing.unit * 5,
+  },
+  centerButtonFixed: {
+    position: 'fixed',
+    left: '50%',
+    bottom: theme.spacing.unit * 2,
+    transform: `translate(-50%, 0%)`,
+    width: '85%',
+  },
+  centerButtonRelative: {
+    position: 'relative',
+    left: '50%',
+    bottom: theme.spacing.unit * 2,
+    transform: `translate(-50%, 0%)`,
+    width: '85%',
   },
 });
 
 const ScoringAdvanceButton = props => {
-  const shotsSoFar = props.shooters.reduce((sum, current) => {
+  const { classes } = props;
+  const shotsThisRound = props.shooters.reduce((sum, current) => {
     if (current.shots[props.currentRound - 1] === null) {
       return sum;
     } else {
       return sum + 1;
     }
   }, 0);
-  console.log('shotsSoFar:', shotsSoFar);
+  const shotsThisRotation = props.shooters.reduce((sum, current) => {
+    return (
+      sum +
+      current.shots.reduce((shotsSum, currentShot) => {
+        if (currentShot === null) {
+          return shotsSum;
+        } else {
+          return shotsSum + 1;
+        }
+      }, 0)
+    );
+  }, 0);
+
   return (
     <>
-      {shotsSoFar < props.shooters.length ? (
-        props.currentRound < 5 ? (
-          <Button disabled={true}>Next Round</Button>
-        ) : (
-          <Button disabled={true}>Submit Scores</Button>
-        )
-      ) : props.currentRound < 5 ? (
-        <Button onClick={props.nextRound}>Next Round</Button>
+      {props.currentRound < 5 ? (
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.centerButtonFixed}
+          disabled={shotsThisRound < props.shooters.length}
+          onClick={props.nextRound}
+        >
+          Next Round
+        </Button>
       ) : (
-        <Button onClick={props.nextRound}>Submit Scores</Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          className={classes.centerButtonFixed}
+          disabled={shotsThisRotation < props.shooters.length * 5}
+          onClick={props.nextRound}
+        >
+          Submit Scores
+        </Button>
       )}
     </>
   );
