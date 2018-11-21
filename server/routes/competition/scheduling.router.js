@@ -45,9 +45,10 @@ router.get('/', rejectUnauthenticated, (req, res) => {
   }
 
   Promise.all(promises).then(values => {
+    let trapsValues = values[1].rows[0].traps || [];
     dataToSend = {
       unassigned: values[0].rows,
-      traps: values[1].rows[0].traps,
+      traps: trapsValues,
     };
     res.send(dataToSend);
   });
