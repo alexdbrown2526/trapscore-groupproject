@@ -11,7 +11,6 @@ const passport = require("./strategies/user.strategy");
 // ALL other routes are routed through competitionRouter. No need to add more here.
 const userRouter = require("./routes/user.router");
 const competitionRouter = require("./routes/competition/competition.router");
-const smsRouter = require("./routes/sms.router");
 const registrationRouter = require("./routes/registration.router");
 
 
@@ -31,7 +30,6 @@ app.use(passport.session());
 app.use("/api/registration", registrationRouter);
 app.use("/api/user", userRouter);
 app.use("/api/competition", competitionRouter);
-app.use("/api/sms", smsRouter);
 
 // Serve static files
 app.use(express.static("build"));
