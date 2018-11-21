@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 
 import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
 
-import './ViewShooterRegistration.css';
 import { toast } from 'react-toastify';
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
