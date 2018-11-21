@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Switch, FormControlLabel, Typography, Paper } from "@material-ui/core";
+import { Switch, FormControlLabel, Typography, Paper, Button } from "@material-ui/core";
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
 import { withStyles } from "@material-ui/core/styles";
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import ResultsDetail from "../ResultsDetail/ResultsDetail";
+import fileDownload from 'js-file-download';
 
 //JSS Styles object
 const styles = theme => ({
@@ -32,6 +33,11 @@ const styles = theme => ({
   scoreDetailContainer: {
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
+  },
+  optionsContainer: {
+    display: "flex",
+    flexDirection: "row", 
+    justifyContent: "space-between",
   }
 });
 
@@ -49,6 +55,18 @@ class ViewResults extends Component {
   };
   //creates a reference to the react-table child component
   tableRef = null;
+
+  fetchCSV = () => {
+    axios.get('/api/competition/results/export')
+      .then(response => {
+        console.log('back from results export with:', response.data);
+        fileDownload(response.data, 'competition-results.csv');
+      })
+      .catch(error => {
+        console.log('Error downloading CSV', error);
+        alert("Error downloading CSV file");
+      })
+  }
 
   //increments selected event in local state
   toggleNextEvent = () => {
@@ -196,78 +214,48 @@ class ViewResults extends Component {
 
     
 
-    return this.state.finishedLoading ? (
-      <div className={classes.container}>
+    return this.state.finishedLoading ? <div className={classes.container}>
         <Typography variant="h3">Results</Typography>
-        <FormControlLabel
-          control={<Switch onChange={this.togglePagination} />}
-          label="Scroll Results"
-        />
-        <ToggleButtonGroup
-          value={this.state.indexOfSelectedEvent}
-          exclusive
-          onChange={this.selectEvent}
-        >
+        <div className={classes.optionsContainer}>
+          <FormControlLabel control={<Switch onChange={this.togglePagination} />} label="Scroll Results" />
+          <Button onClick={this.fetchCSV}>Download CSV</Button>
+        </div>
+        <ToggleButtonGroup value={this.state.indexOfSelectedEvent} exclusive onChange={this.selectEvent}>
           {this.props.events.map(ev => {
-            return (
-              <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
+            return <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
                 {ev.name}
-              </ToggleButton>
-            );
+              </ToggleButton>;
           })}
         </ToggleButtonGroup>
-        <ReactTable
-          getProps={() => {
-            return {
-              style: {
-                fontFamily: "Roboto, sans-serif",
-                textAlign: "center",
-              }
-            };
-          }}
-          columns={columns}
-          data={data}
-          pageSizeOptions={[20]}
-          pageSize={20}
-          page={this.state.page}
-          className="-striped -highlight"
-          onPageChange={pageIndex => {
+        <ReactTable getProps={() => {
+            return { style: { fontFamily: "Roboto, sans-serif", textAlign: "center" } };
+          }} columns={columns} data={data} pageSizeOptions={[20]} pageSize={20} page={this.state.page} className="-striped -highlight" onPageChange={pageIndex => {
             this.setState({ ...this.state, page: pageIndex });
-          }}
-          SubComponent={row => {
+          }} SubComponent={row => {
             let scoreSlices = [];
 
-            for (let i = 0; i < row.original.raw_scores.length; i+=25) {
+            for (let i = 0; i < row.original.raw_scores.length; i += 25) {
               scoreSlices.push(row.original.raw_scores.slice(i, i + 25));
             }
-            return (
-              <Paper className={classes.scoreDetailContainer}>
-              <Typography variant={'h5'}>Score Details: {row.original.first_name} {row.original.last_name}</Typography>
-              <div className={classes.boxScoreContainer}>
-                <div>
-                  {scoreSlices.map(boxScore => {
-                    return (
-                      <ResultsDetail
-                        key={row.original.id}
-                        boxScore={boxScore}
-                      />
-                    );
-                  })}
-                </div>
-                <div >
-                  <Typography className={classes.totalScore} variant={"h2"}>
-                  {row.original.total_hits}
+            return <Paper className={classes.scoreDetailContainer}>
+                <Typography variant={"h5"}>
+                  Score Details: {row.original.first_name} {row.original.last_name}
                 </Typography>
+                <div className={classes.boxScoreContainer}>
+                  <div>
+                    {scoreSlices.map(boxScore => {
+                      return <ResultsDetail key={row.original.id} boxScore={boxScore} />;
+                    })}
+                  </div>
+                  <div>
+                    <Typography className={classes.totalScore} variant={"h2"}>
+                      {row.original.total_hits}
+                    </Typography>
+                  </div>
                 </div>
-              </div>
-              </Paper>
-            );
-          }}
-        />
-      </div>
-    ) : (
-      <div>Loading...</div>
-    );
+              </Paper>;
+          }} />
+      </div> : <div>Loading...</div>;
   }
 }
 

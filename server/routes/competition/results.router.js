@@ -1,5 +1,6 @@
 const express = require("express");
 const pool = require("../../modules/pool");
+const copyTo = require("pg-copy-streams").to;
 const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
@@ -77,5 +78,50 @@ router.get("/", rejectUnauthenticated, (req, res) => {
       console.log(error);
     });
 });
+
+router.get('/export', rejectUnauthenticated, (req, res) => {
+  console.log('/api/competition/results/export GET hit for competition id:', req.user.competition_id)
+  const compId = req.user.competition_id
+  pool.connect(function(err, client, done) {
+    if (err) {
+      console.log("error exporting csv:", err);
+      res.sendStatus(500);
+    }
+    const stream = client.query(copyTo(`
+    COPY (
+      SELECT 
+        "shooter"."first_name" as "First Name", 
+        "shooter"."last_name" as "Last Name", 
+        "shooter"."email" as "Email", 
+        "shooter"."phone" as "Phone", 
+        "shooter"."handicap" as "Handicap", 
+        "shooter"."ata_number" as "ATA Number", 
+        "event"."name" as "Event", 
+        SUM("score"."score") as "Score" 
+      FROM "shooter"
+        JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
+        JOIN "event" ON "shooter_event"."event_id" = "event"."id"
+        JOIN "score" ON "shooter_event"."id" = "score"."shooter_event_id"
+      WHERE "event"."competition_id" = ${compId}
+      GROUP BY "shooter"."id", "event"."id"
+    ) 
+    TO STDOUT WITH (FORMAT csv, HEADER true);
+    `));
+    stream.pipe(res);
+    stream.on("end", done);
+    stream.on("error", done);
+  })
+    
+    
+  });
+  
+    // .then(results => {
+    //   res.send(results.rows);
+    // })
+    // .catch(error => {
+    //   console.log("Error exporting competition scores summary CSV file", error);
+    //   res.sendStatus(500);
+    // });
+// })
 
 module.exports = router;
