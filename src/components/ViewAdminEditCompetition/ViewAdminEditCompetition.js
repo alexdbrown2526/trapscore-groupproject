@@ -97,7 +97,8 @@ class ViewAdminEditCompetition extends Component {
         <h2>{this.props.edit.name} </h2>
         <h3>Shareable Registration URL:</h3>
         <p>
-          http://localhost:3000/#/registration/
+          {process.env.REACT_APP_ROOT_URL}
+          /#/registration/
           {this.props.edit.id}&{this.props.edit.secret_url}
         </p>
         {/* <h3>
