@@ -37,7 +37,8 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
         ) sh
       ) as members
       FROM "squad" as sq
-      WHERE sq."event_id" = $1) squ
+      WHERE sq."event_id" = $1
+      ORDER BY sq."id") squ
       ;`,
       [req.params.event_id]
     );
