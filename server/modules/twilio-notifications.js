@@ -44,8 +44,8 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
               client.messages
                 .create({
                   from: process.env.TWILIO_NUMBER,
-                  //MAY NEED TO FORMAT PHONE NUMBERS
-                  to: `+1${shooter.phone}`,
+                  //adds US country code (+1) and strips all non digit characters before attempting to send
+                  to: `+1${shooter.phone.toString().replace(/\D/g,'')}`,
                   body: body
                 })
                 .then(() => {
