@@ -5,7 +5,6 @@ import {
   Button,
   List,
   ListItem,
-  ListItemText,
   TextField,
 } from '@material-ui/core';
 
