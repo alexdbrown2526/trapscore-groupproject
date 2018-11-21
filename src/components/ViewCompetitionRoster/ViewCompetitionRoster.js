@@ -132,8 +132,8 @@ class CompetitionRoster extends Component {
       .filter(
         shooter =>
           this.state.input === '' ||
-          shooter.last_name.includes(this.state.input) ||
-          shooter.first_name.includes(this.state.input)
+          shooter.last_name.toLowerCase().includes(this.state.input) ||
+          shooter.first_name.toLowerCase().includes(this.state.input)
       )
       .map((shooter, index) => (
         <ListItem key={index}>
