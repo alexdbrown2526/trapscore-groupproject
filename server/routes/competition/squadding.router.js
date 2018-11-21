@@ -23,7 +23,8 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
       `SELECT * FROM "event" WHERE "id" = ${req.params.event_id};`
     );
     //returns an array of squad objects made up of squad id, squad name, and array of squad members
-    const getSquadDetails = pool.query(`SELECT json_agg(row_to_json(squ)) as squads
+    const getSquadDetails = pool.query(
+      `SELECT json_agg(row_to_json(squ)) as squads
       FROM (
         SELECT sq."id", sq."name",
         (SELECT COALESCE(json_agg(sh), '[]'::json)
@@ -31,15 +32,15 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
           SELECT "shooter"."id", "shooter"."first_name", "shooter"."last_name", "shooter"."handicap", "shooter_event"."post_position" FROM "shooter"
           JOIN "shooter_event" ON "shooter"."id" = "shooter_event"."shooter_id"
           JOIN "squad" ON "shooter_event"."squad_id" = "squad"."id"
-          WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = ${
-            req.params.event_id
-          }
+          WHERE "squad"."id" = sq."id" AND "shooter_event"."event_id" = $1
           ORDER BY "shooter_event"."post_position"
         ) sh
       ) as members
       FROM "squad" as sq
-      WHERE sq."event_id" = ${req.params.event_id}) squ
-      ;`);
+      WHERE sq."event_id" = $1) squ
+      ;`,
+      [req.params.event_id]
+    );
 
     //assemble contents of dataToSend from postgres responses
     const unsquaddedResults = await getUnsquadded;
