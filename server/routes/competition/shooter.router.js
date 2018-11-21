@@ -5,6 +5,8 @@ const {
 } = require('../../modules/authentication-middleware');
 const router = express.Router();
 
+const routerName = 'shooter.router.js';
+
 // GET a list of all shooters associated with a competition
 router.get('/', rejectUnauthenticated, (req, res) => {
   pool
@@ -16,7 +18,6 @@ router.get('/', rejectUnauthenticated, (req, res) => {
               GROUP BY "shooter"."id";`
     )
     .then(results => {
-      console.log(results.rows);
       res.send(results.rows);
     })
     .catch(error => {
@@ -38,7 +39,6 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
       WHERE "id" = ${req.params.id};`
     )
     .then(results => {
-      console.log(results.rows);
       res.send(results.rows);
     })
     .catch(error => {
@@ -75,8 +75,9 @@ router.put('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.delete(':/id', rejectUnauthenticated, async (req, res) => {
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
   let shooterToDeleteId = req.params.id;
+  console.log('delete shooter hit:', shooterToDeleteId);
 
   // we will need to get all of the shooter_events,
   // delete all the scores that references those shooter events,
@@ -84,38 +85,51 @@ router.delete(':/id', rejectUnauthenticated, async (req, res) => {
   // then delete the shooter.
 
   // get all of the apllicable shooter_events
-  let response = await pool.query(
-    `
+  let response = await pool
+    .query(
+      `
         SELECT "id" FROM "shooter_event"
         WHERE "shooter_id" = $1
       `,
-    [shooterToDeleteId]
-  );
+      [shooterToDeleteId]
+    )
+    .catch(error => {
+      console.log('### Problem in', routerName, '.');
+      console.log('### Error:');
+      console.log(error);
+    });
   let shooterEventIdsToDelete = response.rows;
 
   // delete all the scores that reference those shooter_events
-  let scorePromises = shooterEventIdsToDelete.map(id => {
+  let scorePromises = shooterEventIdsToDelete.map(current => {
     return pool.query(
       `
-            DELETE FROM "scores"
+            DELETE FROM "score"
             WHERE "shooter_event_id" = $1;
           `,
-      [id]
+      [current.id]
     );
   });
-  await Promise.all(scorePromises);
-
+  await Promise.all(scorePromises).catch(error => {
+    console.log('### Problem in', routerName, '.');
+    console.log('### Error:');
+    console.log(error);
+  });
   // delete all of the shooter_events
-  let shooterEventPromises = shooterEventIdsToDelete.map(id => {
+  let shooterEventPromises = shooterEventIdsToDelete.map(current => {
     return pool.query(
       `
             DELETE FROM "shooter_event"
             WHERE "id" = $1;
           `,
-      [id]
+      [current.id]
     );
   });
-  await Promise.all(shooterEventPromises);
+  await Promise.all(shooterEventPromises).catch(error => {
+    console.log('### Problem in', routerName, '.');
+    console.log('### Error:');
+    console.log(error);
+  });
 
   // delete the shooter
   await pool
@@ -126,7 +140,11 @@ router.delete(':/id', rejectUnauthenticated, async (req, res) => {
     `,
       [shooterToDeleteId]
     )
-    .catch(error => {});
+    .catch(error => {
+      console.log('### Problem in', routerName, '.');
+      console.log('### Error:');
+      console.log(error);
+    });
 
   res.sendStatus(200);
 });
