@@ -25,6 +25,7 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
               JOIN "squad_trap" ON "squad_trap"."squad_id" = "squad"."id"
               JOIN "trap" ON "squad_trap"."trap_id" = "trap"."id"
               WHERE "squad_trap"."squad_id" = ${squad_id} 
+                AND "squad_trap"."trap_id" = ${trap_id}
                 AND "squad_trap"."place_in_line" = ${results.rows[results.rows.length - 1].place_in_line};`)
           .then(results => {
             results.rows.forEach(shooter => {
