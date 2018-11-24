@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
-import { Button, Card, Checkbox, TextField } from '@material-ui/core/';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
+import { 
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  Button, 
+  Card, 
+  Checkbox, 
+  TextField 
+} from '@material-ui/core/';
 
 import { toast } from 'react-toastify';
-import List from '@material-ui/core/List'
-import ListItem from '@material-ui/core/ListItem'
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 
 const styles = theme => ({
   registerCard: {
@@ -27,9 +33,6 @@ const styles = theme => ({
     borderRadius: 2,
     marginTop: '2%',
     listStyle: 'none'
-    // boxShadow: "0 3px 4px 0 fade(brown, 14%),
-    //           0 3px 3px -3px fade(rgb(59, 41, 41), 20%),
-    //           0 2px 8px 0 fade(brown, 12%)",
   },
 
   eventList: {
@@ -41,11 +44,9 @@ const styles = theme => ({
 
   header: {
     marginTop: '10%'
-  }
-  
+  }  
+
 });
-
-
 
 class ViewShooterRegistration extends Component {
   state = {
@@ -55,7 +56,6 @@ class ViewShooterRegistration extends Component {
     phone: '',
     handicap: '',
     ata_number: '',
-    //array of event IDs from checkboxes.
     competition: {
       events: [],
     },
@@ -63,25 +63,6 @@ class ViewShooterRegistration extends Component {
 
   componentDidMount() {
     this.tryToGetCompetition();
-    // axios({
-    //   method: "GET",
-    //   url: `/api/competition/event`,
-    // }).then(response => {
-    //   console.log(response);
-
-    //   let eventsList;
-
-    //   if (response.data) {
-    //     eventsList = response.data.map(event => ({
-    //       id: event.id,
-    //       name: event.name,
-    //       checked: false,
-    //     }));
-    //   } else {
-    //     eventsList = [];
-    //   }
-    //   this.setState({ ...this.state, eventsList: eventsList });
-    // });
   }
 
   tryToGetCompetition = () => {
@@ -89,7 +70,6 @@ class ViewShooterRegistration extends Component {
       id: this.props.match.params.id,
       hash: this.props.match.params.hash,
     };
-    console.log('trying:', toTry);
     axios({
       method: 'GET',
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
@@ -131,7 +111,6 @@ class ViewShooterRegistration extends Component {
           phone: '',
           handicap: '',
           ata_number: '',
-          //array of event IDs from checkboxes.
           competition: {
             events: [],
           },
@@ -143,23 +122,6 @@ class ViewShooterRegistration extends Component {
         alert('Please fill out all fields and try again.');
       });
       toast('Shooter Registered')
-
-    // axios({
-    //   method: "POST",
-    //   url: "/api/competition/shooter",
-    //   data: body,
-    // }).then(() => {
-    //   this.setState({
-    //     first_name: "",
-    //     last_name: "",
-    //     email: "",
-    //     phone: Number,
-    //     handicap: Number,
-    //     ata_number: Number,
-    //     //array of event IDs from checkboxes.
-    //     eventsList: [],
-    //   });
-    // });
   };
 
   handleChangeFor = propertyName => event => {
@@ -175,7 +137,6 @@ class ViewShooterRegistration extends Component {
     let indexOfCheckedItem = this.state.competition.events.findIndex(
       item => item.id === parseInt(event.target.value)
     );
-
     this.setState({
       ...this.state,
       competition: {
@@ -190,22 +151,11 @@ class ViewShooterRegistration extends Component {
         ],
       },
     });
-
-    // this.setState({
-    //   ...this.state,
-    //   eventsList: [
-    //     ...this.state.eventsList.slice(0, indexOfCheckedItem),
-    //     {
-    //       ...this.state.eventsList[indexOfCheckedItem],
-    //       checked: checked,
-    //     },
-    //     ...this.state.eventsList.slice(indexOfCheckedItem + 1),
-    //   ],
-    // });
   };
 
   render() {
     const { classes } = this.props;
+
     return (
       <div>
         <Card className={classes.registerCard}>

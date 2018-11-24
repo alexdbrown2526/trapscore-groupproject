@@ -1,17 +1,18 @@
-import React from 'react';
-import { Droppable } from 'react-beautiful-dnd';
+import React from "react";
+
+import PropTypes from "prop-types";
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
-import { List } from '@material-ui/core';
+import { List } from "@material-ui/core";
 
-import DndItem from '../DndItem/DndItem';
+import { Droppable } from "react-beautiful-dnd";
+import DndItem from "../DndItem/DndItem";
 
 const styles = theme => ({
   list: {},
   dndContainer: {
-    minHeight: 200,
-  },
+    minHeight: 200
+  }
 });
 
 const DndList = props => {
@@ -20,11 +21,7 @@ const DndList = props => {
     <List dense={true} disablePadding={true}>
       <Droppable droppableId={props.droppableId}>
         {(provided, snapshot) => (
-          <div
-            className={classes.dndContainer}
-            ref={provided.innerRef}
-            // style={getListStyle(snapshot.isDraggingOver)}
-          >
+          <div className={classes.dndContainer} ref={provided.innerRef}>
             {props.data.map((item, index) => {
               return (
                 <DndItem
@@ -47,7 +44,7 @@ const DndList = props => {
 DndList.propTypes = {
   data: PropTypes.array.isRequired,
   droppableId: PropTypes.string.isRequired,
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(DndList);

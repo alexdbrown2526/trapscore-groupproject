@@ -1,22 +1,28 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+
 import { USER_ACTIONS } from "../../redux/actions/userActions";
+
+import PropTypes from "prop-types";
+import { withStyles } from '@material-ui/core/styles';
+
+import { 
+  Button, 
+  Select, 
+  MenuItem, 
+  Typography, 
+  ListItem 
+} from "@material-ui/core/";
+
 import { scoringRoute } from "../../navigationRoutes";
+
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button } from "@material-ui/core/";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import { Select, MenuItem } from "@material-ui/core/";
-import { Typography } from "@material-ui/core";
-import { ListItem, ListItemText } from "@material-ui/core/";
 
 const styles = theme => ({
   selectBox: {
     width: "100%",
     paddingTop: "20vw",
-    // marginLeft: theme.spacing.unit,
-    // marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
     height: "40%"
@@ -86,8 +92,7 @@ class TrapSelection extends Component {
         <Typography className={classes.header} variant="h4">
           Select A Trap
         </Typography>
-        {/* {JSON.stringify(this.state.trap)} */}
-        <Typography className={classes.headerFour} variant="h7">
+        <Typography className={classes.headerFour} variant="h6">
           Click below to select a trap.
         </Typography>
         <form onSubmit={this.handleSubmit}>

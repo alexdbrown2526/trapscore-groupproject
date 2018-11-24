@@ -1,81 +1,80 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
-import { selectCompetitionRoute } from '../../navigationRoutes';
+import { selectCompetitionRoute } from "../../navigationRoutes";
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { toast } from 'react-toastify';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { toast } from "react-toastify";
 
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap"
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
   dense: {
-    marginTop: 16,
-  },
+    marginTop: 16
+  }
 });
 
 class ViewAdminEditCompetition extends Component {
   state = {
-    // id: this.props.edit.id,
-    date: '',
-    name: '',
-    location: '',
-    defaultPassword: '',
-    newPassword: '',
+    date: "",
+    name: "",
+    location: "",
+    defaultPassword: "",
+    newPassword: "",
     // Conditional Rendering Variable
-    isVisible: false,
+    isVisible: false
     //
   };
 
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
   };
 
   handleChange = date => {
     this.setState({
-      date: date,
+      date: date
     });
   };
 
   handleSubmit = event => {
     event.preventDefault();
-    toast('Competition Submitted!');
+    toast("Competition Submitted!");
     const body = {
       id: this.props.edit.id,
       date: this.state.date,
       name: this.state.name,
-      location: this.state.location,
+      location: this.state.location
     };
 
     axios({
-      method: 'PUT',
+      method: "PUT",
       url: `/api/competition`,
-      data: body,
+      data: body
     }).then(response => {
       console.log(response);
       this.setState({
         ...this.state,
-        id: '',
-        date: '',
-        name: '',
-        location: '',
-        isVisible: false,
+        id: "",
+        date: "",
+        name: "",
+        location: "",
+        isVisible: false
       });
     });
     console.log(this.state.isVisible);
@@ -92,8 +91,6 @@ class ViewAdminEditCompetition extends Component {
     return (
       <div className={classes.modal}>
         <h1>Edit Competition</h1>
-        {/* {JSON.stringify(this.props.edit)} */}
-
         <h2>{this.props.edit.name} </h2>
         <h3>Shareable Registration URL:</h3>
         <p>
@@ -101,25 +98,19 @@ class ViewAdminEditCompetition extends Component {
           /#/registration/
           {this.props.edit.id}&{this.props.edit.secret_url}
         </p>
-        {/* <h3>
-          Shareable Registration URL: https://trapscore/{this.props.edit.name
+        <p>
+          Staff Username:{" "}
+          {this.props.edit.name
             .toLowerCase()
             .split(" ")
-            .join("-")}
-        </h3> */}
-        <p>
-          Staff Username:{' '}
-          {this.props.edit.name
-            .toLowerCase()
-            .split(' ')
-            .join('')}
+            .join("")}
         </p>
         <p>
-          Default Password:{' '}
+          Default Password:{" "}
           {this.props.edit.name
             .toLowerCase()
-            .split(' ')
-            .join('') + '-admin'}
+            .split(" ")
+            .join("") + "-admin"}
         </p>
         <h3>Change Password</h3>
         <p>
@@ -129,12 +120,12 @@ class ViewAdminEditCompetition extends Component {
         <form>
           <input
             value={this.state.defaultPassword}
-            onChange={this.handleChangeFor('defaultPassword')}
+            onChange={this.handleChangeFor("defaultPassword")}
             placeholder="Default Password"
           />
           <input
             value={this.state.newPassword}
-            onChange={this.handleChangeFor('newPassword')}
+            onChange={this.handleChangeFor("newPassword")}
             placeholder="New Password"
           />
 
@@ -142,12 +133,12 @@ class ViewAdminEditCompetition extends Component {
 
           <input
             value={this.state.name}
-            onChange={this.handleChangeFor('name')}
+            onChange={this.handleChangeFor("name")}
             placeholder={this.props.edit.name}
           />
           <input
             value={this.state.location}
-            onChange={this.handleChangeFor('location')}
+            onChange={this.handleChangeFor("location")}
             placeholder={this.props.edit.location}
           />
         </form>
@@ -159,17 +150,14 @@ class ViewAdminEditCompetition extends Component {
     );
   }
 }
+
 ViewAdminEditCompetition.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
-// const ViewAdminEditCompetition = withStyles(styles)(ViewAdminEditCompetition);
-
 const mapStateToProps = reduxState => ({
-  reduxState,
+  reduxState
 });
-
-// export default connect(mapStateToProps)(withRouter(Edit));
 
 export default compose(
   connect(mapStateToProps),

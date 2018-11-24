@@ -1,48 +1,48 @@
-import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
-import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Lock from '@material-ui/icons/Lock'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
+import { LOGIN_ACTIONS } from "../../redux/actions/loginActions";
 
-// let imgUrl = 'https://waiteparkrifleclub.com/wp-content/uploads/2016/04/Trap_Shooting.jpg'
+import { withStyles } from "@material-ui/core/styles";
+
+import { 
+  Card, 
+  Button, 
+  TextField,
+} from "@material-ui/core/";
+
+import {
+  AccountCircle,
+  Lock,
+} from "@material-ui/icons/";
 
 
 const styles = theme => ({
   adminRegister: {
-    fontFamily: 'Roboto, sans-serif',
-    marginTop: '3%',
-    paddingBottom: '10%',
-    width: '30%',
-    paddingTop: '3%',
-	  display: 'flex',
-	  overflow: 'hidden',
-	  flexDirection: 'column',
-	  margin: 'auto',
-
-},
+    fontFamily: "Roboto, sans-serif",
+    marginTop: "3%",
+    paddingBottom: "10%",
+    width: "30%",
+    paddingTop: "3%",
+    display: "flex",
+    overflow: "hidden",
+    flexDirection: "column",
+    margin: "auto"
+  },
 
   registerButton: {
-    marginTop:'4%',
-    marginBottom: '4%',
-  
-},
-    
-})
+    marginTop: "4%",
+    marginBottom: "4%"
+  }
+});
 
 class RegisterPage extends Component {
-
-  
   state = {
-    username: '',
-    password: '',
+    username: "",
+    password: ""
   };
 
-  registerUser = (event) => {
+  registerUser = event => {
     event.preventDefault();
 
     if (this.state.username && this.state.password) {
@@ -50,19 +50,19 @@ class RegisterPage extends Component {
         type: LOGIN_ACTIONS.REGISTER,
         payload: {
           username: this.state.username,
-          password: this.state.password,
-        },
+          password: this.state.password
+        }
       });
     } else {
-      this.props.dispatch({type: LOGIN_ACTIONS.REGISTRATION_INPUT_ERROR});
+      this.props.dispatch({ type: LOGIN_ACTIONS.REGISTRATION_INPUT_ERROR });
     }
-  } // end registerUser
+  }; // end registerUser
 
-  handleInputChangeFor = propertyName => (event) => {
+  handleInputChangeFor = propertyName => event => {
     this.setState({
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
-  }
+  };
 
   render() {
     const { classes } = this.props;
@@ -70,80 +70,72 @@ class RegisterPage extends Component {
     return (
       <div className={classes.background}>
         {this.props.errors.registrationMessage && (
-          <h2
-            className="alert"
-            role="alert"
-          >
+          <h2 className="alert" role="alert">
             {this.props.errors.registrationMessage}
           </h2>
         )}
         <Card className={classes.adminRegister}>
-        <form onSubmit={this.registerUser}>
-          <center>
-          <h1>Register User</h1>
-          <div>
-            <label htmlFor="username">
-              <TextField
-              placeholder="Username"
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              /><AccountCircle />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="password">
-              <TextField
-              placeholder="Password"
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              /><Lock/>
-            </label>
-          </div>
-          <div>
-            <Button
-            onClick={this.registerUser}
-            variant="contained"
-            className={classes.registerButton}
-              type="submit"
-              name="submit"
-              value="Register">
-              Register
-              
-            </Button>
-           
-        <br/>
-          <Button
-          variant="contained"
-            type="button"
-            className={classes.loginButton}
-            onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_LOGIN_MODE})}}
-          >
-           Back to Login
-          </Button>
-          </div>
-          </center>
+          <form onSubmit={this.registerUser}>
+            <center>
+              <h1>Register User</h1>
+              <div>
+                <label htmlFor="username">
+                  <TextField
+                    placeholder="Username"
+                    type="text"
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.handleInputChangeFor("username")}
+                  />
+                  <AccountCircle />
+                </label>
+              </div>
+              <div>
+                <label htmlFor="password">
+                  <TextField
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.handleInputChangeFor("password")}
+                  />
+                  <Lock />
+                </label>
+              </div>
+              <div>
+                <Button
+                  onClick={this.registerUser}
+                  variant="contained"
+                  className={classes.registerButton}
+                  type="submit"
+                  name="submit"
+                  value="Register"
+                >
+                  Register
+                </Button>
 
-        </form>
+                <br />
+                <Button
+                  variant="contained"
+                  type="button"
+                  className={classes.loginButton}
+                  onClick={() => {
+                    this.props.dispatch({
+                      type: LOGIN_ACTIONS.SET_TO_LOGIN_MODE
+                    });
+                  }}
+                >
+                  Back to Login
+                </Button>
+              </div>
+            </center>
+          </form>
         </Card>
       </div>
-     
     );
   }
 }
 
-// Instead of taking everything from state, we just want the error messages.
-// if you wanted you could write this code like this:
-// const mapStateToProps = ({errors}) => ({ errors });
-const mapStateToProps = state => ({
-  errors: state.errors,
-});
+const mapStateToProps = ({ errors }) => ({ errors });
 
-
-
- export default withStyles(styles)(connect(mapStateToProps)(RegisterPage));
-
-
+export default withStyles(styles)(connect(mapStateToProps)(RegisterPage));

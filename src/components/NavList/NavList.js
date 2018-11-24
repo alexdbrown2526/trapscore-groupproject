@@ -1,8 +1,5 @@
 import React from "react";
 
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-
 import {
   rosterRoute,
   squaddingRoute,
@@ -11,7 +8,14 @@ import {
   resultsRoute,
 } from "../../navigationRoutes";
 
-import { List, ListItem, ListItemText } from "@material-ui/core/";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+
+import { 
+  List, 
+  ListItem, 
+  ListItemText 
+} from "@material-ui/core/";
 
 const styles = {
   userDetail: {

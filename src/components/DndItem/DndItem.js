@@ -1,10 +1,15 @@
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
 
-import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-import { Avatar, ListItem, ListItemText } from '@material-ui/core';
+import {
+  Avatar, 
+  ListItem, 
+  ListItemText 
+} from '@material-ui/core';
+
+import { Draggable } from 'react-beautiful-dnd';
 
 const styles = theme => ({
   avatar: {
@@ -27,10 +32,6 @@ const DndItem = props => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          // style={getItemStyle(
-          //   snapshot.isDragging,
-          //   provided.draggableProps.style
-          // )}
         >
           <ListItem button disableGutters={props.disableGutters}>
             <Avatar className={props.box ? classes.avatarBox : classes.avatar}>
@@ -38,7 +39,6 @@ const DndItem = props => {
             </Avatar>
             <ListItemText
               primary={item.mainText}
-              // secondary={"Handicap: " + shooter.handicap}
             />
           </ListItem>
         </div>

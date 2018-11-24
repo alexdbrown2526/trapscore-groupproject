@@ -1,71 +1,80 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+
+import { LOGIN_ACTIONS } from "../../redux/actions/loginActions";
+
+import PropTypes from "prop-types";
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 
-import { Button, List, ListItem, Modal, TextField } from '@material-ui/core/';
+import { 
+  Button, 
+  List, 
+  ListItem, 
+  Modal, 
+  TextField 
+} from "@material-ui/core/";
 
-import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
-import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
+import CancelRounded from "@material-ui/icons/CancelRounded";
 
-import { homeRoute } from '../../navigationRoutes';
-import CancelRounded from '@material-ui/icons/CancelRounded';
+import { homeRoute } from "../../navigationRoutes";
+
+import ViewAdminEditCompetition from "../ViewAdminEditCompetition/ViewAdminEditCompetition";
 
 const styles = theme => ({
   userDetail: {
     padding: 24,
-    width: '100%',
+    width: "100%"
   },
   contestDetail: {
     paddingLeft: 24,
-    width: '100%',
+    width: "100%"
   },
   list: {
-    width: '50%',
-    fontFamily: 'Roboto, sans-serif',
-    borderStyle: 'solid',
-    marginTop: '3%',
-    paddingBottom: '1%',
-    fontSize: '20px',
+    width: "50%",
+    fontFamily: "Roboto, sans-serif",
+    borderStyle: "solid",
+    marginTop: "3%",
+    paddingBottom: "1%",
+    fontSize: "20px"
   },
   cancel: {
-    color: 'red',
-    float: 'right',
-    marginRight: '2%',
+    color: "red",
+    float: "right",
+    marginRight: "2%"
   },
 
   paper: {
-    position: 'absolute',
+    position: "absolute",
     width: theme.spacing.unit * 100,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing.unit * 4
   },
   modal: {
-    top: '50%',
-    left: '50%',
+    top: "50%",
+    left: "50%",
     transform: `translate(-50%, -50%)`,
-    overflowY: 'scroll',
-    height: '575px',
-    width: '675px',
-    fontFamily: 'Roboto, sans-serif',
-    borderStyle: 'solid',
+    overflowY: "scroll",
+    height: "575px",
+    width: "675px",
+    fontFamily: "Roboto, sans-serif",
+    borderStyle: "solid"
   },
   logOutButton: {
-    marginLeft: '3%',
+    marginLeft: "3%"
   },
 
   editButton: {
-    marginRight: '10%',
+    marginRight: "10%"
   },
 
   event: {
-    backgroundColor: 'red',
-  },
+    backgroundColor: "red"
+  }
 });
 
 class ViewAdminSelectCompetition extends Component {
@@ -75,21 +84,20 @@ class ViewAdminSelectCompetition extends Component {
     isLogged: false,
     // Modal Variable
     open: false,
-    //
     competitions: [],
     competitionToEdit: Number,
-    newCompetitionName: '',
+    newCompetitionName: ""
   };
 
   refreshData = () => {
     axios({
-      method: 'GET',
-      url: '/api/competition',
+      method: "GET",
+      url: "/api/competition"
     }).then(response => {
       this.setState({
         ...this.state,
         competitions: response.data,
-        isVisible: false,
+        isVisible: false
       });
     });
   };
@@ -101,37 +109,22 @@ class ViewAdminSelectCompetition extends Component {
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
   };
-
-  // addNewCompetition = event => {
-  //   event.preventDefault();
-  //   axios({
-  //     method: 'POST',
-  //     url: '/api/competition',
-  //   }).then(response => {
-  //     console.log(response.data);
-  //     this.editCompetition(response.data);
-  //   });
-  // };
-
+ 
   editCompetition = selectedCompetition => {
     this.setState({
       ...this.state,
       competitionToEdit: selectedCompetition,
       isVisible: true,
-      open: true,
+      open: true
     });
   };
   // Conditional Rendering for Log out
   handleLogOut = event => {
     event.preventDefault();
     this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT });
-    // this.setState({
-    //   ...this.state,
-    //   isLogged: true,
-    // });
   };
 
   handleClose = () => {
@@ -140,20 +133,20 @@ class ViewAdminSelectCompetition extends Component {
 
   handleChange = name => event => {
     this.setState({
-      [name]: event.target.value,
+      [name]: event.target.value
     });
   };
 
   addCompetition = () => {
     // reject blank input
-    if (this.state.newCompetitionName == '') {
-      alert('Please input a competition name.');
+    if (this.state.newCompetitionName == "") {
+      alert("Please input a competition name.");
       return false;
     } else {
       axios({
-        method: 'POST',
-        url: '/api/competition',
-        data: { name: this.state.newCompetitionName },
+        method: "POST",
+        url: "/api/competition",
+        data: { name: this.state.newCompetitionName }
       })
         .then(response => {
           console.log(response.data);
@@ -161,9 +154,9 @@ class ViewAdminSelectCompetition extends Component {
         })
         .catch(error => {
           alert(
-            'Something went wrong adding the competition. Are you sure the name is unique?'
+            "Something went wrong adding the competition. Are you sure the name is unique?"
           );
-          console.log('Error:', error);
+          console.log("Error:", error);
         });
     }
   };
@@ -232,9 +225,8 @@ class ViewAdminSelectCompetition extends Component {
               </Button>
               <TextField
                 label="New competition name"
-                // className={classes.textField}
                 value={this.state.newCompetitionName}
-                onChange={this.handleChange('newCompetitionName')}
+                onChange={this.handleChange("newCompetitionName")}
                 margin="normal"
               />
             </ListItem>
@@ -257,11 +249,11 @@ class ViewAdminSelectCompetition extends Component {
 }
 
 ViewAdminSelectCompetition.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = reduxState => ({
-  reduxState,
+  reduxState
 });
 
 export default compose(

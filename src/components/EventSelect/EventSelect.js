@@ -2,13 +2,15 @@ import React from 'react';
 
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { Select, MenuItem } from '@material-ui/core/';
+
+import {
+  Select, 
+  MenuItem 
+} from '@material-ui/core/';
 
 const styles = theme => ({
   selectBox: {
     width: '100%',
-    // marginLeft: theme.spacing.unit,
-    // marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
   },
@@ -18,7 +20,6 @@ const EventSelect = props => {
   const { classes } = props;
   return (
     <>
-      {/* <InputLabel htmlFor="age-simple">Age</InputLabel> */}
       <Select
         className={classes.selectBox}
         value={props.selectedEvent}
