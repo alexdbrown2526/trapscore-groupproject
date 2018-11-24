@@ -18,8 +18,6 @@ import {
   TextField 
 } from "@material-ui/core/";
 
-import CancelRounded from "@material-ui/icons/CancelRounded";
-
 import { homeRoute } from "../../navigationRoutes";
 
 import ViewAdminEditCompetition from "../ViewAdminEditCompetition/ViewAdminEditCompetition";
@@ -55,14 +53,14 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4
   },
   modal: {
-    top: "50%",
-    left: "50%",
-    transform: `translate(-50%, -50%)`,
-    overflowY: "scroll",
-    height: "575px",
-    width: "675px",
-    fontFamily: "Roboto, sans-serif",
-    borderStyle: "solid"
+    top: '10%',
+    left: '20%',
+    overflowY: 'scroll',
+    height: '575px',
+    width: '60%',
+    fontFamily: 'Roboto, sans-serif',
+    borderStyle: 'solid',
+    outline: 'none',
   },
   logOutButton: {
     marginLeft: "3%"
@@ -161,6 +159,21 @@ class ViewAdminSelectCompetition extends Component {
     }
   };
 
+  deleteCompetition = competitionIdToDelete => {
+    console.log('deleting competition id:', competitionIdToDelete);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/${competitionIdToDelete}`,
+    })
+      .then(response => {
+        this.refreshData();
+      })
+      .catch(error => {
+        alert('Something went wrong deleting the competition.');
+        console.log('Error:', error);
+      });
+  };
+
   render() {
     const { classes } = this.props;
     //Conditional Rendering if statements/variables
@@ -172,20 +185,16 @@ class ViewAdminSelectCompetition extends Component {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={this.state.open}
-          onClose={this.handleClose}
+          // onClose={this.handleClose}
           className={classes.modal}
+          onBackdropClick={this.handleClose}
+          onEscapeKeyDown={this.handleClose}
         >
           <div className={classes.paper}>
-            <CancelRounded
-              className={classes.cancel}
-              onClick={this.handleClose}
-            >
-              Close
-            </CancelRounded>
-
             <ViewAdminEditCompetition
               edit={this.state.competitionToEdit}
               data={this.refreshData}
+              deleteCompetition={this.deleteCompetition}
             />
           </div>
         </Modal>

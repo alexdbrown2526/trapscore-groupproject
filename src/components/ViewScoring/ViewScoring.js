@@ -78,7 +78,7 @@ class Scoring extends Component {
         payload: this.props.currentRound + 1
       });
     } else {
-      toast("Scores Submitted, Posts Rotating");
+      toast("Scores Submitted, Posts Rotating", {position: toast.POSITION.TOP_CENTER});
       this.props.dispatch({
         type: USER_ACTIONS.SUBMIT_SCORES,
         payload: this.props.selectedTrap

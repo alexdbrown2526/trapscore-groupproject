@@ -38,7 +38,8 @@ CREATE TABLE "person" (
     "id" serial PRIMARY KEY,
     "username" varchar(80) NOT NULL UNIQUE,
     "password" varchar(1000) NOT NULL,
-    "competition_id" integer REFERENCES "competition"("id")
+    "competition_id" integer REFERENCES "competition"("id"),
+		"isAdmin" boolean NOT NULL DEFAULT 'false'
 );
 
 

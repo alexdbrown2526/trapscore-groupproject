@@ -69,7 +69,7 @@ router.put('/', rejectUnauthenticated, (req, res) => {
     //for each squad in a trap's schedule array, push '(place_in_line, trap_id, squad_id, and box_number)' to updateValues
     trap.schedule.forEach(item => {
       updateValues.push(
-        `(${item.place_in_line}, ${trap.id}, ${item.squad_id}, ${
+        `(${trap.schedule.indexOf(item) + 1}, ${trap.id}, ${item.squad_id}, ${
           item.box_number
         })`
       );

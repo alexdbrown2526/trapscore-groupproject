@@ -18,7 +18,7 @@ const styles = theme => ({
   },
   avatarBox: {
     color: '#fff',
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
     borderRadius: 10,
   },
 });

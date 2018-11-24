@@ -31,6 +31,10 @@ const styles = theme => ({
     fontFamily: "Roboto, sans-serif"
   },
 
+  scrollable: {
+    overflowY: 'auto'
+  },
+
   searchField: {
     height: "5vh",
     fontFamily: "Roboto, sans-serif",
@@ -136,9 +140,9 @@ class CompetitionRoster extends Component {
     const list = this.state.shooters
       .filter(
         shooter =>
-          this.state.input === "" ||
-          shooter.last_name.includes(this.state.input) ||
-          shooter.first_name.includes(this.state.input)
+          this.state.input === '' ||
+          shooter.last_name.toLowerCase().includes(this.state.input) ||
+          shooter.first_name.toLowerCase().includes(this.state.input)
       )
       .map((shooter, index) => (
         <ListItem key={index}>
@@ -165,19 +169,24 @@ class CompetitionRoster extends Component {
           />
         </div>
         <div className={classes.roster}>
-          <div>
-            <h2 className={classes.header}>Competition Roster</h2>
-            <TextField
-              className={classes.searchField}
-              placeholder="Search by name"
-              variant="outlined"
-              value={this.state.input}
-              type="text"
-              onChange={this.onFilterChange}
-            />
-          </div>
-          <div className={classes.scrollable}>
-            <List>{list}</List>
+        <div >
+        <List className={classes.scrollable}>
+
+        <h2 className={classes.header}>Competition Roster</h2>
+        
+        <ListSubheader>
+          <TextField
+            className={classes.searchField}
+            placeholder="Search by name"
+            variant="outlined"
+            value={this.state.input}
+            type="text"
+            onChange={this.onFilterChange}
+          />
+          </ListSubheader>
+          
+            {list}
+          </List>
           </div>
         </div>
       </div>

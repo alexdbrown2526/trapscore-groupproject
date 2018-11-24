@@ -67,6 +67,11 @@ class ViewSquadding extends Component {
           );
           console.log(error);
         });
+    } else {
+      this.setState({
+        ...this.state,
+        squads: [],
+      });
     }
   };
 
@@ -182,8 +187,8 @@ class ViewSquadding extends Component {
           ]
         });
       }
-      this.sendData();
     }
+    this.sendData();
   };
 
   addSquad = () => {
