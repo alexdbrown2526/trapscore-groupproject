@@ -207,7 +207,7 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.delete('/id', rejectUnauthenticated, async (req, res) => {
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
   // Delete just orphans shooters, it doesn't delete them
   // this is because we believe eventually people will want to
   // be able to select a shooter to register instead of typing them new
