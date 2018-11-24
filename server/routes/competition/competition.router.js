@@ -211,47 +211,100 @@ router.delete('/id', rejectUnauthenticated, async (req, res) => {
   // Delete just orphans shooters, it doesn't delete them
   // this is because we believe eventually people will want to
   // be able to select a shooter to register instead of typing them new
+  let competitionIdToDelete = req.params.id;
 
-  // get the ids of everything that's going to be deleted
-  let toDelete = {
-    competitions: [req.params.id],
-    traps: [],
-    squadTraps: [],
-    scores: [],
-    events: [],
-    shooterEvents: [],
-    people: [],
-  };
+  // delete everything associated with that competition,
+  // starting deep in foreign keys and working our way out
+  try {
+    // scores
+    await pool.query(
+      `
+        DELETE FROM "score"
+        USING "squad_trap", "trap"
+        WHERE "score"."squad_trap_id" = "squad_trap"."id"
+        AND "squad_trap"."trap_id" = "trap"."id"
+        AND "trap"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
 
-  // traps
-  let trapResults = await pool.query(
-    `
-      SELECT "id" FROM "trap" WHERE "competition_id" = $1;
-    `,
-    [toDelete.competitions[0]]
-  );
-  toDelete.traps = trapResults.rows;
+    // squad_traps
+    await pool.query(
+      `
+        DELETE FROM "squad_trap"
+        USING "trap"
+        WHERE "squad_trap"."trap_id" = "trap"."id"
+        AND "trap"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
 
-  // events
-  let eventResults = await pool.query(
-    `
-      SELECT "id" FROM "events" WHERE "competition_id" = $1;
-    `,
-    [toDelete.competitions[0]]
-  );
+    // traps
+    await pool.query(
+      `
+        DELETE FROM "trap"
+        WHERE "trap"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
 
-  toDelete.events = eventResults.rows;
+    // shooter_events
+    await pool.query(
+      `
+        DELETE FROM "shooter_event"
+        USING "event"
+        WHERE "shooter_event"."event_id" = "event"."id"
+        AND "event"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
 
-  console.log('toDelete:', toDelete);
+    // squads
+    await pool.query(
+      `
+        DELETE FROM "squad"
+        USING "event"
+        WHERE "squad"."event_id" = "event"."id"
+        AND "event"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
 
-  // Data to delete:
-  // competition
-  //    trap
-  //      squad trap
-  //        score
-  //    event
-  //        shooter_event
-  // person
+    // events
+    await pool.query(
+      `
+        DELETE FROM "event"
+        WHERE "event"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
+
+    // person
+    await pool.query(
+      `
+        DELETE FROM "person"
+        WHERE "person"."competition_id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
+
+    // competition
+    await pool.query(
+      `
+        DELETE FROM "competition"
+        WHERE "id" = $1;
+      `,
+      [competitionIdToDelete]
+    );
+
+    console.log('Competition deleted.');
+    res.sendStatus(200);
+  } catch (error) {
+    console.log('### Something went wrong deleting a competition.');
+    console.log('### Error:');
+    console.log(error);
+    res.sendStatus(500);
+  }
 });
 
 module.exports = router;
