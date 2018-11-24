@@ -158,8 +158,8 @@ class ViewScheduling extends Component {
           ],
         });
       }
-      this.sendData();
     }
+    this.sendData();
   };
 
   addTrap = () => {
