@@ -46,14 +46,14 @@ const styles = theme => ({
     padding: theme.spacing.unit * 4,
   },
   modal: {
-    top: '50%',
-    left: '50%',
-    transform: `translate(-50%, -50%)`,
+    top: '10%',
+    left: '20%',
     overflowY: 'scroll',
     height: '575px',
-    width: '675px',
+    width: '60%',
     fontFamily: 'Roboto, sans-serif',
     borderStyle: 'solid',
+    outline: 'none'
   },
   logOutButton: {
     marginLeft: '3%',
@@ -134,6 +134,8 @@ class ViewAdminSelectCompetition extends Component {
     // });
   };
 
+ 
+
   handleClose = () => {
     this.setState({ open: false });
   };
@@ -179,17 +181,12 @@ class ViewAdminSelectCompetition extends Component {
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
           open={this.state.open}
-          onClose={this.handleClose}
+          // onClose={this.handleClose}
           className={classes.modal}
+          onBackdropClick={this.handleClose}
+          onEscapeKeyDown={this.handleClose}
         >
           <div className={classes.paper}>
-            <CancelRounded
-              className={classes.cancel}
-              onClick={this.handleClose}
-            >
-              Close
-            </CancelRounded>
-
             <ViewAdminEditCompetition
               edit={this.state.competitionToEdit}
               data={this.refreshData}
@@ -267,5 +264,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles(styles)
+  withStyles(styles),
 )(ViewAdminSelectCompetition);
