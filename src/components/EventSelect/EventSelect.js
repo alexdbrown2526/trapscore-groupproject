@@ -26,7 +26,7 @@ const EventSelect = props => {
       >
         <MenuItem value={0}>None</MenuItem>
         {props.events.map(event => {
-          return <MenuItem value={event.id}>{event.name}</MenuItem>;
+          return <MenuItem key={event.id} value={event.id}>{event.name}</MenuItem>;
         })}
       </Select>
     </>
