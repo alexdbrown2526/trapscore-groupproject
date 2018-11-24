@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem, TextField, ListItemSecondaryAction } from '@material-ui/core';
+import { List, ListItem, TextField, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,6 +23,10 @@ const styles = theme => ({
     padding: '20px',
     fontFamily: 'Roboto, sans-serif',
 
+  },
+
+  scrollable: {
+    overflowY: 'auto'
   },
 
   searchField: {
@@ -161,9 +165,11 @@ class CompetitionRoster extends Component {
         </div>
         <div className={classes.roster}>
         <div >
+        <List className={classes.scrollable}>
+
         <h2 className={classes.header}>Competition Roster</h2>
         
-
+        <ListSubheader>
           <TextField
             className={classes.searchField}
             placeholder="Search by name"
@@ -172,9 +178,8 @@ class CompetitionRoster extends Component {
             type="text"
             onChange={this.onFilterChange}
           />
-          </div>
-          <div className={classes.scrollable}>
-          <List>
+          </ListSubheader>
+          
             {list}
           </List>
           </div>
