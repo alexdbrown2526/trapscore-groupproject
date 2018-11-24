@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
 
+import { DragDropContext } from 'react-beautiful-dnd';
 import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import { Divider, Typography } from '@material-ui/core';
+import { 
+  Divider, 
+  Typography 
+} from '@material-ui/core';
 
 import HeaderMargins from '../HeaderMargins/HeaderMargins';
 import DndPage from '../DndPage/DndPage';
@@ -81,15 +84,6 @@ class ViewScheduling extends Component {
     if (!destination) {
       return;
     }
-
-    // if (destination.droppableId != 'unassigned') {
-    // if destination is already full
-    // if (
-    //   this.state.traps[Number(destination.droppableId)].schedule.length > 4
-    // ) {
-    //   return;
-    // }
-    // }
 
     // dropped on the same table
     if (source.droppableId === destination.droppableId) {
@@ -215,9 +209,6 @@ class ViewScheduling extends Component {
               />
             </DndLeftSide>
             <DndRightSide>
-              {/* <Typography variant="h4" className={classes.subheader}>
-                traps
-              </Typography> */}
               {this.state.traps.length > 0 &&
                 this.state.traps.map((trap, index) => {
                   return (

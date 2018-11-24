@@ -16,7 +16,6 @@ const styles = theme => ({
   score: {
     width: "3vw",
     height: "3vw",
-    // border: "1px solid lightgray",
     borderRadius: "2px",
     margin: "1px",
     lineHeight: "3vw",
@@ -47,6 +46,5 @@ const ResultsDetail = (props) => {
     </>
   )
 };
-
 
 export default withStyles(styles)(ResultsDetail);

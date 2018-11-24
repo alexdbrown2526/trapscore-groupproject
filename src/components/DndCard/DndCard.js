@@ -1,17 +1,24 @@
-import React from 'react';
+import React from "react";
+
+import PropTypes from "prop-types";
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import { Card, CardActions, CardContent, CardHeader } from '@material-ui/core';
+
+import {
+  Card, 
+  CardActions, 
+  CardContent, 
+  CardHeader 
+} from "@material-ui/core";
 
 const styles = theme => ({
   card: {
     margin: theme.spacing.unit * 2,
-    minWidth: theme.spacing.unit * 30,
+    minWidth: theme.spacing.unit * 30
   },
   cardNoMargin: {
     // margin: theme.spacing.unit * 3,
-    minWidth: theme.spacing.unit * 30,
-  },
+    minWidth: theme.spacing.unit * 30
+  }
 });
 
 const DndCard = props => {
@@ -27,7 +34,7 @@ const DndCard = props => {
 
 DndCard.propTypes = {
   classes: PropTypes.object.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(DndCard);

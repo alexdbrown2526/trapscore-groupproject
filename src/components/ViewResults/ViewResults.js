@@ -1,14 +1,28 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
-import { Switch, FormControlLabel, Typography, Paper, Button } from "@material-ui/core";
-import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
-import { withStyles } from "@material-ui/core/styles";
+
+import { withStyles } from '@material-ui/core/styles';
+
+import {
+  Switch,
+  FormControlLabel,
+  Typography,
+  Paper,
+  Button
+} from "@material-ui/core";
+
+import { 
+  ToggleButtonGroup,  
+  ToggleButton 
+} from "@material-ui/lab/";
+
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import ResultsDetail from "../ResultsDetail/ResultsDetail";
-import fileDownload from 'js-file-download';
+import fileDownload from "js-file-download";
 
 //JSS Styles object
 const styles = theme => ({
@@ -32,12 +46,12 @@ const styles = theme => ({
   },
   scoreDetailContainer: {
     paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2
   },
   optionsContainer: {
     display: "flex",
-    flexDirection: "row", 
-    justifyContent: "space-between",
+    flexDirection: "row",
+    justifyContent: "space-between"
   }
 });
 
@@ -51,21 +65,22 @@ class ViewResults extends Component {
     resultsData: [],
     //boolean stops table from rendering before server response
     finishedLoading: false,
-    totalPages: 0,
+    totalPages: 0
   };
   //creates a reference to the react-table child component
   tableRef = null;
 
   fetchCSV = () => {
-    axios.get('/api/competition/results/export')
+    axios
+      .get("/api/competition/results/export")
       .then(response => {
-        fileDownload(response.data, 'competition-results.csv');
+        fileDownload(response.data, "competition-results.csv");
       })
       .catch(error => {
-        console.log('Error downloading CSV', error);
+        console.log("Error downloading CSV", error);
         alert("Error downloading CSV file");
-      })
-  }
+      });
+  };
 
   //increments selected event in local state
   toggleNextEvent = () => {
@@ -79,15 +94,15 @@ class ViewResults extends Component {
     this.setState({
       ...this.state,
       page: this.state.page + 1
-    })
-  }
+    });
+  };
 
   //toggles pagination boolean in local state
   togglePagination = () => {
     this.setState({
       ...this.state,
       resultsShouldPaginate: !this.state.resultsShouldPaginate
-    })
+    });
   };
 
   //sets event ID to local state from toggle buttons above table
@@ -96,7 +111,7 @@ class ViewResults extends Component {
       ...this.state,
       indexOfSelectedEvent: value,
       totalPages: Math.ceil(this.state.resultsData[value].results.length / 20),
-      page: 0,
+      page: 0
     });
   };
 
@@ -104,19 +119,20 @@ class ViewResults extends Component {
     if (this.state.resultsShouldPaginate) {
       if (this.state.page < this.state.totalPages - 1) {
         this.incrementPage();
-      }
-      else if (this.state.indexOfSelectedEvent < this.props.events.length - 1) {
+      } else if (
+        this.state.indexOfSelectedEvent <
+        this.props.events.length - 1
+      ) {
         this.toggleNextEvent();
         this.setState({
           ...this.state,
-          page: 0,
-        })
-      }
-      else {
+          page: 0
+        });
+      } else {
         this.setState({
           indexOfSelectedEvent: 0,
           page: 0
-        })
+        });
       }
     }
   };
@@ -133,7 +149,7 @@ class ViewResults extends Component {
         this.setState({
           ...this.state,
           resultsData: response.data,
-          totalPages: Math.ceil(response.data[0].results.length / 20),
+          totalPages: Math.ceil(response.data[0].results.length / 20)
         });
       })
       .catch(error => {
@@ -147,9 +163,9 @@ class ViewResults extends Component {
     await this.fetchResultsData();
     await this.setState({
       ...this.state,
-      finishedLoading: true,
+      finishedLoading: true
     });
-    this.paginate = setInterval(this.paginate, 8000)
+    this.paginate = setInterval(this.paginate, 8000);
   }
 
   render() {
@@ -211,39 +227,65 @@ class ViewResults extends Component {
       ? this.state.resultsData[this.state.indexOfSelectedEvent].results
       : [];
 
-    
-
-    return this.state.finishedLoading ? <div className={classes.container}>
+    return this.state.finishedLoading ? (
+      <div className={classes.container}>
         <Typography variant="h3">Results</Typography>
         <div className={classes.optionsContainer}>
-          <FormControlLabel control={<Switch onChange={this.togglePagination} />} label="Scroll Results" />
+          <FormControlLabel
+            control={<Switch onChange={this.togglePagination} />}
+            label="Scroll Results"
+          />
           <Button onClick={this.fetchCSV}>Download CSV</Button>
         </div>
-        <ToggleButtonGroup value={this.state.indexOfSelectedEvent} exclusive onChange={this.selectEvent}>
+        <ToggleButtonGroup
+          value={this.state.indexOfSelectedEvent}
+          exclusive
+          onChange={this.selectEvent}
+        >
           {this.props.events.map(ev => {
-            return <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
+            return (
+              <ToggleButton key={ev.id} value={this.props.events.indexOf(ev)}>
                 {ev.name}
-              </ToggleButton>;
+              </ToggleButton>
+            );
           })}
         </ToggleButtonGroup>
-        <ReactTable getProps={() => {
-            return { style: { fontFamily: "Roboto, sans-serif", textAlign: "center" } };
-          }} columns={columns} data={data} pageSizeOptions={[20]} pageSize={20} page={this.state.page} className="-striped -highlight" onPageChange={pageIndex => {
+        <ReactTable
+          getProps={() => {
+            return {
+              style: { fontFamily: "Roboto, sans-serif", textAlign: "center" }
+            };
+          }}
+          columns={columns}
+          data={data}
+          pageSizeOptions={[20]}
+          pageSize={20}
+          page={this.state.page}
+          className="-striped -highlight"
+          onPageChange={pageIndex => {
             this.setState({ ...this.state, page: pageIndex });
-          }} SubComponent={row => {
+          }}
+          SubComponent={row => {
             let scoreSlices = [];
 
             for (let i = 0; i < row.original.raw_scores.length; i += 25) {
               scoreSlices.push(row.original.raw_scores.slice(i, i + 25));
             }
-            return <Paper className={classes.scoreDetailContainer}>
+            return (
+              <Paper className={classes.scoreDetailContainer}>
                 <Typography variant={"h5"}>
-                  Score Details: {row.original.first_name} {row.original.last_name}
+                  Score Details: {row.original.first_name}{" "}
+                  {row.original.last_name}
                 </Typography>
                 <div className={classes.boxScoreContainer}>
                   <div>
                     {scoreSlices.map(boxScore => {
-                      return <ResultsDetail key={row.original.id} boxScore={boxScore} />;
+                      return (
+                        <ResultsDetail
+                          key={row.original.id}
+                          boxScore={boxScore}
+                        />
+                      );
                     })}
                   </div>
                   <div>
@@ -252,9 +294,14 @@ class ViewResults extends Component {
                     </Typography>
                   </div>
                 </div>
-              </Paper>;
-          }} />
-      </div> : <div>Loading...</div>;
+              </Paper>
+            );
+          }}
+        />
+      </div>
+    ) : (
+      <div>Loading...</div>
+    );
   }
 }
 

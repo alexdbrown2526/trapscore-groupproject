@@ -1,24 +1,28 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
-import { DragDropContext } from 'react-beautiful-dnd';
+import React, { Component } from "react";
+import axios from "axios";
+import { connect } from "react-redux";
 
-import { reorder, move } from '../../modules/dragAndDrop.strategy';
+import { USER_ACTIONS } from "../../redux/actions/userActions";
 
-import { Divider, Typography } from '@material-ui/core';
+import { DragDropContext } from "react-beautiful-dnd";
+import { reorder, move } from "../../modules/dragAndDrop.strategy";
 
-import HeaderMargins from '../HeaderMargins/HeaderMargins';
-import EventSelect from '../EventSelect/EventSelect';
-import DndPage from '../DndPage/DndPage';
-import DndLeftSide from '../DndLeftSide/DndLeftSide';
-import DndRightSide from '../DndRightSide/DndRightSide';
-import DndCard from '../DndCard/DndCard';
-import DndEditModal from '../DndEditModal/DndEditModal';
-import DndList from '../DndList/DndList';
-import DndAddButton from '../DndAddButton/DndAddButton';
+import { 
+  Divider, 
+  Typography 
+} from "@material-ui/core";
 
-import { toast } from 'react-toastify';
-import { USER_ACTIONS } from '../../redux/actions/userActions';
+import HeaderMargins from "../HeaderMargins/HeaderMargins";
+import EventSelect from "../EventSelect/EventSelect";
+import DndPage from "../DndPage/DndPage";
+import DndLeftSide from "../DndLeftSide/DndLeftSide";
+import DndRightSide from "../DndRightSide/DndRightSide";
+import DndCard from "../DndCard/DndCard";
+import DndEditModal from "../DndEditModal/DndEditModal";
+import DndList from "../DndList/DndList";
+import DndAddButton from "../DndAddButton/DndAddButton";
+
+import { toast } from "react-toastify";
 
 class ViewSquadding extends Component {
   state = {
@@ -26,11 +30,11 @@ class ViewSquadding extends Component {
     unassigned: [],
     squads: [
       {
-        name: '',
+        name: "",
         id: 0,
-        members: [],
-      },
-    ],
+        members: []
+      }
+    ]
   };
 
   componentDidMount() {
@@ -51,15 +55,15 @@ class ViewSquadding extends Component {
   getData = () => {
     if (this.state.selectedEvent !== 0) {
       axios({
-        method: 'GET',
-        url: `/api/competition/squadding/${this.state.selectedEvent}`,
+        method: "GET",
+        url: `/api/competition/squadding/${this.state.selectedEvent}`
       })
         .then(response => {
           this.setState({ ...response.data });
         })
         .catch(error => {
           alert(
-            'Something went wrong getting the squadding data from the server.'
+            "Something went wrong getting the squadding data from the server."
           );
           console.log(error);
         });
@@ -73,11 +77,11 @@ class ViewSquadding extends Component {
 
   sendData = () => {
     if (this.state.selectedEvent !== 0) {
-      toast('Squads saved');
+      toast("Squads saved");
       axios({
-        method: 'PUT',
+        method: "PUT",
         url: `/api/competition/squadding/${this.state.selectedEvent}`,
-        data: this.state,
+        data: this.state
       }).then(() => {
         this.getData();
       });
@@ -85,7 +89,7 @@ class ViewSquadding extends Component {
   };
 
   getList = id => {
-    if (id === 'unassigned') {
+    if (id === "unassigned") {
       return this.state.unassigned;
     } else {
       return this.state.squads[Number(id)].members;
@@ -95,8 +99,8 @@ class ViewSquadding extends Component {
   onDragEnd = result => {
     const { source, destination } = result;
 
-    console.log('source:', source);
-    console.log('destination:', destination);
+    console.log("source:", source);
+    console.log("destination:", destination);
 
     // dropped outside the list
     if (!destination) {
@@ -104,14 +108,14 @@ class ViewSquadding extends Component {
     }
 
     if (
-      destination.droppableId != 'unassigned' &&
+      destination.droppableId != "unassigned" &&
       destination.droppableId != source.droppableId
     ) {
       // if destination is already full
       if (
         this.state.squads[Number(destination.droppableId)].members.length > 4
       ) {
-        toast('Squads can only have five people!');
+        toast("Squads can only have five people!");
         return;
       }
     }
@@ -124,9 +128,9 @@ class ViewSquadding extends Component {
         destination.index
       );
 
-      if (source.droppableId === 'unassigned') {
+      if (source.droppableId === "unassigned") {
         this.setState({
-          unassigned: newItems,
+          unassigned: newItems
         });
       } else {
         this.setState({
@@ -134,10 +138,10 @@ class ViewSquadding extends Component {
             ...this.state.squads.slice(0, Number(source.droppableId)),
             {
               ...this.state.squads[source.droppableId],
-              members: newItems,
+              members: newItems
             },
-            ...this.state.squads.slice(Number(source.droppableId) + 1),
-          ],
+            ...this.state.squads.slice(Number(source.droppableId) + 1)
+          ]
         });
       }
     } else {
@@ -151,9 +155,9 @@ class ViewSquadding extends Component {
 
       console.log(result);
 
-      if (source.droppableId === 'unassigned') {
+      if (source.droppableId === "unassigned") {
         this.setState({
-          unassigned: result.source,
+          unassigned: result.source
         });
       } else {
         this.setState({
@@ -161,15 +165,15 @@ class ViewSquadding extends Component {
             ...this.state.squads.slice(0, Number(source.droppableId)),
             {
               ...this.state.squads[source.droppableId],
-              members: result.source,
+              members: result.source
             },
-            ...this.state.squads.slice(Number(source.droppableId) + 1),
-          ],
+            ...this.state.squads.slice(Number(source.droppableId) + 1)
+          ]
         });
       }
-      if (destination.droppableId === 'unassigned') {
+      if (destination.droppableId === "unassigned") {
         this.setState({
-          unassigned: result.destination,
+          unassigned: result.destination
         });
       } else {
         this.setState({
@@ -177,10 +181,10 @@ class ViewSquadding extends Component {
             ...this.state.squads.slice(0, Number(destination.droppableId)),
             {
               ...this.state.squads[destination.droppableId],
-              members: result.destination,
+              members: result.destination
             },
-            ...this.state.squads.slice(Number(destination.droppableId) + 1),
-          ],
+            ...this.state.squads.slice(Number(destination.droppableId) + 1)
+          ]
         });
       }
     }
@@ -190,33 +194,33 @@ class ViewSquadding extends Component {
   addSquad = () => {
     if (this.state.selectedEvent !== 0) {
       axios({
-        method: 'POST',
-        url: `/api/competition/squadding/new/${this.state.selectedEvent}`,
+        method: "POST",
+        url: `/api/competition/squadding/new/${this.state.selectedEvent}`
       }).then(() => {
         this.getData();
       });
-      toast('Squad added!');
+      toast("Squad added!");
     }
   };
 
   editSquad = (squadId, newName) => {
     axios({
-      method: 'PUT',
+      method: "PUT",
       url: `/api/competition/edit/squad/${squadId}`,
-      data: { name: newName },
+      data: { name: newName }
     }).then(() => {
       this.getData();
-      toast('Squad name updated!');
+      toast("Squad name updated!");
     });
   };
 
   deleteSquad = squadId => {
     axios({
-      method: 'DELETE',
-      url: `/api/competition/squadding/squad/${squadId}`,
+      method: "DELETE",
+      url: `/api/competition/squadding/squad/${squadId}`
     }).then(() => {
       this.getData();
-      toast('Squad deleted.');
+      toast("Squad deleted.");
     });
   };
 
@@ -235,20 +239,16 @@ class ViewSquadding extends Component {
                 />
               </HeaderMargins>
               <Divider />
-              {/* <Button onClick={this.getData}>Save</Button> */}
               <DndList
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {
-                  item.mainText = item.first_name + ' ' + item.last_name;
+                  item.mainText = item.first_name + " " + item.last_name;
                   item.avatar = item.handicap;
                   return item;
                 })}
               />
             </DndLeftSide>
             <DndRightSide>
-              {/* <Typography variant="h4" className={classes.subheader}>
-                Squads
-              </Typography> */}
               {this.state.squads.length > 0 &&
                 this.state.squads.map((squad, index) => {
                   return (
@@ -269,7 +269,7 @@ class ViewSquadding extends Component {
                         droppableId={index.toString()}
                         data={squad.members.map(item => {
                           item.mainText =
-                            item.first_name + ' ' + item.last_name;
+                            item.first_name + " " + item.last_name;
                           item.avatar = item.handicap;
                           return item;
                         })}
@@ -288,7 +288,7 @@ class ViewSquadding extends Component {
 
 const mapStateToProps = state => ({
   user: state.user,
-  events: state.events,
+  events: state.events
 });
 
 export default connect(mapStateToProps)(ViewSquadding);

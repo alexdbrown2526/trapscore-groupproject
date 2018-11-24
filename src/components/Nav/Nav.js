@@ -8,6 +8,7 @@ import NavSideHeader from '../NavSideHeader/NavSideHeader';
 import NavList from '../NavList/NavList';
 import NavSideBottom from '../NavSideBottom/NavSideBottom';
 import NavSideBottomActions from '../NavSideBottomActions/NavSideBottomActions';
+
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 

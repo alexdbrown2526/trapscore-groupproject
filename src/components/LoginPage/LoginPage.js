@@ -1,12 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
-import { withStyles } from '@material-ui/core'
-import Button from '@material-ui/core/Button'
-import TextField from '@material-ui/core/TextField'
-import AccountCircle from '@material-ui/icons/AccountCircle'
-import Lock from '@material-ui/icons/Lock'
-import Card from '@material-ui/core/Card'
+
+import { withStyles } from '@material-ui/core/styles';
+
+import {
+  Button, 
+  Card, 
+  TextField
+} from '@material-ui/core/'
+
+import {
+  AccountCircle, 
+  Lock
+} from '@material-ui/icons/'
+
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -134,7 +134,7 @@ class App extends Component {
             </Switch>
           </MuiThemeProvider>
           <ToastContainer
-            position={toast.POSITION.BOTTOM_RIGHT}
+            position={toast.POSITION.TOP_RIGHT}
             toastClassName={classes.darkToast}
             transition={Slide}
             autoClose={3000}

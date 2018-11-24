@@ -3,7 +3,7 @@ import { withStyles } from "@material-ui/core/styles";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { connect } from "react-redux";
-import { List, ListItemText } from "@material-ui/core/";
+import { List, } from "@material-ui/core/";
 import ScoringItem from "../ScoringItem/ScoringItem";
 import PropTypes from "prop-types";
 import { Typography } from "@material-ui/core";
@@ -53,7 +53,6 @@ const styles = theme => ({
   },
   headersThree: {
     paddingLeft: "38%"
-    
   }
 });
 
@@ -79,7 +78,7 @@ class Scoring extends Component {
         payload: this.props.currentRound + 1
       });
     } else {
-      toast("Scores submitted, post positions rotating.", {position: toast.POSITION.TOP_CENTER});
+      toast("Scores Submitted, Posts Rotating", {position: toast.POSITION.TOP_CENTER});
       this.props.dispatch({
         type: USER_ACTIONS.SUBMIT_SCORES,
         payload: this.props.selectedTrap
@@ -100,12 +99,13 @@ class Scoring extends Component {
 
   render() {
     const { classes } = this.props;
+
     return (
       <div className={classes.bigContainer}>
-       <Typography className={classes.headersThree} variant="h6">
+        <Typography className={classes.headersThree} variant="h6">
           Rotation: {this.props.selectedTrap.squad_trap.current_rotation}
         </Typography>
-        <hr className="hr2"></hr>
+        <hr className="hr2" />
         <Typography className={classes.headers} variant="h4">
           Rounds
         </Typography>

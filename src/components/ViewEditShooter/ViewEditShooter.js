@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
+
 import {
   Button,
   List,
   ListItem,
   TextField,
-} from '@material-ui/core';
+} from '@material-ui/core/';
 
 const styles = theme => ({
   field: {

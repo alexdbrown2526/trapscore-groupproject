@@ -1,11 +1,11 @@
 import React from 'react';
-import { withStyles } from '@material-ui/core/styles';
+
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   root: {
     width: '100%',
-    // maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
     flexGrow: 1,
     display: 'flex',

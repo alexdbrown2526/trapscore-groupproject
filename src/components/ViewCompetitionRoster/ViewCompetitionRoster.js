@@ -1,29 +1,34 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
+
 import { withStyles } from '@material-ui/core/styles';
-import { List, ListItem, TextField, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
-import { toast } from 'react-toastify';
 
-import SettingsIcon from '@material-ui/icons/Settings';
-import IconButton from '@material-ui/core/IconButton';
+import {
+  List,
+  ListItem,
+  ListItemSecondaryAction,
+  TextField,
+  IconButton
+  
+} from "@material-ui/core";
 
-import ViewEditShooter from '../ViewEditShooter/ViewEditShooter';
+import SettingsIcon from "@material-ui/icons/Settings";
 
+import { toast } from "react-toastify";
+
+import ViewEditShooter from "../ViewEditShooter/ViewEditShooter";
 
 const styles = theme => ({
   roster: {
-    // backgroundColor: 'red',
-    width: '30vw',
+    width: "30vw",
     minWidth: 100,
-    height: '83vh',
-    overflowY: 'auto',
-    // float: 'left',
-    marginLeft: '10vw',
-    marginTop: '5vh',
-    borderStyle: 'solid',
-    padding: '20px',
-    fontFamily: 'Roboto, sans-serif',
-
+    height: "83vh",
+    overflowY: "auto",
+    marginLeft: "10vw",
+    marginTop: "5vh",
+    borderStyle: "solid",
+    padding: "20px",
+    fontFamily: "Roboto, sans-serif"
   },
 
   scrollable: {
@@ -31,14 +36,13 @@ const styles = theme => ({
   },
 
   searchField: {
-    height: '5vh',
-    fontFamily: 'Roboto, sans-serif',
-    marginLeft: '22px',
+    height: "5vh",
+    fontFamily: "Roboto, sans-serif",
+    marginLeft: "22px"
   },
 
   header: {
-    marginLeft: '22px',
-    
+    marginLeft: "22px"
   }
 });
 
@@ -48,15 +52,14 @@ class CompetitionRoster extends Component {
     this.state = {
       shooters: [],
       selectedShooter: {},
-      // filteredArray: [],
-      input: '',
+      input: ""
     };
   }
   //GET all shooters associated with the current competition
   getShooters() {
     axios({
-      method: 'GET',
-      url: '/api/competition/shooter',
+      method: "GET",
+      url: "/api/competition/shooter"
     }).then(response => {
       let shooters;
 
@@ -67,7 +70,7 @@ class CompetitionRoster extends Component {
       }
       this.setState({
         shooters: shooters,
-        selectedShooter: {},
+        selectedShooter: {}
       });
     });
   }
@@ -75,22 +78,22 @@ class CompetitionRoster extends Component {
   //GET an individual shooters information
   editShooter = id => {
     axios({
-      method: 'GET',
-      url: `/api/competition/shooter/${id}`,
+      method: "GET",
+      url: `/api/competition/shooter/${id}`
     }).then(response => {
       this.setState({
         ...this.state,
-        selectedShooter: response.data[0],
+        selectedShooter: response.data[0]
       });
     });
   };
 
   updateUser = (id, data) => {
-    console.log('update hit for:', id, data);
+    console.log("update hit for:", id, data);
     axios({
-      method: 'PUT',
+      method: "PUT",
       url: `/api/competition/shooter/${id}`,
-      data: data,
+      data: data
     }).then(response => {
       toast("Changes Saved");
       this.getShooters();
@@ -98,10 +101,10 @@ class CompetitionRoster extends Component {
   };
 
   deleteShooter = id => {
-    console.log('delete hit for:', id);
+    console.log("delete hit for:", id);
     axios({
-      method: 'DELETE',
-      url: `/api/competition/shooter/${id}`,
+      method: "DELETE",
+      url: `/api/competition/shooter/${id}`
     }).then(response => {
       toast("Shooter Deleted");
       this.getShooters();
@@ -113,15 +116,15 @@ class CompetitionRoster extends Component {
       ...this.state,
       selectedShooter: {
         ...this.state.selectedShooter,
-        [propertyName]: event.target.value,
-      },
+        [propertyName]: event.target.value
+      }
     });
   };
 
   onFilterChange = event => {
     console.log(event.target.value);
     this.setState({
-      input: event.target.value,
+      input: event.target.value
     });
   };
 
@@ -132,9 +135,8 @@ class CompetitionRoster extends Component {
 
   //Able to filter roster by search field. Select a user and edit their information
 
-  render() {
+  render() { 
     const { classes } = this.props;
-
     const list = this.state.shooters
       .filter(
         shooter =>
@@ -144,15 +146,15 @@ class CompetitionRoster extends Component {
       )
       .map((shooter, index) => (
         <ListItem key={index}>
-          {shooter.first_name} {shooter.last_name}{' '}
+          {shooter.first_name} {shooter.last_name}{" "}
           <ListItemSecondaryAction>
-          <IconButton
-            onClick={() => {
-              this.editShooter(shooter.id);
-            }}
-          >
-            <SettingsIcon />
-          </IconButton>
+            <IconButton
+              onClick={() => {
+                this.editShooter(shooter.id);
+              }}
+            >
+              <SettingsIcon />
+            </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
       ));
@@ -189,8 +191,6 @@ class CompetitionRoster extends Component {
         </div>
       </div>
     );
-
-    
   }
 }
 
