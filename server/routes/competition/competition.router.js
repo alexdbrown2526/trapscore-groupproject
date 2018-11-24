@@ -307,4 +307,27 @@ router.delete('/:id', rejectUnauthenticated, async (req, res) => {
   }
 });
 
+router.put('password/:id', rejectUnauthenticated, (req, res) => {
+  // pool
+  //   .query(
+  //     `
+  //       UPDATE "person"
+  //       SET "username" = $1, "password" = $2
+  //       WHERE "competition_id" = $3;
+  //     `,
+  //     [
+  //       getCompetitionStaffName(updatedCompetition.name),
+  //       getCompetitionStaffPassword(updatedCompetition.name),
+  //       updatedCompetition.id,
+  //     ]
+  //   )
+  //   .catch(error => {
+  //     console.log('### Error in router:', routerName);
+  //     console.log('### Error:');
+  //     console.log(error);
+  //     res.sendStatus(500);
+  //   });
+  // res.sendStatus(201);
+});
+
 module.exports = router;
