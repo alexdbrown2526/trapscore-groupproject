@@ -67,7 +67,7 @@ class ViewSquadding extends Component {
       this.setState({
         ...this.state,
         squads: [],
-      })
+      });
     }
   };
 

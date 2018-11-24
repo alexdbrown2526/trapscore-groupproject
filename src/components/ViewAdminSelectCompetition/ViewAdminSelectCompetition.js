@@ -13,7 +13,6 @@ import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditC
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 import { homeRoute } from '../../navigationRoutes';
-import CancelRounded from '@material-ui/icons/CancelRounded';
 
 const styles = theme => ({
   userDetail: {
@@ -53,7 +52,7 @@ const styles = theme => ({
     width: '60%',
     fontFamily: 'Roboto, sans-serif',
     borderStyle: 'solid',
-    outline: 'none'
+    outline: 'none',
   },
   logOutButton: {
     marginLeft: '3%',
@@ -134,8 +133,6 @@ class ViewAdminSelectCompetition extends Component {
     // });
   };
 
- 
-
   handleClose = () => {
     this.setState({ open: false });
   };
@@ -170,6 +167,21 @@ class ViewAdminSelectCompetition extends Component {
     }
   };
 
+  deleteCompetition = competitionIdToDelete => {
+    console.log('deleting competition id:', competitionIdToDelete);
+    axios({
+      method: 'DELETE',
+      url: `/api/competition/${competitionIdToDelete}`,
+    })
+      .then(response => {
+        this.refreshData();
+      })
+      .catch(error => {
+        alert('Something went wrong deleting the competition.');
+        console.log('Error:', error);
+      });
+  };
+
   render() {
     const { classes } = this.props;
     //Conditional Rendering if statements/variables
@@ -190,6 +202,7 @@ class ViewAdminSelectCompetition extends Component {
             <ViewAdminEditCompetition
               edit={this.state.competitionToEdit}
               data={this.refreshData}
+              deleteCompetition={this.deleteCompetition}
             />
           </div>
         </Modal>
@@ -264,5 +277,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles(styles),
+  withStyles(styles)
 )(ViewAdminSelectCompetition);

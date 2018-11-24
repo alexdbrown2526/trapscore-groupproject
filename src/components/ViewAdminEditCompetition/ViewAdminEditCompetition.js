@@ -13,9 +13,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-toastify';
 
-import IconButton from '@material-ui/core/IconButton'
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday'
+import { Button } from '@material-ui/core';
 
+import IconButton from '@material-ui/core/IconButton';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 
 const styles = theme => ({
   container: {
@@ -50,8 +51,6 @@ class ViewAdminEditCompetition extends Component {
       [propertyName]: event.target.value,
     });
   };
-  
-
 
   handleChange = date => {
     this.setState({
@@ -158,10 +157,26 @@ class ViewAdminEditCompetition extends Component {
           />
         </form>
         <h2>Select Date</h2>
+        <DatePicker selected={this.state.date} onChange={this.handleChange} />
 
-          
-        <DatePicker selected={this.state.date} onChange={this.handleChange}  />
-        <button onClick={this.handleSubmit}>Submit</button>
+        <div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={this.handleSubmit}
+          >
+            Submit
+          </Button>
+          <Button
+            // variant="contained"
+            // color="primary"
+            onClick={() => {
+              this.props.deleteCompetition(this.props.edit.id);
+            }}
+          >
+            Delete
+          </Button>
+        </div>
         {viewItem}
       </div>
     );
@@ -182,5 +197,5 @@ const mapStateToProps = reduxState => ({
 export default compose(
   connect(mapStateToProps),
   withRouter,
-  withStyles(styles),
+  withStyles(styles)
 )(ViewAdminEditCompetition);
