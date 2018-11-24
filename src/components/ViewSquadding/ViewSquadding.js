@@ -63,6 +63,11 @@ class ViewSquadding extends Component {
           );
           console.log(error);
         });
+    } else {
+      this.setState({
+        ...this.state,
+        squads: [],
+      })
     }
   };
 
