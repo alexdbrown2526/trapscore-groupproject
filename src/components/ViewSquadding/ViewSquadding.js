@@ -67,7 +67,7 @@ class ViewSquadding extends Component {
       this.setState({
         ...this.state,
         squads: [],
-      })
+      });
     }
   };
 
@@ -183,8 +183,8 @@ class ViewSquadding extends Component {
           ],
         });
       }
-      this.sendData();
     }
+    this.sendData();
   };
 
   addSquad = () => {

@@ -207,4 +207,51 @@ router.get('/:id', rejectUnauthenticated, (req, res) => {
     });
 });
 
+router.delete('/id', rejectUnauthenticated, async (req, res) => {
+  // Delete just orphans shooters, it doesn't delete them
+  // this is because we believe eventually people will want to
+  // be able to select a shooter to register instead of typing them new
+
+  // get the ids of everything that's going to be deleted
+  let toDelete = {
+    competitions: [req.params.id],
+    traps: [],
+    squadTraps: [],
+    scores: [],
+    events: [],
+    shooterEvents: [],
+    people: [],
+  };
+
+  // traps
+  let trapResults = await pool.query(
+    `
+      SELECT "id" FROM "trap" WHERE "competition_id" = $1;
+    `,
+    [toDelete.competitions[0]]
+  );
+  toDelete.traps = trapResults.rows;
+
+  // events
+  let eventResults = await pool.query(
+    `
+      SELECT "id" FROM "events" WHERE "competition_id" = $1;
+    `,
+    [toDelete.competitions[0]]
+  );
+
+  toDelete.events = eventResults.rows;
+
+  console.log('toDelete:', toDelete);
+
+  // Data to delete:
+  // competition
+  //    trap
+  //      squad trap
+  //        score
+  //    event
+  //        shooter_event
+  // person
+});
+
 module.exports = router;
