@@ -7,7 +7,7 @@ import { withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import { Button, List, ListItem, Modal } from '@material-ui/core/';
+import { Button, List, ListItem, Modal, TextField } from '@material-ui/core/';
 
 import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
@@ -78,6 +78,7 @@ class ViewAdminSelectCompetition extends Component {
     //
     competitions: [],
     competitionToEdit: Number,
+    newCompetitionName: '',
   };
 
   refreshData = () => {
@@ -104,17 +105,16 @@ class ViewAdminSelectCompetition extends Component {
     });
   };
 
-  addNewCompetition = event => {
-    event.preventDefault();
-
-    axios({
-      method: 'POST',
-      url: '/api/competition',
-    }).then(response => {
-      console.log(response.data);
-      this.editCompetition(response.data);
-    });
-  };
+  // addNewCompetition = event => {
+  //   event.preventDefault();
+  //   axios({
+  //     method: 'POST',
+  //     url: '/api/competition',
+  //   }).then(response => {
+  //     console.log(response.data);
+  //     this.editCompetition(response.data);
+  //   });
+  // };
 
   editCompetition = selectedCompetition => {
     this.setState({
@@ -138,6 +138,36 @@ class ViewAdminSelectCompetition extends Component {
 
   handleClose = () => {
     this.setState({ open: false });
+  };
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
+
+  addCompetition = () => {
+    // reject blank input
+    if (this.state.newCompetitionName == '') {
+      alert('Please input a competition name.');
+      return false;
+    } else {
+      axios({
+        method: 'POST',
+        url: '/api/competition',
+        data: { name: this.state.newCompetitionName },
+      })
+        .then(response => {
+          console.log(response.data);
+          this.editCompetition(response.data);
+        })
+        .catch(error => {
+          alert(
+            'Something went wrong adding the competition. Are you sure the name is unique?'
+          );
+          console.log('Error:', error);
+        });
+    }
   };
 
   render() {
@@ -188,14 +218,24 @@ class ViewAdminSelectCompetition extends Component {
                 </ListItem>
               );
             })}
+            <ListItem>
+              <Button
+                className={classes.editButton}
+                variant="contained"
+                color="primary"
+                onClick={this.addCompetition}
+              >
+                Add
+              </Button>
+              <TextField
+                label="New competition name"
+                // className={classes.textField}
+                value={this.state.newCompetitionName}
+                onChange={this.handleChange('newCompetitionName')}
+                margin="normal"
+              />
+            </ListItem>
 
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={this.addNewCompetition}
-            >
-              Add Competition
-            </Button>
             <Button
               className={classes.logOutButton}
               color="secondary"

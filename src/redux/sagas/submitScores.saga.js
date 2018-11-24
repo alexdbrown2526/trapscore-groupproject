@@ -6,7 +6,7 @@ const sagaName = 'submitScoresSaga'
 
 function* submitScores(action) {
   try {
-    const response = yield axios.post(`api/competition/scores/`, action.payload );
+    yield axios.post(`api/competition/scores/`, action.payload );
     yield put({ type: USER_ACTIONS.FETCH_SELECTED_TRAP, payload: action.payload.trap.id});
   } catch (error) {
     console.log('error in', sagaName, ':', error);

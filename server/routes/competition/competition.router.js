@@ -17,14 +17,24 @@ const secretRouter = require('./secret.router');
 const scoresRouter = require('./scores.router');
 const editRouter = require('./edit.router');
 
+const routerName = 'competition.router.js';
+
+getCompetitionStaffName = competitionName => {
+  return competitionName
+    .toLowerCase()
+    .split(' ')
+    .join('');
+};
+
+getCompetitionStaffPassword = competitionName => {
+  let toEncrypt = getCompetitionStaffName(competitionName) + '-admin';
+  return encryptLib.encryptPassword(toEncrypt);
+};
+
 /**
  * GET list of all competitions
  */
 router.get('/', rejectUnauthenticated, (req, res) => {
-  console.log(
-    'User is logged in with competition ID=',
-    req.user.competition_id
-  );
   pool
     .query(`SELECT * FROM "competition" ORDER BY "isActive" DESC, "date" ASC;`)
     .then(results => res.send(results.rows))
@@ -41,17 +51,19 @@ router.get('/', rejectUnauthenticated, (req, res) => {
 router.post('/', rejectUnauthenticated, async (req, res) => {
   // create the new competition
   let results = await pool
-    .query(`INSERT INTO "competition" DEFAULT VALUES RETURNING *;`)
+    .query(`INSERT INTO "competition" ("name") VALUES ($1) RETURNING *;`, [
+      req.body.name,
+    ])
     .catch(error => {
       console.log('Error creating new competition:', error);
       res.sendStatus(500);
     });
 
-  let competitionId = results.rows[0].id;
-  console.log('Competition ID:', competitionId);
+  let newCompetitionInfo = results.rows[0];
+  console.log('Competition ID:', newCompetitionInfo.id);
 
   // set the secret url for that competition
-  let secretUrl = encryptLib.encryptPassword(String(competitionId));
+  let secretUrl = encryptLib.encryptPassword(String(newCompetitionInfo.id));
 
   await pool
     .query(
@@ -60,42 +72,117 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       SET "secret_url" = $1
       WHERE "id" = $2;
     `,
-      [secretUrl, competitionId]
+      [secretUrl, newCompetitionInfo.id]
     )
     .catch(error => {
       console.log('Error setting secret url:', error);
       res.sendStatus(500);
     });
 
-  let results2 = await pool
+  // create the staff user for that account
+  const username = getCompetitionStaffName(newCompetitionInfo.name);
+  const password = getCompetitionStaffPassword(newCompetitionInfo.name);
+
+  const queryText =
+    'INSERT INTO person (username, password, competition_id) VALUES ($1, $2, $3) RETURNING id';
+  await pool
+    .query(queryText, [username, password, newCompetitionInfo.id])
+    .catch(error => {
+      console.log('error:', error);
+    });
+
+  // create events for that competition; for now, just give it the defaults
+  let results2 = await pool.query(
+    `
+      INSERT INTO "event" ("name", "competition_id")
+      VALUES
+        ('Singles', $1),
+        ('Handicap', $1),
+        ('Doubles', $1)
+        RETURNING "id"
+        ;
+    `,
+    [newCompetitionInfo.id]
+  );
+
+  let eventIds = results2.rows.map(row => {
+    return row.id;
+  });
+
+  let defaultSquadPromises = eventIds.map(id => {
+    return pool.query(
+      `
+        INSERT INTO "squad" ("name", "event_id")
+        VALUES ($1, $2);
+      `,
+      ['Squad ' + id, id]
+    );
+  });
+
+  await Promise.all(defaultSquadPromises);
+
+  await pool.query(
+    `
+      INSERT INTO "trap" ("name", "competition_id")
+      VALUES ('Trap 1', $1)
+    `,
+    [newCompetitionInfo.id]
+  );
+
+  // get the information to send back to the client
+  let results3 = await pool
     .query(
       `
       SELECT * FROM "competition"
       WHERE "id" = $1;
     `,
-      [competitionId]
+      [newCompetitionInfo.id]
     )
     .catch(error => {
       console.log('Error getting new competition details:', error);
       res.sendStatus(500);
     });
-  console.log(results2.rows[0]);
-  res.send(results2.rows[0]);
+  console.log(results3.rows[0]);
+  res.send(results3.rows[0]);
 });
 
 // update an existing competition's name, location, and/or date
-router.put('/', rejectUnauthenticated, (req, res) => {
-  pool
+router.put('/', rejectUnauthenticated, async (req, res) => {
+  results = await pool
     .query(
       `UPDATE "competition" SET "name" = $1, "location" = $2, "date"=$3
-              WHERE "id" = $4;`,
+              WHERE "id" = $4
+              RETURNING *;`,
       [req.body.name, req.body.location, req.body.date, req.body.id]
     )
-    .then(() => res.sendStatus(200))
     .catch(error => {
       console.log('Error updating competition:', error);
       res.sendStatus(500);
     });
+
+  updatedCompetition = results.rows[0];
+
+  await pool
+    .query(
+      `
+        UPDATE "person"
+        SET "username" = $1, "password" = $2
+        WHERE "competition_id" = $3;
+      `,
+      [
+        getCompetitionStaffName(updatedCompetition.name),
+        getCompetitionStaffPassword(updatedCompetition.name),
+        updatedCompetition.id,
+      ]
+    )
+    .catch(error => {
+      console.log('### Error in router:', routerName);
+      console.log('### Error:');
+      console.log(error);
+      res.sendStatus(500);
+    });
+
+  res.sendStatus(201);
 });
 
 /* sub-route uses */

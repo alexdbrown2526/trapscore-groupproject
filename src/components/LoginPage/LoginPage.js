@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField'
 import AccountCircle from '@material-ui/icons/AccountCircle'
 import Lock from '@material-ui/icons/Lock'
 import Card from '@material-ui/core/Card'
-import { ToastContainer, toast, Slide } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({

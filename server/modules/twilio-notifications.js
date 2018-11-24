@@ -1,15 +1,5 @@
 const twilio = require("twilio");
 const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-
-
-(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN,
-  process.env.TWILIO_NUMBER,
-  process.env.TWILIO_MESSAGING_SERVICE_SID,
-  process.env.TWILIO_NOTIFY_SERVICE_SID,
-  process.env.MY_NUMBER
-);
 const pool = require("../modules/pool");
 
 const sendTwilioNotification = (trap_id, place_in_line) => {
@@ -44,8 +34,8 @@ const sendTwilioNotification = (trap_id, place_in_line) => {
               client.messages
                 .create({
                   from: process.env.TWILIO_NUMBER,
-                  //MAY NEED TO FORMAT PHONE NUMBERS
-                  to: `+1${shooter.phone}`,
+                  //adds US country code (+1) and strips all non digit characters before attempting to send
+                  to: `+1${shooter.phone.toString().replace(/\D/g,'')}`,
                   body: body
                 })
                 .then(() => {

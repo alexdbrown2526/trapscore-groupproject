@@ -15,7 +15,7 @@ DROP TABLE "score" CASCADE;
 
 CREATE TABLE "competition" (
     "id" serial PRIMARY KEY,
-    "name" varchar(100) NOT NULL DEFAULT 'New Competition',
+    "name" varchar(100) NOT NULL UNIQUE,
     "location" varchar(150) NOT NULL DEFAULT 'Anytown, USA',
     "date" DATE NOT NULL DEFAULT NOW() + INTERVAL '7 days',
     "isActive" BOOLEAN NOT NULL DEFAULT 'true',

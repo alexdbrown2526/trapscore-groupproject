@@ -244,7 +244,7 @@ class ViewSquadding extends Component {
               {/* <Typography variant="h4" className={classes.subheader}>
                 Squads
               </Typography> */}
-              {this.state.squads.length > 1 &&
+              {this.state.squads.length > 0 &&
                 this.state.squads.map((squad, index) => {
                   return (
                     <DndCard

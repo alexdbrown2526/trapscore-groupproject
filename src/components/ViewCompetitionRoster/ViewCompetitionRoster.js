@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import { List, ListItem, TextField, ListItemSecondaryAction, ListSubheader } from '@material-ui/core';
+import { toast } from 'react-toastify';
 
 import SettingsIcon from '@material-ui/icons/Settings';
 import IconButton from '@material-ui/core/IconButton';
@@ -91,6 +92,7 @@ class CompetitionRoster extends Component {
       url: `/api/competition/shooter/${id}`,
       data: data,
     }).then(response => {
+      toast("Changes Saved");
       this.getShooters();
     });
   };
@@ -101,6 +103,7 @@ class CompetitionRoster extends Component {
       method: 'DELETE',
       url: `/api/competition/shooter/${id}`,
     }).then(response => {
+      toast("Shooter Deleted");
       this.getShooters();
     });
   };

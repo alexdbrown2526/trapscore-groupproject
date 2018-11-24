@@ -2,20 +2,38 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { USER_ACTIONS } from "../../redux/actions/userActions";
 import { scoringRoute } from "../../navigationRoutes";
-import { ToastContainer, toast, Slide } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Button, Card, Checkbox, TextField } from "@material-ui/core/";
+import { Button } from "@material-ui/core/";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { Select, MenuItem } from "@material-ui/core/";
+import { Typography } from "@material-ui/core";
+import { ListItem, ListItemText } from "@material-ui/core/";
 
 const styles = theme => ({
   selectBox: {
     width: "100%",
+    paddingTop: "20vw",
     // marginLeft: theme.spacing.unit,
     // marginRight: theme.spacing.unit,
     marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2
+    marginBottom: theme.spacing.unit * 2,
+    height: "40%"
+  },
+  centerButtonFixed: {
+    position: "fixed",
+    left: "50%",
+    bottom: theme.spacing.unit * 2,
+    transform: `translate(-50%, 0%)`,
+    width: "85%"
+  },
+  header: {
+    textAlign: "center"
+  },
+  headerFour: {
+    paddingTop: '10vw',
+    textAlign:"center"
   }
 });
 
@@ -27,7 +45,6 @@ class TrapSelection extends Component {
     isVisible: false,
     trap: "",
     counter: 0
-
   };
   // Get available Traps
   componentDidMount() {
@@ -66,32 +83,38 @@ class TrapSelection extends Component {
     const { classes } = this.props;
     return (
       <div>
-        <h1>Trap Selection</h1>
+        <Typography className={classes.header} variant="h4">
+          Select A Trap
+        </Typography>
         {/* {JSON.stringify(this.state.trap)} */}
+        <Typography className={classes.headerFour} variant="h7">
+          Click below to select a trap.
+        </Typography>
         <form onSubmit={this.handleSubmit}>
-          <>
-            <Select
-              className={classes.selectBox}
-              value={this.state.trap}
-              onChange={this.handleChangeFor("trap")}
-            
-            >
-            <MenuItem value={0}>Select</MenuItem>
-              {this.props.traps.map(trap => {
-                return (
-                  <MenuItem key={trap.id} value={trap.id}>
-                    {trap.name}
-                  </MenuItem>
-                );
-              })}
-            </Select>
-          </>
+          <ListItem>
+            <>
+              <Select
+                className={classes.selectBox}
+                value={this.state.trap}
+                onChange={this.handleChangeFor("trap")}
+              >
+                {this.props.traps.map(trap => {
+                  return (
+                    <MenuItem key={trap.id} value={trap.id}>
+                      {trap.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </>
+          </ListItem>
           <Button
             variant="contained"
             color="primary"
             type="submit"
             name="submit"
             value="Register"
+            className={classes.centerButtonFixed}
           >
             Confirm
           </Button>

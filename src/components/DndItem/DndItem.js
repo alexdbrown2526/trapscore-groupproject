@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 
 import { withStyles } from '@material-ui/core/styles';
@@ -13,7 +13,7 @@ const styles = theme => ({
   },
   avatarBox: {
     color: '#fff',
-    backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.secondary.main,
     borderRadius: 10,
   },
 });

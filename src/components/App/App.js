@@ -7,7 +7,11 @@ import {
 } from 'react-router-dom';
 
 import { connect } from 'react-redux';
-import './App.css';
+
+import { ToastContainer, toast, Slide } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import { withStyles } from "@material-ui/core/styles";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
@@ -22,8 +26,6 @@ import ViewScheduling from '../ViewScheduling/ViewScheduling';
 import Scoring from '../ViewScoring/ViewScoring';
 import TrapSelection from '../ViewTrapSelection/TrapSelection';
 import ViewShooterRegistration from '../ViewShooterRegistration/ViewShooterRegistration';
-import { ToastContainer, toast, Slide } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 import {
   selectCompetitionRoute,
@@ -33,7 +35,6 @@ import {
   schedulingRoute,
   selectTrapRoute,
   scoringRoute,
-  registrationRoute,
   resultsRoute,
 } from '../../navigationRoutes';
 
@@ -43,7 +44,6 @@ import {
   createMuiTheme,
   MuiThemeProvider,
 } from '@material-ui/core';
-import { deepOrange, lightGreen } from '@material-ui/core/colors/';
 
 const theme = createMuiTheme({
   palette: {
@@ -55,12 +55,22 @@ const theme = createMuiTheme({
   },
 });
 
+const styles = {
+  darkToast: {
+    backgroundColor: "rgba(30,30,30,.9)",
+    color: "white",
+    textAlign: "center",
+    fontFamily: "Roboto, sans-serif"
+  }
+}
+
 class App extends Component {
   componentDidMount() {
     this.props.dispatch({ type: LOGIN_ACTIONS.FETCH_USER });
   }
 
   render() {
+    const { classes } = this.props;
     return (
       <Router>
         <div>
@@ -123,10 +133,22 @@ class App extends Component {
               <Route render={() => <h1>404</h1>} />
             </Switch>
           </MuiThemeProvider>
+          <ToastContainer
+            position={toast.POSITION.BOTTOM_RIGHT}
+            toastClassName={classes.darkToast}
+            transition={Slide}
+            autoClose={3000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnVisibilityChange
+            draggable
+            pauseOnHover />
         </div>
       </Router>
     );
   }
 }
 
-export default connect()(App);
+export default withStyles(styles)(connect()(App));
