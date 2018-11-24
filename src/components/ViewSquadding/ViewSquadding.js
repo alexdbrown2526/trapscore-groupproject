@@ -183,8 +183,8 @@ class ViewSquadding extends Component {
           ],
         });
       }
-      this.sendData();
     }
+    this.sendData();
   };
 
   addSquad = () => {
