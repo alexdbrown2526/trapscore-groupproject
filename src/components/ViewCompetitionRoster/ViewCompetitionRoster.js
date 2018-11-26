@@ -9,7 +9,8 @@ import {
   ListItemSecondaryAction,
   ListSubheader,
   TextField,
-  IconButton
+  IconButton,
+  Divider
 } from "@material-ui/core";
 
 import EditIcon from "@material-ui/icons/Edit";
@@ -181,7 +182,6 @@ class CompetitionRoster extends Component {
                   onChange={this.onFilterChange}
                 />
               </ListSubheader>
-
               {list}
             </List>
           </div>
