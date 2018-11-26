@@ -15,8 +15,7 @@ import { toast } from "react-toastify";
 
 import { Button } from '@material-ui/core';
 
-import IconButton from '@material-ui/core/IconButton';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import moment from "moment";
 
 const styles = theme => ({
   container: {
@@ -85,6 +84,15 @@ class ViewAdminEditCompetition extends Component {
     console.log(this.state.isVisible);
     this.props.data();
   };
+
+  componentDidMount(){
+    this.setState({
+      ...this.state,
+      name: this.props.edit.name,
+      location: this.props.edit.location,
+      date: moment(this.props.edit.date)
+        })
+  }
 
   render() {
     //Conditional Rendering if statement/variable
