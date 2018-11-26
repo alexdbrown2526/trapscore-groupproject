@@ -24,7 +24,7 @@ const styles = theme => ({
 const DndCard = props => {
   const { classes, title } = props;
   return (
-    <Card className={props.noMargin ? classes.cardNoMargin : classes.card}>
+    <Card raised className={props.noMargin ? classes.cardNoMargin : classes.card}>
       <CardHeader action={props.cornerButton} title={title} />
       <CardContent>{props.children}</CardContent>
       <CardActions>{props.cardActions ? props.cardActions : null}</CardActions>
