@@ -169,7 +169,7 @@ router.post("/", rejectUnauthenticated, (req, res) => {
       .then((results) => {
         console.log("current rotation update succeeded", results.rows[0]);
         //posts a message to Twilio API at beginning of current_rotation passed in
-        if (results.rows[0].current_rotation === 4) {
+        if (results.rows[0].current_rotation === 3) {
           console.log('sending twilio notification');
           sendTwilioNotification(req.body.squad_trap.trap_id, req.body.squad_trap.place_in_line);
         }

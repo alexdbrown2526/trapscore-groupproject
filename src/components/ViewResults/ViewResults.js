@@ -257,8 +257,8 @@ class ViewResults extends Component {
           }}
           columns={columns}
           data={data}
-          pageSizeOptions={[20]}
-          pageSize={20}
+          pageSizeOptions={[15]}
+          pageSize={15}
           page={this.state.page}
           className="-striped -highlight"
           onPageChange={pageIndex => {

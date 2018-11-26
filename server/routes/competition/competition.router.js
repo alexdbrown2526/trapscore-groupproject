@@ -1,45 +1,45 @@
-const express = require('express');
-const pool = require('../../modules/pool');
+const express = require("express");
+const pool = require("../../modules/pool");
 const router = express.Router();
 const {
-  rejectUnauthenticated,
-} = require('../../modules/authentication-middleware');
-const encryptLib = require('../../modules/encryption');
+  rejectUnauthenticated
+} = require("../../modules/authentication-middleware");
+const encryptLib = require("../../modules/encryption");
 
 /* sub-route requires */
-const shooterRouter = require('./shooter.router');
-const eventRouter = require('./event.router');
-const squaddingRouter = require('./squadding.router');
-const schedulingRouter = require('./scheduling.router');
-const trapRouter = require('./trap.router');
-const resultsRouter = require('./results.router');
-const secretRouter = require('./secret.router');
-const scoresRouter = require('./scores.router');
-const editRouter = require('./edit.router');
+const shooterRouter = require("./shooter.router");
+const eventRouter = require("./event.router");
+const squaddingRouter = require("./squadding.router");
+const schedulingRouter = require("./scheduling.router");
+const trapRouter = require("./trap.router");
+const resultsRouter = require("./results.router");
+const secretRouter = require("./secret.router");
+const scoresRouter = require("./scores.router");
+const editRouter = require("./edit.router");
 
-const routerName = 'competition.router.js';
+const routerName = "competition.router.js";
 
 getCompetitionStaffName = competitionName => {
   return competitionName
     .toLowerCase()
-    .split(' ')
-    .join('');
+    .split(" ")
+    .join("");
 };
 
 getCompetitionStaffPassword = competitionName => {
-  let toEncrypt = getCompetitionStaffName(competitionName) + '-admin';
+  let toEncrypt = getCompetitionStaffName(competitionName) + "-admin";
   return encryptLib.encryptPassword(toEncrypt);
 };
 
 /**
  * GET list of all competitions
  */
-router.get('/', rejectUnauthenticated, (req, res) => {
+router.get("/", rejectUnauthenticated, (req, res) => {
   pool
     .query(`SELECT * FROM "competition" ORDER BY "isActive" DESC, "date" ASC;`)
     .then(results => res.send(results.rows))
     .catch(error => {
-      console.log('Error getting from /competition', error);
+      console.log("Error getting from /competition", error);
       res.sendStatus(500);
     });
 });
@@ -48,22 +48,24 @@ router.get('/', rejectUnauthenticated, (req, res) => {
  * create a new competition with default values
  * returns id of new competition as results.rows
  */
-router.post('/', rejectUnauthenticated, async (req, res) => {
+router.post("/", rejectUnauthenticated, async (req, res) => {
   // create the new competition
   let results = await pool
     .query(`INSERT INTO "competition" ("name") VALUES ($1) RETURNING *;`, [
-      req.body.name,
+      req.body.name
     ])
     .catch(error => {
-      console.log('Error creating new competition:', error);
+      console.log("Error creating new competition:", error);
       res.sendStatus(500);
     });
 
   let newCompetitionInfo = results.rows[0];
-  console.log('Competition ID:', newCompetitionInfo.id);
+  console.log("Competition ID:", newCompetitionInfo.id);
 
   // set the secret url for that competition
-  let secretUrl = encryptLib.encryptPassword(String(newCompetitionInfo.id));
+  let secretUrl = encryptLib
+    .encryptPassword(String(newCompetitionInfo.id))
+    .replace(/\//g, "");
 
   await pool
     .query(
@@ -75,7 +77,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       [secretUrl, newCompetitionInfo.id]
     )
     .catch(error => {
-      console.log('Error setting secret url:', error);
+      console.log("Error setting secret url:", error);
       res.sendStatus(500);
     });
 
@@ -84,11 +86,11 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
   const password = getCompetitionStaffPassword(newCompetitionInfo.name);
 
   const queryText =
-    'INSERT INTO person (username, password, competition_id) VALUES ($1, $2, $3) RETURNING id';
+    "INSERT INTO person (username, password, competition_id) VALUES ($1, $2, $3) RETURNING id";
   await pool
     .query(queryText, [username, password, newCompetitionInfo.id])
     .catch(error => {
-      console.log('error:', error);
+      console.log("error:", error);
     });
 
   // create events for that competition; for now, just give it the defaults
@@ -115,7 +117,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
         INSERT INTO "squad" ("name", "event_id")
         VALUES ($1, $2);
       `,
-      ['Squad ' + id, id]
+      ["Squad " + id, id]
     );
   });
 
@@ -139,7 +141,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
       [newCompetitionInfo.id]
     )
     .catch(error => {
-      console.log('Error getting new competition details:', error);
+      console.log("Error getting new competition details:", error);
       res.sendStatus(500);
     });
   console.log(results3.rows[0]);
@@ -147,7 +149,7 @@ router.post('/', rejectUnauthenticated, async (req, res) => {
 });
 
 // update an existing competition's name, location, and/or date
-router.put('/', rejectUnauthenticated, async (req, res) => {
+router.put("/", rejectUnauthenticated, async (req, res) => {
   results = await pool
     .query(
       `UPDATE "competition" SET "name" = $1, "location" = $2, "date"=$3
@@ -156,7 +158,7 @@ router.put('/', rejectUnauthenticated, async (req, res) => {
       [req.body.name, req.body.location, req.body.date, req.body.id]
     )
     .catch(error => {
-      console.log('Error updating competition:', error);
+      console.log("Error updating competition:", error);
       res.sendStatus(500);
     });
 
@@ -172,12 +174,12 @@ router.put('/', rejectUnauthenticated, async (req, res) => {
       [
         getCompetitionStaffName(updatedCompetition.name),
         getCompetitionStaffPassword(updatedCompetition.name),
-        updatedCompetition.id,
+        updatedCompetition.id
       ]
     )
     .catch(error => {
-      console.log('### Error in router:', routerName);
-      console.log('### Error:');
+      console.log("### Error in router:", routerName);
+      console.log("### Error:");
       console.log(error);
       res.sendStatus(500);
     });
@@ -186,28 +188,28 @@ router.put('/', rejectUnauthenticated, async (req, res) => {
 });
 
 /* sub-route uses */
-router.use('/shooter', shooterRouter);
-router.use('/event', eventRouter);
-router.use('/squadding', squaddingRouter);
-router.use('/scheduling', schedulingRouter);
-router.use('/trap', trapRouter);
-router.use('/results', resultsRouter);
-router.use('/secret', secretRouter);
-router.use('/scores', scoresRouter);
-router.use('/edit', editRouter);
+router.use("/shooter", shooterRouter);
+router.use("/event", eventRouter);
+router.use("/squadding", squaddingRouter);
+router.use("/scheduling", schedulingRouter);
+router.use("/trap", trapRouter);
+router.use("/results", resultsRouter);
+router.use("/secret", secretRouter);
+router.use("/scores", scoresRouter);
+router.use("/edit", editRouter);
 
 //GET a single competition by ID
-router.get('/:id', rejectUnauthenticated, (req, res) => {
+router.get("/:id", rejectUnauthenticated, (req, res) => {
   pool
     .query(`SELECT * FROM "competition" WHERE "id" = $1;`, [req.params.id])
     .then(results => res.send(results.rows))
     .catch(error => {
-      console.log('Error getting competition details:', error);
+      console.log("Error getting competition details:", error);
       res.sendStatus(500);
     });
 });
 
-router.delete('/:id', rejectUnauthenticated, async (req, res) => {
+router.delete("/:id", rejectUnauthenticated, async (req, res) => {
   // Delete just orphans shooters, it doesn't delete them
   // this is because we believe eventually people will want to
   // be able to select a shooter to register instead of typing them new
@@ -297,17 +299,17 @@ router.delete('/:id', rejectUnauthenticated, async (req, res) => {
       [competitionIdToDelete]
     );
 
-    console.log('Competition deleted.');
+    console.log("Competition deleted.");
     res.sendStatus(200);
   } catch (error) {
-    console.log('### Something went wrong deleting a competition.');
-    console.log('### Error:');
+    console.log("### Something went wrong deleting a competition.");
+    console.log("### Error:");
     console.log(error);
     res.sendStatus(500);
   }
 });
 
-router.put('password/:id', rejectUnauthenticated, (req, res) => {
+router.put("password/:id", rejectUnauthenticated, (req, res) => {
   let competitionId = req.params.id;
   let oldPassword = req.body.oldPassword;
   let newPassword = req.body.newPassword;
