@@ -2,9 +2,15 @@ const express = require('express');
 const pool = require('../../modules/pool');
 const router = express.Router();
 const {
+<<<<<<< HEAD
   rejectUnauthenticated,
 } = require('../../modules/authentication-middleware');
 const sendTwilioNotification = require('../../modules/twilio-notifications');
+=======
+  rejectUnauthenticated
+} = require("../../modules/authentication-middleware");
+const sendTwilioNotification = require("../../modules/twilio-notifications");
+>>>>>>> master
 
 /**
  * GET route template
@@ -166,10 +172,10 @@ router.post('/', rejectUnauthenticated, (req, res) => {
         RETURNING "current_rotation";`
       )
       .then(results => {
-        console.log('current rotation update succeeded', results.rows[0]);
+        console.log("current rotation update succeeded", results.rows[0]);
         //posts a message to Twilio API at beginning of current_rotation passed in
-        if (results.rows[0].current_rotation === 3) {
-          console.log('sending twilio notification');
+        if (results.rows[0].current_rotation === 4) {
+          console.log("sending twilio notification");
           sendTwilioNotification(
             req.body.squad_trap.trap_id,
             req.body.squad_trap.place_in_line
