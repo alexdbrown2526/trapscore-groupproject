@@ -71,10 +71,16 @@ class ViewAdminSelectCompetition extends Component {
       method: 'GET',
       url: '/api/competition',
     }).then(response => {
+      let newCompetitions = [];
+      for (let competition of response.data) {
+        newCompetitions.push({
+          ...competition,
+          date: moment(competition.date),
+        });
+      }
       this.setState({
         ...this.state,
-        competitions: response.data,
-        isVisible: false,
+        competitions: newCompetitions,
       });
     });
   };
@@ -103,7 +109,7 @@ class ViewAdminSelectCompetition extends Component {
     this.setState({
       editCompetition: {
         ...this.state.editCompetition,
-        date: moment(date),
+        date: date,
       },
     });
   };
@@ -133,14 +139,13 @@ class ViewAdminSelectCompetition extends Component {
       url: `/api/competition`,
       data: body,
     }).then(response => {
-      console.log(response);
       this.setState({
         ...this.state,
         editCompetition: {
           id: '',
           name: '',
           location: '',
-          date: '',
+          date: moment(),
           defaultPassword: '',
           newPassword: '',
         },
@@ -176,7 +181,6 @@ class ViewAdminSelectCompetition extends Component {
         data: { name: this.state.newCompetitionName },
       })
         .then(response => {
-          console.log(response.data);
           this.editCompetition(response.data);
         })
         .catch(error => {
@@ -189,7 +193,6 @@ class ViewAdminSelectCompetition extends Component {
   };
 
   deleteCompetition = competitionIdToDelete => {
-    console.log('deleting competition id:', competitionIdToDelete);
     axios({
       method: 'DELETE',
       url: `/api/competition/${competitionIdToDelete}`,

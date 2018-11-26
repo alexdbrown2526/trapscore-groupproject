@@ -125,8 +125,8 @@ const ViewAdminEditCompetition = props => {
               type="submit"
               variant="contained"
               color="primary"
-              onClick={() => {
-                props.submitEdits();
+              onClick={event => {
+                props.submitEdits(event);
                 props.handleClose();
               }}
             >

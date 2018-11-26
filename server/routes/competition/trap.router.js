@@ -55,8 +55,6 @@ router.post('/new/', rejectUnauthenticated, (req, res) => {
 });
 
 router.delete('/:id', rejectUnauthenticated, async (req, res) => {
-  console.log('delete hit:', req.params.id);
-
   await pool.query(
     `
       UPDATE "squad_trap"

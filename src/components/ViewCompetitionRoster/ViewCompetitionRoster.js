@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import axios from "axios";
+import React, { Component } from 'react';
+import axios from 'axios';
 
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 
 import {
   List,
@@ -10,40 +10,40 @@ import {
   ListSubheader,
   TextField,
   IconButton,
-  Divider
-} from "@material-ui/core";
+  Divider,
+} from '@material-ui/core';
 
-import EditIcon from "@material-ui/icons/Edit";
+import EditIcon from '@material-ui/icons/Edit';
 
-import { toast } from "react-toastify";
+import { toast } from 'react-toastify';
 
-import ViewEditShooter from "../ViewEditShooter/ViewEditShooter";
+import ViewEditShooter from '../ViewEditShooter/ViewEditShooter';
 
 const styles = theme => ({
   roster: {
-    width: "30vw",
+    width: '30vw',
     minWidth: 100,
-    height: "83vh",
-    overflowY: "auto",
-    marginLeft: "10vw",
-    marginTop: "5vh",
-    borderStyle: "solid",
-    padding: "20px",
-    fontFamily: "Roboto, sans-serif"
+    height: '83vh',
+    overflowY: 'auto',
+    marginLeft: '10vw',
+    marginTop: '5vh',
+    borderStyle: 'solid',
+    padding: '20px',
+    fontFamily: 'Roboto, sans-serif',
   },
 
   scrollable: {
-    overflowY: "auto"
+    overflowY: 'auto',
   },
 
   searchField: {
-    height: "5vh",
-    fontFamily: "Roboto, sans-serif",
+    height: '5vh',
+    fontFamily: 'Roboto, sans-serif',
   },
 
   header: {
-    marginLeft: "22px"
-  }
+    marginLeft: '22px',
+  },
 });
 
 class CompetitionRoster extends Component {
@@ -52,14 +52,14 @@ class CompetitionRoster extends Component {
     this.state = {
       shooters: [],
       selectedShooter: {},
-      input: ""
+      input: '',
     };
   }
   //GET all shooters associated with the current competition
   getShooters() {
     axios({
-      method: "GET",
-      url: "/api/competition/shooter"
+      method: 'GET',
+      url: '/api/competition/shooter',
     }).then(response => {
       let shooters;
 
@@ -70,7 +70,7 @@ class CompetitionRoster extends Component {
       }
       this.setState({
         shooters: shooters,
-        selectedShooter: {}
+        selectedShooter: {},
       });
     });
   }
@@ -78,35 +78,33 @@ class CompetitionRoster extends Component {
   //GET an individual shooters information
   editShooter = id => {
     axios({
-      method: "GET",
-      url: `/api/competition/shooter/${id}`
+      method: 'GET',
+      url: `/api/competition/shooter/${id}`,
     }).then(response => {
       this.setState({
         ...this.state,
-        selectedShooter: response.data[0]
+        selectedShooter: response.data[0],
       });
     });
   };
 
   updateUser = (id, data) => {
-    console.log("update hit for:", id, data);
     axios({
-      method: "PUT",
+      method: 'PUT',
       url: `/api/competition/shooter/${id}`,
-      data: data
+      data: data,
     }).then(response => {
-      toast("Changes Saved");
+      toast('Changes Saved');
       this.getShooters();
     });
   };
 
   deleteShooter = id => {
-    console.log("delete hit for:", id);
     axios({
-      method: "DELETE",
-      url: `/api/competition/shooter/${id}`
+      method: 'DELETE',
+      url: `/api/competition/shooter/${id}`,
     }).then(response => {
-      toast("Shooter Deleted");
+      toast('Shooter Deleted');
       this.getShooters();
     });
   };
@@ -116,21 +114,19 @@ class CompetitionRoster extends Component {
       ...this.state,
       selectedShooter: {
         ...this.state.selectedShooter,
-        [propertyName]: event.target.value
-      }
+        [propertyName]: event.target.value,
+      },
     });
   };
 
   onFilterChange = event => {
-    console.log(event.target.value);
     this.setState({
-      input: event.target.value
+      input: event.target.value,
     });
   };
 
   componentDidMount() {
     this.getShooters();
-    console.log(this.state.shooters);
   }
 
   //Able to filter roster by search field. Select a user and edit their information
@@ -140,13 +136,13 @@ class CompetitionRoster extends Component {
     const list = this.state.shooters
       .filter(
         shooter =>
-          this.state.input === "" ||
+          this.state.input === '' ||
           shooter.last_name.toLowerCase().includes(this.state.input) ||
           shooter.first_name.toLowerCase().includes(this.state.input)
       )
       .map((shooter, index) => (
         <ListItem key={index}>
-          {shooter.first_name} {shooter.last_name}{" "}
+          {shooter.first_name} {shooter.last_name}{' '}
           <ListItemSecondaryAction>
             <IconButton
               onClick={() => {

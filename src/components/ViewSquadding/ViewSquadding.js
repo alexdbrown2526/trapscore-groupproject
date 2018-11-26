@@ -96,9 +96,6 @@ class ViewSquadding extends Component {
   onDragEnd = result => {
     const { source, destination } = result;
 
-    console.log('source:', source);
-    console.log('destination:', destination);
-
     // dropped outside the list
     if (!destination) {
       return;
@@ -149,8 +146,6 @@ class ViewSquadding extends Component {
         source,
         destination
       );
-
-      console.log(result);
 
       if (source.droppableId === 'unassigned') {
         this.setState({

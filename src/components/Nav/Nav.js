@@ -20,7 +20,6 @@ class Nav extends Component {
   };
 
   setDrawer = open => () => {
-    console.log('setDrawer:', open);
     this.setState({
       sidenavOpen: open,
     });
@@ -33,8 +32,6 @@ class Nav extends Component {
     this.setState({
       sidenavOpen: false,
     });
-
-    console.log('navigateTo');
 
     this.props.history.push(`${destination}`);
 

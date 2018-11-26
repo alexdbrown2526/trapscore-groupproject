@@ -1,7 +1,9 @@
-const express = require("express");
-const pool = require("../../modules/pool");
+const express = require('express');
+const pool = require('../../modules/pool');
 const router = express.Router();
-const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
+const {
+  rejectUnauthenticated,
+} = require('../../modules/authentication-middleware');
 const sendTwilioNotification = require('../../modules/twilio-notifications');
 
 /**
@@ -53,7 +55,7 @@ const sendTwilioNotification = require('../../modules/twilio-notifications');
   ]
 }
  */
-router.get("/", rejectUnauthenticated, async (req, res, next) => {
+router.get('/', rejectUnauthenticated, async (req, res, next) => {
   //assumes that req.body.id is the trap id AND that the lowest value of 'place_in_line' is actually the next in line (i.e. when scores are submitted, place_in_line needs to be set to null)
   let selectedTrap;
   let squadTrap;
@@ -106,13 +108,15 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
           //initializes a null set of 5 shots for each shooter
           shooter.shots = [null, null, null, null, null];
           //sets new post_position based on current rotation
-          shooter.post_position = ((shooter.post_position + currentRotation - 1) % 5) === 0 ? 5 : ((shooter.post_position + currentRotation - 1) % 5);
+          shooter.post_position =
+            (shooter.post_position + currentRotation - 1) % 5 === 0
+              ? 5
+              : (shooter.post_position + currentRotation - 1) % 5;
         });
       })
       .catch(error => {
         console.log(error);
       });
-
 
     //sorts shooterList array by new post_position property of each shooter object
     shooterList.sort((a, b) => {
@@ -122,25 +126,20 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
       } else if (a.post_position < b.post_position) {
         comparison = -1;
       }
-      return comparison
-    })
-
+      return comparison;
+    });
 
     //assembles the response object from the three query results above
     assembledResponse = {
       trap: selectedTrap,
       squad_trap: squadTrap,
-      shooters: shooterList
+      shooters: shooterList,
     };
-    // console.log(
-    //   "assembled response ready to send to client:",
-    //   assembledResponse
-    // );
 
     res.send(assembledResponse);
   } catch (error) {
     console.log(
-      "##Error assembling score object. More information below:",
+      '##Error assembling score object. More information below:',
       error
     );
     res.sendStatus(500);
@@ -151,7 +150,7 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
  * inserts 5 scores for each member of a squad into the score table
  * increment current_rotation in squad_trap (up to a maximum of 6)
  */
-router.post("/", rejectUnauthenticated, (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   const squad_trap_id = req.body.squad_trap.id;
   try {
     pool
@@ -166,12 +165,15 @@ router.post("/", rejectUnauthenticated, (req, res) => {
         WHERE "id" = ${squad_trap_id}
         RETURNING "current_rotation";`
       )
-      .then((results) => {
-        console.log("current rotation update succeeded", results.rows[0]);
+      .then(results => {
+        console.log('current rotation update succeeded', results.rows[0]);
         //posts a message to Twilio API at beginning of current_rotation passed in
         if (results.rows[0].current_rotation === 3) {
           console.log('sending twilio notification');
-          sendTwilioNotification(req.body.squad_trap.trap_id, req.body.squad_trap.place_in_line);
+          sendTwilioNotification(
+            req.body.squad_trap.trap_id,
+            req.body.squad_trap.place_in_line
+          );
         }
       });
 
@@ -188,11 +190,11 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     pool
       .query(
         `INSERT INTO "score" ("shooter_event_id", "squad_trap_id", "score")
-              VALUES ${formattedShotData.join(",")};`
+              VALUES ${formattedShotData.join(',')};`
       )
       .then(() => res.sendStatus(200));
   } catch (error) {
-    console.log("Error posting scores:", error);
+    console.log('Error posting scores:', error);
     res.sendStatus(500);
   }
 });
