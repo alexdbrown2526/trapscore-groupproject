@@ -105,8 +105,8 @@ class ViewSquadding extends Component {
     }
 
     if (
-      destination.droppableId != 'unassigned' &&
-      destination.droppableId != source.droppableId
+      destination.droppableId !== 'unassigned' &&
+      destination.droppableId !== source.droppableId
     ) {
       // if destination is already full
       if (

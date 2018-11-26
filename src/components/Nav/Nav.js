@@ -13,7 +13,6 @@ import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 import { USER_ACTIONS } from '../../redux/actions/userActions';
 
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 class Nav extends Component {
   state = {

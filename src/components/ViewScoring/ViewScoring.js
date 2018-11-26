@@ -1,59 +1,53 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { connect } from "react-redux";
-import { List, } from "@material-ui/core/";
-import ScoringItem from "../ScoringItem/ScoringItem";
-import PropTypes from "prop-types";
-import { Typography } from "@material-ui/core";
-import ScoringAdvanceButton from "../ScoringAdvanceButton/ScoringAdvanceButton";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import { List, Typography, Divider } from '@material-ui/core/';
+import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab/';
+import ScoringItem from '../ScoringItem/ScoringItem';
+import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
 
-import "./ViewScoring.css";
-
-import { USER_ACTIONS } from "../../redux/actions/userActions";
-
-import { toast } from "react-toastify";
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+import { toast } from 'react-toastify';
 
 const styles = theme => ({
   toggleContainer: {
-    display: "flex",
-    overflow: "hidden",
-    backfaceVisibility: "hidden",
-    flexDirection: "row",
-    margin: "0",
-    width: "100vw",
+    display: 'flex',
+    overflow: 'hidden',
+    backfaceVisibility: 'hidden',
+    flexDirection: 'row',
+    margin: '0',
+    width: '100vw',
     border: 0,
-    borderRadius: 2
+    borderRadius: 2,
   },
   bigContainer: {
     maxWidth: 2000,
-    maxHeight: 500
+    maxHeight: 500,
   },
   buttons: {
-    height: "60%",
-    width: "20vw",
-    lineHeight: "4vw",
-    fontSize: "4vw",
-    alignItems: "right",
-    display: "flex"
+    height: '60%',
+    width: '20vw',
+    lineHeight: '4vw',
+    fontSize: '4vw',
+    alignItems: 'right',
+    display: 'flex',
   },
   headers: {
-    alignItems: "center",
-    display: "flex",
-    paddingTop: "1%",
-    paddingBottom: "5%",
-    paddingLeft: "37%"
+    paddingBottom: '5%',
   },
   headersTwo: {
-    alignItems: "center",
-    paddingTop: "5%",
-    paddingLeft: "35%",
-    fontSize: "8vw"
+    paddingTop: '5%',
+    fontSize: '8vw',
   },
-  headersThree: {
-    paddingLeft: "38%"
-  }
+  dividerOne: {
+    marginTop: 5,
+    // marginBottom: -5,
+  },
+  dividerTwo: {
+    marginTop: 5,
+    // marginBottom: -3,
+  },
 });
 
 class Scoring extends Component {
@@ -61,13 +55,13 @@ class Scoring extends Component {
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
-    NextRoundButton: false
+    NextRoundButton: false,
   };
 
   selectRound = (event, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: value
+      payload: value,
     });
   };
 
@@ -75,13 +69,15 @@ class Scoring extends Component {
     if (this.props.currentRound < 5) {
       this.props.dispatch({
         type: USER_ACTIONS.SET_CURRENT_ROUND,
-        payload: this.props.currentRound + 1
+        payload: this.props.currentRound + 1,
       });
     } else {
-      toast("Scores Submitted, Posts Rotating", {position: toast.POSITION.TOP_CENTER});
+      toast('Scores Submitted, Posts Rotating', {
+        position: toast.POSITION.TOP_CENTER,
+      });
       this.props.dispatch({
         type: USER_ACTIONS.SUBMIT_SCORES,
-        payload: this.props.selectedTrap
+        payload: this.props.selectedTrap,
       });
     }
   };
@@ -92,8 +88,8 @@ class Scoring extends Component {
       payload: {
         index: index,
         round: round,
-        score: value
-      }
+        score: value,
+      },
     });
   };
 
@@ -102,11 +98,11 @@ class Scoring extends Component {
 
     return (
       <div className={classes.bigContainer}>
-        <Typography className={classes.headersThree} variant="h6">
+        <Typography align="center" variant="h6">
           Rotation: {this.props.selectedTrap.squad_trap.current_rotation}
         </Typography>
-        <hr className="hr2" />
-        <Typography className={classes.headers} variant="h4">
+        <Divider className={classes.dividerTwo} />
+        <Typography className={classes.headers} align="center" variant="h4">
           Rounds
         </Typography>
         <ToggleButtonGroup
@@ -132,26 +128,28 @@ class Scoring extends Component {
           </ToggleButton>
         </ToggleButtonGroup>
         <Typography
-          disableTypography
+          align="center"
+          // disableTypography
           className={classes.headersTwo}
           variant="h5"
         >
-          {" "}
+          {' '}
           Shooters
         </Typography>
-        <hr className="hr" />
+        <Divider className={classes.dividerOne} />
         <List>
-          {this.props.selectedTrap.shooters.map((shooter, index) => {
-            return (
-              <ScoringItem
-                key={shooter.shooter_id}
-                shooter={shooter}
-                round={this.props.currentRound}
-                index={index}
-                setScore={this.setScore}
-              />
-            );
-          })}
+          {this.props.selectedTrap.shooters.length > 2 &&
+            this.props.selectedTrap.shooters.map((shooter, index) => {
+              return (
+                <ScoringItem
+                  key={shooter.shooter_id}
+                  shooter={shooter}
+                  round={this.props.currentRound}
+                  index={index}
+                  setScore={this.setScore}
+                />
+              );
+            })}
         </List>
         <ScoringAdvanceButton
           shooters={this.props.selectedTrap.shooters}
@@ -164,13 +162,13 @@ class Scoring extends Component {
 }
 
 Scoring.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = reduxState => ({
   currentRound: reduxState.currentRound,
   selectedTrap: reduxState.selectedTrap,
-  squads: reduxState.squaddingData
+  squads: reduxState.squaddingData,
 });
 
 const Scores = withStyles(styles)(Scoring);
