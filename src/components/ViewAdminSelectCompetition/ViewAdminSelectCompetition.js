@@ -148,8 +148,6 @@ class ViewAdminSelectCompetition extends Component {
       this.refreshData();
       toast('Competition Submitted!');
     });
-    // console.log(this.state.isVisible);
-    // this.props.data();
   };
 
   handleClose = () => {
@@ -207,33 +205,6 @@ class ViewAdminSelectCompetition extends Component {
 
   render() {
     const { classes } = this.props;
-    //Conditional Rendering if statements/variables
-    let displayItem;
-    let viewItem;
-    // if (this.state.isVisible) {
-    //   displayItem = (
-    //     <Modal
-    //       aria-labelledby="simple-modal-title"
-    //       aria-describedby="simple-modal-description"
-    //       open={this.state.open}
-    //       // onClose={this.handleClose}
-    //       className={classes.modal}
-    //       onBackdropClick={this.handleClose}
-    //       onEscapeKeyDown={this.handleClose}
-    //     >
-    //       <div className={classes.paper}>
-    //         <ViewAdminEditCompetition
-    //           edit={this.state.competitionToEdit}
-    //           data={this.refreshData}
-    //           deleteCompetition={this.deleteCompetition}
-    //         />
-    //       </div>
-    //     </Modal>
-    //   );
-    // }
-    if (this.state.isLogged) {
-      viewItem = this.props.history.push(homeRoute);
-    }
     return (
       <center>
         <div className={classes.list}>
@@ -279,8 +250,6 @@ class ViewAdminSelectCompetition extends Component {
             >
               Log Out
             </Button>
-            {displayItem}
-            {viewItem}
           </List>
           <ViewAdminEditCompetition
             open={this.state.modalOpen}
