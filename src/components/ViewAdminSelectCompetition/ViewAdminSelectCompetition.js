@@ -10,7 +10,7 @@ import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import { Button, List, ListItem, Modal, TextField } from '@material-ui/core/';
+import { Button, List, ListItem, TextField } from '@material-ui/core/';
 
 import { homeRoute } from '../../navigationRoutes';
 
@@ -62,7 +62,7 @@ class ViewAdminSelectCompetition extends Component {
       id: '',
       name: '',
       location: '',
-      date: '',
+      date: moment(),
     },
   };
 
