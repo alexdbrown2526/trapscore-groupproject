@@ -48,7 +48,7 @@ import {
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#800000',},
-    secondary: { main: '#212191',},
+    secondary: { main: '#171769',},
   },
   typography: {
     useNextVariants: true,
