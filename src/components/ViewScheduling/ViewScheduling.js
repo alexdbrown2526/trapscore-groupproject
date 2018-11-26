@@ -5,10 +5,7 @@ import { connect } from 'react-redux';
 import { DragDropContext } from 'react-beautiful-dnd';
 import { reorder, move } from '../../modules/dragAndDrop.strategy';
 
-import { 
-  Divider, 
-  Typography 
-} from '@material-ui/core';
+import { Divider, Typography } from '@material-ui/core';
 
 import HeaderMargins from '../HeaderMargins/HeaderMargins';
 import DndPage from '../DndPage/DndPage';
@@ -197,8 +194,8 @@ class ViewScheduling extends Component {
                 <Typography variant="h4">Unscheduled</Typography>
               </HeaderMargins>
               <Divider />
-              {/* <Button onClick={this.sendData}>Save</Button> */}
               <DndList
+                subheader="Box number / Squad name"
                 box
                 droppableId="unassigned"
                 data={this.state.unassigned.map(item => {

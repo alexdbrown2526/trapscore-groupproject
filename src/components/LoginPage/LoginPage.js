@@ -4,19 +4,11 @@ import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-  Button, 
-  Card, 
-  TextField
-} from '@material-ui/core/'
+import { Button, Card, TextField } from '@material-ui/core/';
 
-import {
-  AccountCircle, 
-  Lock
-} from '@material-ui/icons/'
+import { AccountCircle, Lock } from '@material-ui/icons/';
 
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const styles = theme => ({
   loginCard: {
@@ -25,23 +17,18 @@ const styles = theme => ({
     paddingBottom: '10%',
     width: '30%',
     paddingTop: '3%',
-	  display: 'flex',
-	  overflow: 'hidden',
-	  flexDirection: 'column',
-	  margin: 'auto',
-
-},
+    display: 'flex',
+    overflow: 'hidden',
+    flexDirection: 'column',
+    margin: 'auto',
+  },
 
   loginButton: {
-    marginTop:'4%',
+    marginTop: '4%',
     marginBottom: '4%',
-    variant: 'contained'
-},
-
-
- 
-    
-})
+    variant: 'contained',
+  },
+});
 
 class LoginPage extends Component {
   state = {
@@ -49,9 +36,9 @@ class LoginPage extends Component {
     password: '',
   };
 
-  login = (event) => {
+  login = event => {
     event.preventDefault();
-    toast('Welcome to TrapScore!')
+    toast('Welcome to TrapScore!');
 
     if (this.state.username && this.state.password) {
       this.props.dispatch({
@@ -64,76 +51,78 @@ class LoginPage extends Component {
     } else {
       this.props.dispatch({ type: LOGIN_ACTIONS.LOGIN_INPUT_ERROR });
     }
-  } // end login
+  }; // end login
 
-  handleInputChangeFor = propertyName => (event) => {
+  handleInputChangeFor = propertyName => event => {
     this.setState({
       [propertyName]: event.target.value,
     });
-  }
+  };
 
   render() {
-      const {classes} = this.props;
+    const { classes } = this.props;
 
     return (
-      <div>  
+      <div>
         {this.props.errors.loginMessage && (
-          <h2
-            className="alert"
-            role="alert"
-          >
+          <h2 className="alert" role="alert">
             {this.props.errors.loginMessage}
           </h2>
         )}
         <Card className={classes.loginCard}>
-        <form onSubmit={this.login}>
-        <center>
-          <h1>Login</h1>
-          <div>
-            <label htmlFor="username">
-              <TextField
-              placeholder="Username"
-                type="text"
-                name="username"
-                value={this.state.username}
-                onChange={this.handleInputChangeFor('username')}
-              /> <AccountCircle />
-            </label>
-          </div>
-          <div>
-            <label htmlFor="password">
-              <TextField
-              placeholder="Password"
-                type="password"
-                name="password"
-                value={this.state.password}
-                onChange={this.handleInputChangeFor('password')}
-              /> <Lock />
-            </label>
-          </div>
-          <div>
-            <Button
-            onClick={this.login}
-            variant="contained"
-            type="submit"
-            className={classes.loginButton}>
-              Login
-            </Button>
-            
-          </div>
-        
-          <Button
-          variant="contained"
-            type="button"
-            className="link-button"
-            onClick={() => {this.props.dispatch({type: LOGIN_ACTIONS.SET_TO_REGISTER_MODE})}}
-          >
-            Register
-          </Button>
-          </center>
-        </form>
+          <form onSubmit={this.login}>
+            <center>
+              <h1>Login</h1>
+              <div>
+                <label htmlFor="username">
+                  <TextField
+                    placeholder="Username"
+                    type="text"
+                    name="username"
+                    value={this.state.username}
+                    onChange={this.handleInputChangeFor('username')}
+                  />{' '}
+                  <AccountCircle />
+                </label>
+              </div>
+              <div>
+                <label htmlFor="password">
+                  <TextField
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    value={this.state.password}
+                    onChange={this.handleInputChangeFor('password')}
+                  />{' '}
+                  <Lock />
+                </label>
+              </div>
+              <div>
+                <Button
+                  onClick={this.login}
+                  variant="contained"
+                  type="submit"
+                  className={classes.loginButton}
+                >
+                  Login
+                </Button>
+              </div>
+
+              <Button
+                variant="contained"
+                type="button"
+                className="link-button"
+                onClick={() => {
+                  this.props.dispatch({
+                    type: LOGIN_ACTIONS.SET_TO_REGISTER_MODE,
+                  });
+                }}
+              >
+                Register
+              </Button>
+            </center>
+          </form>
         </Card>
-        
       </div>
     );
   }
