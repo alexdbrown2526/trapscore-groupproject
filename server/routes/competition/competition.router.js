@@ -308,6 +308,10 @@ router.delete('/:id', rejectUnauthenticated, async (req, res) => {
 });
 
 router.put('password/:id', rejectUnauthenticated, (req, res) => {
+  let competitionId = req.params.id;
+  let oldPassword = req.body.oldPassword;
+  let newPassword = req.body.newPassword;
+
   // pool
   //   .query(
   //     `
