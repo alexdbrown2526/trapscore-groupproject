@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import SettingsIcon from '@material-ui/icons/Settings';
+import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {
@@ -72,7 +72,7 @@ class DndEditModal extends Component {
     return (
       <>
         <IconButton onClick={this.handleOpen}>
-          <SettingsIcon />
+          <EditIcon />
         </IconButton>
         <Modal open={this.state.open} onClose={this.handleClose}>
           <div className={classes.modalPositioning}>

@@ -12,7 +12,7 @@ import {
   IconButton
 } from "@material-ui/core";
 
-import SettingsIcon from "@material-ui/icons/Settings";
+import EditIcon from "@material-ui/icons/Edit";
 
 import { toast } from "react-toastify";
 
@@ -38,7 +38,6 @@ const styles = theme => ({
   searchField: {
     height: "5vh",
     fontFamily: "Roboto, sans-serif",
-    marginLeft: "22px"
   },
 
   header: {
@@ -153,7 +152,7 @@ class CompetitionRoster extends Component {
                 this.editShooter(shooter.id);
               }}
             >
-              <SettingsIcon />
+              <EditIcon />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -172,7 +171,6 @@ class CompetitionRoster extends Component {
           <div>
             <List className={classes.scrollable}>
               <h2 className={classes.header}>Competition Roster</h2>
-
               <ListSubheader>
                 <TextField
                   className={classes.searchField}

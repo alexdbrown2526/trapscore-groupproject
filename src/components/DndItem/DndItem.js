@@ -15,6 +15,7 @@ const styles = theme => ({
   avatar: {
     color: '#fff',
     backgroundColor: theme.palette.primary.main,
+
   },
   avatarBox: {
     color: '#fff',
