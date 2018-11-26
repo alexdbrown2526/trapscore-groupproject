@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import axios from "axios";
 import { connect } from "react-redux";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 
 import {
   Switch,
@@ -12,10 +12,7 @@ import {
   Button
 } from "@material-ui/core";
 
-import { 
-  ToggleButtonGroup,  
-  ToggleButton 
-} from "@material-ui/lab/";
+import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab/";
 
 import ReactTable from "react-table";
 import "react-table/react-table.css";
@@ -235,7 +232,9 @@ class ViewResults extends Component {
             control={<Switch onChange={this.togglePagination} />}
             label="Scroll Results"
           />
-          <Button onClick={this.fetchCSV}>Download CSV</Button>
+          <Button variant="contained" color="secondary" onClick={this.fetchCSV}>
+            Download CSV
+          </Button>
         </div>
         <ToggleButtonGroup
           value={this.state.indexOfSelectedEvent}
