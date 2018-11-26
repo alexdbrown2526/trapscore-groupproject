@@ -99,11 +99,11 @@ class ViewAdminSelectCompetition extends Component {
     });
   };
 
-  handleDateChange = event => {
+  handleDateChange = date => {
     this.setState({
       editCompetition: {
         ...this.state.editCompetition,
-        date: moment(event.target.value),
+        date: moment(date),
       },
     });
   };
