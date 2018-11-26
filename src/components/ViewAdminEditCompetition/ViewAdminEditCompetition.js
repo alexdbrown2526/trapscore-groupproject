@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -48,20 +48,20 @@ const ViewAdminEditCompetition = props => {
       onEscapeKeyDown={props.handleClose}
     >
       <div className={classes.paper}>
-        <Typography variant="h4">{props.editCompetition.name}</Typography>
+        <Typography variant="h4">{props.competitionToEdit.name}</Typography>
         <Typography variant="h6" className={classes.headerSpacer}>
           Shareable Registration URL:
         </Typography>
         <Typography variant="body1">
           {process.env.REACT_APP_ROOT_URL}
           /#/registration/
-          {props.editCompetition.id}&{props.editCompetition.secret_url}
+          {props.competitionToEdit.id}&{props.competitionToEdit.secret_url}
         </Typography>
         <Typography variant="h6" className={classes.headerSpacer}>
           Staff Username:
         </Typography>
         <Typography variant="body1">
-          {props.editCompetition.name
+          {props.competitionToEdit.name
             .toLowerCase()
             .split(' ')
             .join('')}
@@ -70,7 +70,7 @@ const ViewAdminEditCompetition = props => {
           Default Password:
         </Typography>
         <Typography variant="body1">
-          {props.editCompetition.name
+          {props.competitionToEdit.name
             .toLowerCase()
             .split(' ')
             .join('') + '-admin'}
@@ -84,12 +84,12 @@ const ViewAdminEditCompetition = props => {
         </Typography>
         <form>
           <TextField
-            value={props.editCompetition.defaultPassword}
+            value={props.competitionToEdit.defaultPassword}
             onChange={props.handleEditChangeFor('defaultPassword')}
             placeholder="Default Password"
           />
           <TextField
-            value={props.editCompetition.newPassword}
+            value={props.competitionToEdit.newPassword}
             onChange={props.handleEditChangeFor('newPassword')}
             placeholder="New Password"
           />
@@ -99,14 +99,14 @@ const ViewAdminEditCompetition = props => {
           </Typography>
 
           <TextField
-            value={props.editCompetition.name}
+            value={props.competitionToEdit.name}
             onChange={props.handleEditChangeFor('name')}
             placeholder="Competition Name"
             type="text"
             name="name"
           />
           <TextField
-            value={props.editCompetition.location}
+            value={props.competitionToEdit.location}
             onChange={props.handleEditChangeFor('location')}
             placeholder="Location"
             type="text"
@@ -116,7 +116,7 @@ const ViewAdminEditCompetition = props => {
             Select Date
           </Typography>
           <DatePicker
-            selected={props.editCompetition.date}
+            selected={props.competitionToEdit.date}
             onChange={props.handleDateChange}
           />
 
@@ -126,7 +126,7 @@ const ViewAdminEditCompetition = props => {
               variant="contained"
               color="primary"
               onClick={event => {
-                props.submitEdits(event);
+                props.editCompetition(event);
                 props.handleClose();
               }}
             >
@@ -134,7 +134,7 @@ const ViewAdminEditCompetition = props => {
             </Button>
             <Button
               onClick={() => {
-                props.deleteCompetition(props.edit.id);
+                props.deleteCompetition(props.competitionToEdit.id);
               }}
             >
               Delete
