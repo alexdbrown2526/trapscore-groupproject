@@ -15,6 +15,8 @@ import { Button, List, ListItem, Modal, TextField } from '@material-ui/core/';
 import { homeRoute } from '../../navigationRoutes';
 
 import ViewAdminEditCompetition from '../ViewAdminEditCompetition/ViewAdminEditCompetition';
+import { toast } from 'react-toastify';
+import moment from 'moment';
 
 const styles = theme => ({
   userDetail: {
@@ -38,24 +40,6 @@ const styles = theme => ({
     float: 'right',
     marginRight: '2%',
   },
-
-  paper: {
-    position: 'absolute',
-    width: theme.spacing.unit * 100,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
-  },
-  modal: {
-    top: '10%',
-    left: '20%',
-    overflowY: 'scroll',
-    height: '575px',
-    width: '60%',
-    fontFamily: 'Roboto, sans-serif',
-    borderStyle: 'solid',
-    outline: 'none',
-  },
   logOutButton: {
     marginLeft: '3%',
   },
@@ -71,14 +55,15 @@ const styles = theme => ({
 
 class ViewAdminSelectCompetition extends Component {
   state = {
-    // Conditional Rendering Variables
-    isVisible: false,
-    isLogged: false,
-    // Modal Variable
-    open: false,
+    modalOpen: false,
     competitions: [],
-    competitionToEdit: Number,
     newCompetitionName: '',
+    editCompetition: {
+      id: '',
+      name: '',
+      location: '',
+      date: '',
+    },
   };
 
   refreshData = () => {
@@ -105,22 +90,74 @@ class ViewAdminSelectCompetition extends Component {
     });
   };
 
+  handleEditChangeFor = propertyName => event => {
+    this.setState({
+      editCompetition: {
+        ...this.state.editCompetition,
+        [propertyName]: event.target.value,
+      },
+    });
+  };
+
+  handleDateChange = event => {
+    this.setState({
+      editCompetition: {
+        ...this.state.editCompetition,
+        date: moment(event.target.value),
+      },
+    });
+  };
+
   editCompetition = selectedCompetition => {
     this.setState({
-      ...this.state,
-      competitionToEdit: selectedCompetition,
-      isVisible: true,
-      open: true,
+      editCompetition: {
+        ...selectedCompetition,
+        date: moment(selectedCompetition.date),
+      },
     });
+    this.handleOpen();
   };
   // Conditional Rendering for Log out
   handleLogOut = event => {
     event.preventDefault();
     this.props.dispatch({ type: LOGIN_ACTIONS.LOGOUT });
+    this.props.history.push(homeRoute);
+  };
+
+  submitEdits = event => {
+    event.preventDefault();
+    const body = this.state.editCompetition;
+
+    axios({
+      method: 'PUT',
+      url: `/api/competition`,
+      data: body,
+    }).then(response => {
+      console.log(response);
+      this.setState({
+        ...this.state,
+        editCompetition: {
+          id: '',
+          name: '',
+          location: '',
+          date: '',
+          defaultPassword: '',
+          newPassword: '',
+        },
+      });
+      this.refreshData();
+      toast('Competition Submitted!');
+    });
+    // console.log(this.state.isVisible);
+    // this.props.data();
   };
 
   handleClose = () => {
-    this.setState({ open: false });
+    this.setState({ modalOpen: false });
+  };
+
+  handleOpen = () => {
+    this.setState({ modalOpen: true });
   };
 
   handleChange = name => event => {
@@ -173,27 +210,27 @@ class ViewAdminSelectCompetition extends Component {
     //Conditional Rendering if statements/variables
     let displayItem;
     let viewItem;
-    if (this.state.isVisible) {
-      displayItem = (
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.open}
-          // onClose={this.handleClose}
-          className={classes.modal}
-          onBackdropClick={this.handleClose}
-          onEscapeKeyDown={this.handleClose}
-        >
-          <div className={classes.paper}>
-            <ViewAdminEditCompetition
-              edit={this.state.competitionToEdit}
-              data={this.refreshData}
-              deleteCompetition={this.deleteCompetition}
-            />
-          </div>
-        </Modal>
-      );
-    }
+    // if (this.state.isVisible) {
+    //   displayItem = (
+    //     <Modal
+    //       aria-labelledby="simple-modal-title"
+    //       aria-describedby="simple-modal-description"
+    //       open={this.state.open}
+    //       // onClose={this.handleClose}
+    //       className={classes.modal}
+    //       onBackdropClick={this.handleClose}
+    //       onEscapeKeyDown={this.handleClose}
+    //     >
+    //       <div className={classes.paper}>
+    //         <ViewAdminEditCompetition
+    //           edit={this.state.competitionToEdit}
+    //           data={this.refreshData}
+    //           deleteCompetition={this.deleteCompetition}
+    //         />
+    //       </div>
+    //     </Modal>
+    //   );
+    // }
     if (this.state.isLogged) {
       viewItem = this.props.history.push(homeRoute);
     }
@@ -245,6 +282,14 @@ class ViewAdminSelectCompetition extends Component {
             {displayItem}
             {viewItem}
           </List>
+          <ViewAdminEditCompetition
+            open={this.state.modalOpen}
+            handleClose={this.handleClose}
+            submitEdits={this.submitEdits}
+            editCompetition={this.state.editCompetition}
+            handleEditChangeFor={this.handleEditChangeFor}
+            handleDateChange={this.handleDateChange}
+          />
         </div>
       </center>
     );
