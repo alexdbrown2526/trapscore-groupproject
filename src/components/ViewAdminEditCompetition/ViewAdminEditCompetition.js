@@ -1,21 +1,12 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { compose } from 'redux';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import { selectCompetitionRoute } from '../../navigationRoutes';
-
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { toast } from 'react-toastify';
 
-import { Button, TextField } from '@material-ui/core';
-
-import moment from "moment";
+import { Button, Modal, TextField, Typography } from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -29,165 +20,133 @@ const styles = theme => ({
   dense: {
     marginTop: 16,
   },
+  paper: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: `translate(-50%, -50%)`,
+    minWidth: theme.spacing.unit * 50,
+    maxWidth: '80%',
+    maxHeight: '90%',
+    overflowY: 'scroll',
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
+  },
+  headerSpacer: {
+    paddingTop: theme.spacing.unit * 4,
+  },
 });
 
 class ViewAdminEditCompetition extends Component {
-  state = {
-    date: '',
-    name: '',
-    location: '',
-    defaultPassword: '',
-    newPassword: '',
-    // Conditional Rendering Variable
-    isVisible: false,
-    //
-  };
-
-  handleChangeFor = propertyName => event => {
-    this.setState({
-      ...this.state,
-      [propertyName]: event.target.value,
-    });
-  };
-
-  handleChange = date => {
-    this.setState({
-      date: date,
-    });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const body = {
-      id: this.props.edit.id,
-      date: this.state.date,
-      name: this.state.name,
-      location: this.state.location,
-    };
-
-    axios({
-      method: 'PUT',
-      url: `/api/competition`,
-      data: body,
-    }).then(response => {
-      console.log(response);
-      this.setState({
-        ...this.state,
-        id: "",
-        date: "",
-        name: "",
-        location: "",
-        isVisible: false
-      })
-      toast("Competition Submitted!");
-    });
-    console.log(this.state.isVisible);
-    this.props.data();
-  };
-
-  componentDidMount(){
-    this.setState({
-      ...this.state,
-      name: this.props.edit.name,
-      location: this.props.edit.location,
-      date: moment(this.props.edit.date)
-        })
-  }
-
   render() {
-    //Conditional Rendering if statement/variable
-    let viewItem;
-    if (this.state.isVisible) {
-      viewItem = this.props.history.push(selectCompetitionRoute);
-    }
     const { classes } = this.props;
     return (
-      <div className={classes.modal}>
-        <h1>Edit Competition</h1>
-        <h2>{this.props.edit.name} </h2>
-        <h3>Shareable Registration URL:</h3>
-        <p>
-          {process.env.REACT_APP_ROOT_URL}
-          /#/registration/
-          {this.props.edit.id}&{this.props.edit.secret_url}
-        </p>
-        <p>
-          Staff Username:{' '}
-          {this.props.edit.name
-            .toLowerCase()
-            .split(' ')
-            .join('')}
-        </p>
-        <p>
-          Default Password:{' '}
-          {this.props.edit.name
-            .toLowerCase()
-            .split(' ')
-            .join('') + '-admin'}
-        </p>
-        <h3>Change Password</h3>
-        <p>
-          To change the password, type the default password and the new desired
-          password into the text fields below.
-        </p>
-        <form>
-          <input
-            value={this.state.defaultPassword}
-            onChange={this.handleChangeFor('defaultPassword')}
-            placeholder="Default Password"
-          />
-          <input
-            value={this.state.newPassword}
-            onChange={this.handleChangeFor('newPassword')}
-            placeholder="New Password"
-          />
+      <Modal
+        open={this.props.open}
+        onClose={this.props.handleClose}
+        onBackdropClick={this.props.handleClose}
+        onEscapeKeyDown={this.props.handleClose}
+      >
+        <div className={classes.paper}>
+          <Typography variant="h4">
+            {this.props.editCompetition.name}
+          </Typography>
+          <Typography variant="h6" className={classes.headerSpacer}>
+            Shareable Registration URL:
+          </Typography>
+          <Typography variant="body1">
+            {process.env.REACT_APP_ROOT_URL}
+            /#/registration/
+            {this.props.editCompetition.id}&
+            {this.props.editCompetition.secret_url}
+          </Typography>
+          <Typography variant="h6" className={classes.headerSpacer}>
+            Staff Username:
+          </Typography>
+          <Typography variant="body1">
+            {this.props.editCompetition.name
+              .toLowerCase()
+              .split(' ')
+              .join('')}
+          </Typography>
+          <Typography variant="h6" className={classes.headerSpacer}>
+            Default Password:
+          </Typography>
+          <Typography variant="body1">
+            {this.props.editCompetition.name
+              .toLowerCase()
+              .split(' ')
+              .join('') + '-admin'}
+          </Typography>
+          <Typography variant="h6" className={classes.headerSpacer}>
+            Change Password
+          </Typography>
+          <Typography variant="body1">
+            To change the password, type the default password and the new
+            desired password into the text fields below.
+          </Typography>
+          <form>
+            <TextField
+              value={this.props.editCompetition.defaultPassword}
+              onChange={this.props.handleEditChangeFor('defaultPassword')}
+              placeholder="Default Password"
+            />
+            <TextField
+              value={this.props.editCompetition.newPassword}
+              onChange={this.props.handleEditChangeFor('newPassword')}
+              placeholder="New Password"
+            />
 
-          <h3>Add or Edit Competition</h3>
+            <Typography variant="h6" className={classes.headerSpacer}>
+              Edit Competition Details
+            </Typography>
 
-          <TextField
-            value={this.state.name}
-            onChange={this.handleChangeFor("name")}
-            placeholder="Competition Name"
-            required={true}
-            required
-            type="text"
-            name="name"
-          />
-          <input
-            value={this.state.location}
-            onChange={this.handleChangeFor("location")}
-            placeholder="Location"
-            required
-            required={true}
-            type="text"
-            name="location"
-          />
-        <h2>Select Date</h2>
-        <DatePicker selected={this.state.date} onChange={this.handleChange} required={true} required/>
+            <TextField
+              value={this.props.editCompetition.name}
+              onChange={this.props.handleEditChangeFor('name')}
+              placeholder="Competition Name"
+              type="text"
+              name="name"
+            />
+            <TextField
+              value={this.props.editCompetition.location}
+              onChange={this.props.handleEditChangeFor('location')}
+              placeholder="Location"
+              type="text"
+              name="location"
+            />
+            <Typography variant="h6" className={classes.headerSpacer}>
+              Select Date
+            </Typography>
+            <DatePicker
+              selected={this.props.editCompetition.date}
+              onChange={this.props.handleDateChange}
+            />
 
-        <div>
-          <Button
-          type="submit"
-            variant="contained"
-            color="primary"
-            onClick={this.handleSubmit}
-          >
-            Submit
-          </Button>
-          <Button
-            // variant="contained"
-            // color="primary"
-            onClick={() => {
-              this.props.deleteCompetition(this.props.edit.id);
-            }}
-          >
-            Delete
-          </Button>
+            <div>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                onClick={() => {
+                  this.props.submitEdits();
+                  this.props.handleClose();
+                }}
+              >
+                Submit
+              </Button>
+              <Button
+                onClick={() => {
+                  this.props.deleteCompetition(this.props.edit.id);
+                }}
+              >
+                Delete
+              </Button>
+            </div>
+          </form>
         </div>
-        {viewItem}
-        </form>
-
-      </div>
+      </Modal>
     );
   }
 }
@@ -196,12 +155,4 @@ ViewAdminEditCompetition.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = reduxState => ({
-  reduxState,
-});
-
-export default compose(
-  connect(mapStateToProps),
-  withRouter,
-  withStyles(styles)
-)(ViewAdminEditCompetition);
+export default withStyles(styles)(ViewAdminEditCompetition);
