@@ -54,8 +54,18 @@ router.post('/new/', rejectUnauthenticated, (req, res) => {
     });
 });
 
-router.delete('/:id', rejectUnauthenticated, (req, res) => {
+router.delete('/:id', rejectUnauthenticated, async (req, res) => {
   console.log('delete hit:', req.params.id);
+
+  await pool.query(
+    `
+      UPDATE "squad_trap"
+      SET "trap_id" = null
+      WHERE "trap_id" = $1;
+      `,
+    [req.params.id]
+  );
+
   pool
     .query(
       `

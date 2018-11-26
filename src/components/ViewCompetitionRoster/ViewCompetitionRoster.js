@@ -9,8 +9,8 @@ import {
   ListItemSecondaryAction,
   ListSubheader,
   TextField,
-  IconButton
-  
+  IconButton,
+  ListSubheader,
 } from "@material-ui/core";
 
 import SettingsIcon from "@material-ui/icons/Settings";
