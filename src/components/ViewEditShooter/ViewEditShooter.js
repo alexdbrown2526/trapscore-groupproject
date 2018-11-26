@@ -2,12 +2,7 @@ import React, { Component } from 'react';
 
 import { withStyles } from '@material-ui/core/styles';
 
-import {
-  Button,
-  List,
-  ListItem,
-  TextField,
-} from '@material-ui/core/';
+import { Button, List, ListItem, TextField } from '@material-ui/core/';
 
 const styles = theme => ({
   field: {
@@ -18,7 +13,7 @@ const styles = theme => ({
   },
 
   editHeader: {
-      marginLeft: '7%'
+    marginLeft: '7%',
   },
 
   editform: {
@@ -56,7 +51,7 @@ class ViewEditShooter extends Component {
   };
 
   componentDidUpdate(prevProps) {
-    if (this.props != prevProps) {
+    if (this.props !== prevProps) {
       this.setState({
         ...this.props.selectedShooter,
       });
@@ -69,7 +64,7 @@ class ViewEditShooter extends Component {
     return (
       <div>
         <form className={classes.editform}>
-        <h2 className={classes.editHeader}>Edit Shooter</h2>
+          <h2 className={classes.editHeader}>Edit Shooter</h2>
 
           <List dense>
             <ListItem>
@@ -84,7 +79,7 @@ class ViewEditShooter extends Component {
             </ListItem>
             <ListItem>
               <TextField
-                 label="Last Name"
+                label="Last Name"
                 className="textfield"
                 type="text"
                 name="searchText"
@@ -94,7 +89,7 @@ class ViewEditShooter extends Component {
             </ListItem>
             <ListItem>
               <TextField
-              label="E-mail"
+                label="E-mail"
                 className="textfield"
                 type="text"
                 name="searchText"

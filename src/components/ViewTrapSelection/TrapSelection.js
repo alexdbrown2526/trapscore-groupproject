@@ -1,56 +1,55 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { USER_ACTIONS } from "../../redux/actions/userActions";
+import { USER_ACTIONS } from '../../redux/actions/userActions';
 
-import PropTypes from "prop-types";
+import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-import { 
-  Button, 
-  Select, 
-  MenuItem, 
-  Typography, 
-  ListItem 
-} from "@material-ui/core/";
+import {
+  Button,
+  Select,
+  MenuItem,
+  Typography,
+  ListItem,
+} from '@material-ui/core/';
 
-import { scoringRoute } from "../../navigationRoutes";
+import { scoringRoute } from '../../navigationRoutes';
 
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from 'react-toastify';
 
 const styles = theme => ({
   selectBox: {
-    width: "100%",
-    paddingTop: "20vw",
+    width: '100%',
+    paddingTop: '20vw',
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
-    height: "40%"
+    height: '40%',
   },
   centerButtonFixed: {
-    position: "fixed",
-    left: "50%",
+    position: 'fixed',
+    left: '50%',
     bottom: theme.spacing.unit * 2,
     transform: `translate(-50%, 0%)`,
-    width: "85%"
+    width: '85%',
   },
   header: {
-    textAlign: "center"
+    textAlign: 'center',
   },
   headerFour: {
     paddingTop: '10vw',
-    textAlign:"center"
-  }
+    textAlign: 'center',
+  },
 });
 
 class TrapSelection extends Component {
   state = {
     // Value for dropdown selection
-    value: "",
+    value: '',
     // Conditional Rendering Variable
     isVisible: false,
-    trap: "",
-    counter: 0
+    trap: '',
+    counter: 0,
   };
   // Get available Traps
   componentDidMount() {
@@ -58,11 +57,11 @@ class TrapSelection extends Component {
   }
 
   handleChangeFor = propertyName => event => {
-    toast("Trap Selected");
+    toast('Trap Selected');
     this.setState({
       ...this.state,
       [propertyName]: event.target.value,
-      counter: 0
+      counter: 0,
     });
   };
   // Conditional Rendering function
@@ -70,13 +69,13 @@ class TrapSelection extends Component {
   handleSubmit = event => {
     this.props.dispatch({
       type: USER_ACTIONS.FETCH_SELECTED_TRAP,
-      payload: this.state.trap
+      payload: this.state.trap,
     });
     event.preventDefault();
     this.setState({
       ...this.state,
       isVisible: !this.state.isVisible,
-      trap: ""
+      trap: '',
     });
   };
 
@@ -101,7 +100,7 @@ class TrapSelection extends Component {
               <Select
                 className={classes.selectBox}
                 value={this.state.trap}
-                onChange={this.handleChangeFor("trap")}
+                onChange={this.handleChangeFor('trap')}
               >
                 {this.props.traps.map(trap => {
                   return (
@@ -131,13 +130,13 @@ class TrapSelection extends Component {
 }
 
 TrapSelection.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = reduxState => ({
   reduxState,
   traps: reduxState.traps,
-  user: reduxState.user
+  user: reduxState.user,
 });
 
 const Traps = withStyles(styles)(TrapSelection);
