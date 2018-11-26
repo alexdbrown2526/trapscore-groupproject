@@ -13,7 +13,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { toast } from 'react-toastify';
 
-import { Button } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
+
+import moment from "moment";
 
 const styles = theme => ({
   container: {
@@ -56,7 +58,6 @@ class ViewAdminEditCompetition extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    toast('Competition Submitted!');
     const body = {
       id: this.props.edit.id,
       date: this.state.date,
@@ -72,16 +73,26 @@ class ViewAdminEditCompetition extends Component {
       console.log(response);
       this.setState({
         ...this.state,
-        id: '',
-        date: '',
-        name: '',
-        location: '',
-        isVisible: false,
-      });
+        id: "",
+        date: "",
+        name: "",
+        location: "",
+        isVisible: false
+      })
+      toast("Competition Submitted!");
     });
     console.log(this.state.isVisible);
     this.props.data();
   };
+
+  componentDidMount(){
+    this.setState({
+      ...this.state,
+      name: this.props.edit.name,
+      location: this.props.edit.location,
+      date: moment(this.props.edit.date)
+        })
+  }
 
   render() {
     //Conditional Rendering if statement/variable
@@ -133,22 +144,30 @@ class ViewAdminEditCompetition extends Component {
 
           <h3>Add or Edit Competition</h3>
 
-          <input
+          <TextField
             value={this.state.name}
-            onChange={this.handleChangeFor('name')}
-            placeholder={this.props.edit.name}
+            onChange={this.handleChangeFor("name")}
+            placeholder="Competition Name"
+            required={true}
+            required
+            type="text"
+            name="name"
           />
           <input
             value={this.state.location}
-            onChange={this.handleChangeFor('location')}
-            placeholder={this.props.edit.location}
+            onChange={this.handleChangeFor("location")}
+            placeholder="Location"
+            required
+            required={true}
+            type="text"
+            name="location"
           />
-        </form>
         <h2>Select Date</h2>
-        <DatePicker selected={this.state.date} onChange={this.handleChange} />
+        <DatePicker selected={this.state.date} onChange={this.handleChange} required={true} required/>
 
         <div>
           <Button
+          type="submit"
             variant="contained"
             color="primary"
             onClick={this.handleSubmit}
@@ -166,6 +185,8 @@ class ViewAdminEditCompetition extends Component {
           </Button>
         </div>
         {viewItem}
+        </form>
+
       </div>
     );
   }
