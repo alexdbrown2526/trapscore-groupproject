@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import axios from "axios";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 
 import {
   List,
@@ -9,10 +9,10 @@ import {
   ListItemSecondaryAction,
   TextField,
   IconButton,
-  ListSubheader,
+  ListSubheader
 } from "@material-ui/core";
 
-import SettingsIcon from "@material-ui/icons/Settings";
+import EditIcon from "@material-ui/icons/Edit";
 
 import { toast } from "react-toastify";
 
@@ -32,13 +32,12 @@ const styles = theme => ({
   },
 
   scrollable: {
-    overflowY: 'auto'
+    overflowY: "auto"
   },
 
   searchField: {
     height: "5vh",
     fontFamily: "Roboto, sans-serif",
-    marginLeft: "22px"
   },
 
   header: {
@@ -135,12 +134,12 @@ class CompetitionRoster extends Component {
 
   //Able to filter roster by search field. Select a user and edit their information
 
-  render() { 
+  render() {
     const { classes } = this.props;
     const list = this.state.shooters
       .filter(
         shooter =>
-          this.state.input === '' ||
+          this.state.input === "" ||
           shooter.last_name.toLowerCase().includes(this.state.input) ||
           shooter.first_name.toLowerCase().includes(this.state.input)
       )
@@ -153,7 +152,7 @@ class CompetitionRoster extends Component {
                 this.editShooter(shooter.id);
               }}
             >
-              <SettingsIcon />
+              <EditIcon />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -169,24 +168,23 @@ class CompetitionRoster extends Component {
           />
         </div>
         <div className={classes.roster}>
-        <div >
-        <List className={classes.scrollable}>
+          <div>
+            <List className={classes.scrollable}>
+              <h2 className={classes.header}>Competition Roster</h2>
+              <ListSubheader>
+                <TextField
+                  className={classes.searchField}
+                  placeholder="Search by name"
+                  variant="outlined"
+                  value={this.state.input}
+                  type="text"
+                  onChange={this.onFilterChange}
+                />
+              </ListSubheader>
+              <hr />
 
-        <h2 className={classes.header}>Competition Roster</h2>
-        
-        <ListSubheader>
-          <TextField
-            className={classes.searchField}
-            placeholder="Search by name"
-            variant="outlined"
-            value={this.state.input}
-            type="text"
-            onChange={this.onFilterChange}
-          />
-          </ListSubheader>
-          
-            {list}
-          </List>
+              {list}
+            </List>
           </div>
         </div>
       </div>

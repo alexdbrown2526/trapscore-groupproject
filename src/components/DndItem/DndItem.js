@@ -15,11 +15,14 @@ const styles = theme => ({
   avatar: {
     color: '#fff',
     backgroundColor: theme.palette.primary.main,
+    boxShadow: theme.shadows[5],
+
   },
   avatarBox: {
     color: '#fff',
     backgroundColor: theme.palette.secondary.main,
     borderRadius: 10,
+    boxShadow: theme.shadows[5],
   },
 });
 

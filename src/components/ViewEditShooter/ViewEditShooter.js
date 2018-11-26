@@ -70,6 +70,7 @@ class ViewEditShooter extends Component {
       <div>
         <form className={classes.editform}>
         <h2 className={classes.editHeader}>Edit Shooter</h2>
+        <hr></hr>
 
           <List dense>
             <ListItem>

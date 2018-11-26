@@ -13,11 +13,13 @@ import {
 const styles = theme => ({
   card: {
     margin: theme.spacing.unit * 2,
-    minWidth: theme.spacing.unit * 30
+    minWidth: theme.spacing.unit * 30,
+    boxShadow: theme.shadows[5],
   },
   cardNoMargin: {
     // margin: theme.spacing.unit * 3,
-    minWidth: theme.spacing.unit * 30
+    minWidth: theme.spacing.unit * 30,
+    boxShadow: theme.shadows[5],
   }
 });
 
@@ -26,6 +28,7 @@ const DndCard = props => {
   return (
     <Card className={props.noMargin ? classes.cardNoMargin : classes.card}>
       <CardHeader action={props.cornerButton} title={title} />
+      <hr></hr>
       <CardContent>{props.children}</CardContent>
       <CardActions>{props.cardActions ? props.cardActions : null}</CardActions>
     </Card>
