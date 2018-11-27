@@ -1,15 +1,17 @@
-const express = require("express");
-const pool = require("../../modules/pool");
-const copyTo = require("pg-copy-streams").to;
-const { rejectUnauthenticated } = require('../../modules/authentication-middleware');
+const express = require('express');
+const pool = require('../../modules/pool');
+const copyTo = require('pg-copy-streams').to;
+const {
+  rejectUnauthenticated,
+} = require('../../modules/authentication-middleware');
 const router = express.Router();
 
-const routerName = "results.router.js";
+const routerName = 'results.router.js';
 
 /**
  * GET route template
  */
-router.get("/", rejectUnauthenticated, (req, res) => {
+router.get('/', rejectUnauthenticated, (req, res) => {
   let competition_id = req.user.competition_id;
   let toSend = [];
 
@@ -55,9 +57,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
               currentEvent.results = results.rows;
             })
             .catch(error => {
-              console.log("### Error in:", routerName);
+              console.log('### Error in:', routerName);
               console.log(
-                "### Error getting scores for event with id:",
+                '### Error getting scores for event with id:',
                 currentEvent.id
               );
               console.log(error);
@@ -70,9 +72,9 @@ router.get("/", rejectUnauthenticated, (req, res) => {
       });
     })
     .catch(error => {
-      console.log("### Error in:", routerName);
+      console.log('### Error in:', routerName);
       console.log(
-        "### Error getting events for competition with id:",
+        '### Error getting events for competition with id:',
         competition_id
       );
       console.log(error);
@@ -80,14 +82,14 @@ router.get("/", rejectUnauthenticated, (req, res) => {
 });
 
 router.get('/export', rejectUnauthenticated, (req, res) => {
-  console.log('/api/competition/results/export GET hit for competition id:', req.user.competition_id)
-  const compId = req.user.competition_id
+  const compId = req.user.competition_id;
   pool.connect(function(err, client, done) {
     if (err) {
-      console.log("error exporting csv:", err);
+      console.log('error exporting csv:', err);
       res.sendStatus(500);
     }
-    const stream = client.query(copyTo(`
+    const stream = client.query(
+      copyTo(`
     COPY (
       SELECT 
         "shooter"."first_name" as "First Name", 
@@ -106,22 +108,21 @@ router.get('/export', rejectUnauthenticated, (req, res) => {
       GROUP BY "shooter"."id", "event"."id"
     ) 
     TO STDOUT WITH (FORMAT csv, HEADER true);
-    `));
+    `)
+    );
     stream.pipe(res);
-    stream.on("end", done);
-    stream.on("error", done);
-  })
-    
-    
+    stream.on('end', done);
+    stream.on('error', done);
   });
-  
-    // .then(results => {
-    //   res.send(results.rows);
-    // })
-    // .catch(error => {
-    //   console.log("Error exporting competition scores summary CSV file", error);
-    //   res.sendStatus(500);
-    // });
+});
+
+// .then(results => {
+//   res.send(results.rows);
+// })
+// .catch(error => {
+//   console.log("Error exporting competition scores summary CSV file", error);
+//   res.sendStatus(500);
+// });
 // })
 
 module.exports = router;

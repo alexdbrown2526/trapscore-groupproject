@@ -40,7 +40,6 @@ class ViewScheduling extends Component {
       url: `/api/competition/scheduling/`,
     })
       .then(response => {
-        console.log(response);
         this.setState({ ...response.data });
         return response;
       })
@@ -73,9 +72,6 @@ class ViewScheduling extends Component {
 
   onDragEnd = result => {
     const { source, destination } = result;
-
-    console.log('source:', source);
-    console.log('destination:', destination);
 
     // dropped outside the list
     if (!destination) {
@@ -114,8 +110,6 @@ class ViewScheduling extends Component {
         source,
         destination
       );
-
-      console.log(result);
 
       if (source.droppableId === 'unassigned') {
         this.setState({

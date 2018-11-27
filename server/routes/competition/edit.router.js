@@ -6,7 +6,6 @@ const {
 const router = express.Router();
 
 router.put('/squad/:id', rejectUnauthenticated, (req, res) => {
-  console.log(req.body.name, req.params.id);
   pool
     .query(
       `UPDATE "squad"
@@ -22,7 +21,6 @@ router.put('/squad/:id', rejectUnauthenticated, (req, res) => {
 });
 
 router.put('/trap/:id', rejectUnauthenticated, (req, res) => {
-  console.log(req.body.name, req.params.id);
   pool
     .query(
       `UPDATE "trap"

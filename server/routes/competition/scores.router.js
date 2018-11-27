@@ -1,10 +1,10 @@
-const express = require("express");
-const pool = require("../../modules/pool");
+const express = require('express');
+const pool = require('../../modules/pool');
 const router = express.Router();
 const {
-  rejectUnauthenticated
-} = require("../../modules/authentication-middleware");
-const sendTwilioNotification = require("../../modules/twilio-notifications");
+  rejectUnauthenticated,
+} = require('../../modules/authentication-middleware');
+const sendTwilioNotification = require('../../modules/twilio-notifications');
 
 /**
  * GET route template
@@ -55,7 +55,7 @@ const sendTwilioNotification = require("../../modules/twilio-notifications");
   ]
 }
  */
-router.get("/", rejectUnauthenticated, async (req, res, next) => {
+router.get('/', rejectUnauthenticated, async (req, res, next) => {
   //assumes that req.body.id is the trap id AND that the lowest value of 'place_in_line' is actually the next in line (i.e. when scores are submitted, place_in_line needs to be set to null)
   let selectedTrap;
   let squadTrap;
@@ -133,17 +133,13 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
     assembledResponse = {
       trap: selectedTrap,
       squad_trap: squadTrap,
-      shooters: shooterList
+      shooters: shooterList,
     };
-    // console.log(
-    //   "assembled response ready to send to client:",
-    //   assembledResponse
-    // );
 
     res.send(assembledResponse);
   } catch (error) {
     console.log(
-      "##Error assembling score object. More information below:",
+      '##Error assembling score object. More information below:',
       error
     );
     res.sendStatus(500);
@@ -154,7 +150,7 @@ router.get("/", rejectUnauthenticated, async (req, res, next) => {
  * inserts 5 scores for each member of a squad into the score table
  * increment current_rotation in squad_trap (up to a maximum of 6)
  */
-router.post("/", rejectUnauthenticated, (req, res) => {
+router.post('/', rejectUnauthenticated, (req, res) => {
   const squad_trap_id = req.body.squad_trap.id;
   try {
     pool
@@ -170,10 +166,10 @@ router.post("/", rejectUnauthenticated, (req, res) => {
         RETURNING "current_rotation";`
       )
       .then(results => {
-        console.log("current rotation update succeeded", results.rows[0]);
+        console.log('current rotation update succeeded', results.rows[0]);
         //posts a message to Twilio API at beginning of current_rotation passed in
         if (results.rows[0].current_rotation === 4) {
-          console.log("sending twilio notification");
+          console.log('sending twilio notification');
           sendTwilioNotification(
             req.body.squad_trap.trap_id,
             req.body.squad_trap.place_in_line
@@ -194,11 +190,11 @@ router.post("/", rejectUnauthenticated, (req, res) => {
     pool
       .query(
         `INSERT INTO "score" ("shooter_event_id", "squad_trap_id", "score")
-              VALUES ${formattedShotData.join(",")};`
+              VALUES ${formattedShotData.join(',')};`
       )
       .then(() => res.sendStatus(200));
   } catch (error) {
-    console.log("Error posting scores:", error);
+    console.log('Error posting scores:', error);
     res.sendStatus(500);
   }
 });
