@@ -78,13 +78,12 @@ class ViewAdminSelectCompetition extends Component {
       method: 'GET',
       url: '/api/competition',
     }).then(response => {
-      let newCompetitions = [];
-      for (let competition of response.data) {
-        newCompetitions.push({
+      let newCompetitions = response.data.map(competition => {
+        return {
           ...competition,
           date: moment(competition.date),
-        });
-      }
+        };
+      });
       this.setState({
         ...this.state,
         competitions: newCompetitions,
