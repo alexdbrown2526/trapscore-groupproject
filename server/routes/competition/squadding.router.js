@@ -10,7 +10,6 @@ const router = express.Router();
  * TODO: add another query to get individual squad lists and format the response
  */
 router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
-  console.log('event_id', req.params.event_id);
   let dataToSend = {};
   try {
     //Returns an array of all unsquadded shooters associated with the currently selected event
@@ -74,7 +73,6 @@ router.get('/:event_id', rejectUnauthenticated, async (req, res) => {
  */
 router.put('/:event_id', rejectUnauthenticated, (req, res) => {
   newSquadding = req.body;
-  console.log('newSquadding:', newSquadding);
 
   let unassigned = { members: [...newSquadding.unassigned], id: null };
   let squadsToLoop = [...newSquadding.squads.slice(0), unassigned];
