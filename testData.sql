@@ -109,7 +109,7 @@ VALUES
 	('Benedict','Castaneda','elit.pellentesque@laciniaorci.org','(652) 123-4102',24,1696081),
 	('Harlan','Hartman','parturient.montes.nascetur@Aeneanmassa.org','(124) 988-1862',88,1624032),
 	('Lynn','Marshall','sit.amet.risus@dolor.co.uk','(893) 441-4680',96,1697011),
-	('Yoko','Mayo','fringilla.Donec.feugiat@arcu.org','(227) 133-5098',3,1627041),
+	('Yoko','Mayo','fringilla.Donec.feugiat@arcu.org','(227) 133-5098',3,1627041)
 ;
 
 --Test data for user
@@ -429,10 +429,6 @@ INSERT INTO "shooter_event" ("event_id", "shooter_id", "squad_id", "post_positio
 VALUES
 	--shooter_event for competition 1
 		--for Singles
-		(1, 101, null, null),
-		(1, 102, null, null),
-		(1, 103, null, null),
-		(1, 104, null, null),
 		(1,1,1,1),
 		(1,2,3,3),
 		(1,3,3,4),
