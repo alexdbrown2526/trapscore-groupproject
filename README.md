@@ -48,7 +48,14 @@ While you're in your new `.env` file, take the time to replace `superDuperSecret
 - Run `npm run client`
 - Navigate to `localhost:3000`
 
-[[Do we give instructions about creating a user account?]]
+### Create Test Account
+
+1. Navigate to the login page
+1. Register an account
+1. In Postico (or another Postgres client), manually add a valid competition ID to your new account and set 'is_admin' to TRUE in the 'person' table
+1. You should now be able to access admin functionality at http://localhost:3000/#/select-competition as well as all staff functionality for the competition associated with your account.
+
+**Please note: registration URLs within the provided test data may not function properly, but they should work for any competitions created within the app**
 
 ## Deployment
 
