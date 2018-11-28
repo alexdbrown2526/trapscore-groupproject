@@ -83,12 +83,12 @@ class ViewShooterRegistration extends Component {
       id: this.props.match.params.id,
       hash: this.props.match.params.hash,
     };
-
+    //handicaps can only have a value between 16-27
     if (this.state.handicap < 16 || this.state.handicap > 27) {
       alert('You must choose a number between 16 and 27');
       return false;
     }
-
+    //Phone numbers must be entered without dashes
     if (this.state.phone.includes('-')) {
       alert('Enter a phone number without dashes');
     }
@@ -152,6 +152,12 @@ class ViewShooterRegistration extends Component {
     const { classes } = this.props;
 
     return (
+      /* A new shooter will enter in their information and be saved to database.
+      Phone number must be in 1231231234 format, without dashes between. Handicap
+      is a shooter's skill level and will be needed to squad with shooters of
+      similar skill. ATA# comes from the Amateur Trapshooting Association, a 7
+      digit number can be entered. Check the competition's events to participate
+        */
       <div>
         <Card className={classes.registerCard}>
           <center>
