@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
 const styles = theme => ({
   leftSide: {
-    backgroundColor: 'lightgray',
-    width: '20%',
+    backgroundColor: "lightgray",
+    width: "20%",
     minWidth: 250,
-    height: '100vh',
-    overflowY: 'scroll',
-  },
+    height: "100vh",
+    overflowY: "scroll"
+  }
 });
 
 const DndLeftSide = props => {
@@ -19,7 +19,7 @@ const DndLeftSide = props => {
 };
 
 DndLeftSide.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(DndLeftSide);

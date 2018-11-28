@@ -1,41 +1,41 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 
-import { Button, List, ListItem, TextField } from '@material-ui/core/';
+import { Button, List, ListItem, TextField } from "@material-ui/core/";
 
 const styles = theme => ({
   field: {
-    float: 'right',
+    float: "right"
   },
   saveButton: {
-    marginTop: '8%',
+    marginTop: "8%"
   },
 
   editHeader: {
-    marginLeft: '7%',
+    marginLeft: "7%"
   },
 
   editform: {
-    float: 'right',
-    marginRight: '10%',
-    marginTop: '.125vh',
-    borderStyle: 'solid',
-    padding: '20px',
-    fontFamily: 'Roboto, sans-serif',
-    height: '83vh',
-  },
+    float: "right",
+    marginRight: "10%",
+    marginTop: ".125vh",
+    borderStyle: "solid",
+    padding: "20px",
+    fontFamily: "Roboto, sans-serif",
+    height: "83vh"
+  }
 });
 
 class ViewEditShooter extends Component {
   initialState = {
-    id: '',
-    first_name: '',
-    last_name: '',
-    email: '',
-    handicap: '',
-    phone: '',
-    ata_number: '',
+    id: "",
+    first_name: "",
+    last_name: "",
+    email: "",
+    handicap: "",
+    phone: "",
+    ata_number: ""
   };
   state = this.initialState;
 
@@ -46,14 +46,14 @@ class ViewEditShooter extends Component {
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
   };
 
   componentDidUpdate(prevProps) {
     if (this.props !== prevProps) {
       this.setState({
-        ...this.props.selectedShooter,
+        ...this.props.selectedShooter
       });
     }
   }
@@ -64,7 +64,7 @@ class ViewEditShooter extends Component {
     return (
       <div>
         <form className={classes.editform}>
-        <h2 className={classes.editHeader}>Edit Shooter</h2>
+          <h2 className={classes.editHeader}>Edit Shooter</h2>
 
           <List dense>
             <ListItem>
@@ -74,7 +74,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.first_name}
-                onChange={this.handleChangeFor('first_name')}
+                onChange={this.handleChangeFor("first_name")}
               />
             </ListItem>
             <ListItem>
@@ -84,7 +84,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.last_name}
-                onChange={this.handleChangeFor('last_name')}
+                onChange={this.handleChangeFor("last_name")}
               />
             </ListItem>
             <ListItem>
@@ -94,7 +94,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.email}
-                onChange={this.handleChangeFor('email')}
+                onChange={this.handleChangeFor("email")}
               />
             </ListItem>
             <ListItem>
@@ -104,7 +104,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.phone}
-                onChange={this.handleChangeFor('phone')}
+                onChange={this.handleChangeFor("phone")}
               />
             </ListItem>
             <ListItem>
@@ -114,7 +114,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.handicap}
-                onChange={this.handleChangeFor('handicap')}
+                onChange={this.handleChangeFor("handicap")}
               />
             </ListItem>
             <ListItem>
@@ -124,7 +124,7 @@ class ViewEditShooter extends Component {
                 type="text"
                 name="searchText"
                 value={this.state.ata_number}
-                onChange={this.handleChangeFor('ata_number')}
+                onChange={this.handleChangeFor("ata_number")}
               />
             </ListItem>
           </List>

@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
 const styles = theme => ({
   headerMargins: {
-    width: '100%',
+    width: "100%",
     paddingTop: theme.spacing.unit * 3,
     paddingBottom: theme.spacing.unit * 1,
     paddingLeft: theme.spacing.unit * 3,
-    paddingRight: theme.spacing.unit * 3,
-  },
+    paddingRight: theme.spacing.unit * 3
+  }
 });
 
 const HeaderMargins = props => {
@@ -19,7 +19,7 @@ const HeaderMargins = props => {
 };
 
 HeaderMargins.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(HeaderMargins);

@@ -1,25 +1,22 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
-import { 
-  Divider, 
-  Typography 
-} from '@material-ui/core/';
+import { Divider, Typography } from "@material-ui/core/";
 
 const styles = {
   userDetail: {
     padding: 24,
-    width: '100%',
+    width: "100%"
   },
   contestDetail: {
     paddingLeft: 24,
-    width: '100%',
+    width: "100%"
   },
   list: {
-    width: 225,
-  },
+    width: 225
+  }
 };
 
 const NavSideHeader = props => {
@@ -35,7 +32,7 @@ const NavSideHeader = props => {
 };
 
 NavSideHeader.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(NavSideHeader);

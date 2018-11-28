@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import { List, Typography, Divider } from '@material-ui/core/';
-import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab/';
+
+import { 
+  List, 
+  Typography, 
+  Divider 
+} from '@material-ui/core/';
+
+import { 
+  ToggleButton, 
+  ToggleButtonGroup 
+} from '@material-ui/lab/';
+
+import { toast } from 'react-toastify';
+
 import ScoringItem from '../ScoringItem/ScoringItem';
 import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
 
-import { USER_ACTIONS } from '../../redux/actions/userActions';
-import { toast } from 'react-toastify';
+
 
 const styles = theme => ({
   toggleContainer: {
@@ -19,11 +33,11 @@ const styles = theme => ({
     margin: '0',
     width: '100vw',
     border: 0,
-    borderRadius: 2,
+    borderRadius: 2
   },
   bigContainer: {
     maxWidth: 2000,
-    maxHeight: 500,
+    maxHeight: 500
   },
   buttons: {
     height: '60%',
@@ -31,23 +45,21 @@ const styles = theme => ({
     lineHeight: '4vw',
     fontSize: '4vw',
     alignItems: 'right',
-    display: 'flex',
+    display: 'flex'
   },
   headers: {
-    paddingBottom: '5%',
+    paddingBottom: '5%'
   },
   headersTwo: {
     paddingTop: '5%',
-    fontSize: '8vw',
+    fontSize: '8vw'
   },
   dividerOne: {
-    marginTop: 5,
-    // marginBottom: -5,
+    marginTop: 5
   },
   dividerTwo: {
-    marginTop: 5,
-    // marginBottom: -3,
-  },
+    marginTop: 5
+  }
 });
 
 class Scoring extends Component {
@@ -55,13 +67,13 @@ class Scoring extends Component {
     page: 0,
     selectedRound: 1,
     ToggleButton: false,
-    NextRoundButton: false,
+    NextRoundButton: false
   };
 
   selectRound = (event, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_CURRENT_ROUND,
-      payload: value,
+      payload: value
     });
   };
 
@@ -89,7 +101,7 @@ class Scoring extends Component {
         index: index,
         round: round,
         score: value,
-      },
+      }
     });
   };
 

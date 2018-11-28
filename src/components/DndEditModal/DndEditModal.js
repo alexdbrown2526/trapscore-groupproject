@@ -21,19 +21,19 @@ const styles = theme => ({
     boxShadow: theme.shadows[5],
     top: `30%`,
     left: `50%`,
-    transform: `translate(-50%, -50%)`,
+    transform: `translate(-50%, -50%)`
   },
   upperRightButton: {
-    float: 'right',
+    float: 'right'
   },
   title: {
-    marginBottom: theme.spacing.unit * 3,
+    marginBottom: theme.spacing.unit * 3
   },
   textField: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 2,
-    width: 200,
-  },
+    width: 200
+  }
 });
 
 class DndEditModal extends Component {

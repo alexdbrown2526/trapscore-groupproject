@@ -6,7 +6,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemSecondaryAction,
-  ListItemText,
+  ListItemText
 } from '@material-ui/core/';
 
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
