@@ -56,13 +56,18 @@ class ViewResults extends Component {
   state = {
     //defaults table to first results page on render
     page: 0,
+    //gets set by toggle buttons to the value of the index of that item within the events array
     indexOfSelectedEvent: 0,
+    //when true, results will autoscroll
     resultsShouldPaginate: false,
     //populates on componentDidMount
     resultsData: [],
     //boolean stops table from rendering before server response
     finishedLoading: false,
-    totalPages: 0
+    //initializes at 0. dynamically updates based on incoming data
+    totalPages: 0,
+    //set this value to change the number of rows displayed in the results table
+    pageSize: 15
   };
   //creates a reference to the react-table child component
   tableRef = null;
@@ -107,7 +112,9 @@ class ViewResults extends Component {
     this.setState({
       ...this.state,
       indexOfSelectedEvent: value,
-      totalPages: Math.ceil(this.state.resultsData[value].results.length / 20),
+      totalPages: Math.ceil(
+        this.state.resultsData[value].results.length / this.state.pageSize
+      ),
       page: 0
     });
   };
@@ -146,7 +153,9 @@ class ViewResults extends Component {
         this.setState({
           ...this.state,
           resultsData: response.data,
-          totalPages: Math.ceil(response.data[0].results.length / 20)
+          totalPages: Math.ceil(
+            response.data[0].results.length / this.state.pageSize
+          )
         });
       })
       .catch(error => {
@@ -257,8 +266,8 @@ class ViewResults extends Component {
           }}
           columns={columns}
           data={data}
-          pageSizeOptions={[15]}
-          pageSize={15}
+          pageSizeOptions={[this.state.pageSize]}
+          pageSize={this.state.pageSize}
           page={this.state.page}
           className="-striped -highlight"
           onPageChange={pageIndex => {
