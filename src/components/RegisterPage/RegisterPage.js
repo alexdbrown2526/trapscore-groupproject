@@ -66,7 +66,9 @@ class RegisterPage extends Component {
 
   render() {
     const { classes } = this.props;
-
+    /*Administrator registration page, enter a username and password and an
+    admin will be created
+    */
     return (
       <div className={classes.background}>
         {this.props.errors.registrationMessage && (

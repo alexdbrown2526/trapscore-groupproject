@@ -56,7 +56,7 @@ class TrapSelection extends Component {
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_TRAPS });
   }
-
+  // Handlechange for dropdown menu, sets state to selected trap.
   handleChangeFor = propertyName => event => {
     toast("Trap Selected");
     this.setState({

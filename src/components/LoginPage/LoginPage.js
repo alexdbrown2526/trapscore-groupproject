@@ -61,7 +61,7 @@ class LoginPage extends Component {
 
   render() {
     const { classes } = this.props;
-
+    //Login page for administrator can also switch to administrator registration
     return (
       <div>
         {this.props.errors.loginMessage && (

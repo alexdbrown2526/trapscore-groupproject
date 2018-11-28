@@ -56,9 +56,9 @@ class ViewAdminSelectCompetition extends Component {
       return false;
     } else {
       axios({
-        method: "POST",
-        url: "/api/competition",
-        data: { name: this.state.newCompetitionName }
+        method: 'POST',
+        url: '/api/competition/admin',
+        data: { name: this.state.newCompetitionName },
       })
         .then(response => {
           this.editCompetition(response.data);
@@ -75,8 +75,8 @@ class ViewAdminSelectCompetition extends Component {
   // Gets a list of all competitions
   getCompetitions = () => {
     axios({
-      method: "GET",
-      url: "/api/competition"
+      method: 'GET',
+      url: '/api/competition/admin',
     }).then(response => {
       let newCompetitions = response.data.map(competition => {
         return {
@@ -108,9 +108,9 @@ class ViewAdminSelectCompetition extends Component {
     const body = this.state.competitionToEdit;
 
     axios({
-      method: "PUT",
-      url: `/api/competition`,
-      data: body
+      method: 'PUT',
+      url: `/api/competition/admin`,
+      data: body,
     }).then(response => {
       this.setState({
         ...this.state,
@@ -131,11 +131,12 @@ class ViewAdminSelectCompetition extends Component {
   // Delete, passed as props to ViewAdminEditCompetition
   deleteCompetition = competitionIdToDelete => {
     axios({
-      method: "DELETE",
-      url: `/api/competition/${competitionIdToDelete}`
+      method: 'DELETE',
+      url: `/api/competition/admin/${competitionIdToDelete}`,
     })
       .then(response => {
         this.getCompetitions();
+        this.handleClose();
       })
       .catch(error => {
         alert("Something went wrong deleting the competition.");
@@ -232,6 +233,7 @@ class ViewAdminSelectCompetition extends Component {
             open={this.state.modalOpen}
             handleClose={this.handleClose}
             editCompetition={this.editCompetition}
+            deleteCompetition={this.deleteCompetition}
             competitionToEdit={this.state.competitionToEdit}
             handleEditChangeFor={this.handleEditChangeFor}
             handleDateChange={this.handleDateChange}

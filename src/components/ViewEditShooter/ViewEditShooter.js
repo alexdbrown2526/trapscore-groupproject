@@ -61,6 +61,8 @@ class ViewEditShooter extends Component {
   render() {
     const { classes } = this.props;
 
+    //Creates edit shooter form, allowing information to be edited or deleted
+
     return (
       <div>
         <form className={classes.editform}>

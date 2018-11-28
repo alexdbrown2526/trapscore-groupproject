@@ -86,7 +86,7 @@ class CompetitionRoster extends Component {
       });
     });
   };
-
+  //Edit a shooters information and UPDATE
   updateUser = (id, data) => {
     axios({
       method: "PUT",
@@ -97,7 +97,7 @@ class CompetitionRoster extends Component {
       this.getShooters();
     });
   };
-
+  //DELETE a shooter entirely from the competition
   deleteShooter = id => {
     axios({
       method: "DELETE",

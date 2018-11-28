@@ -26,12 +26,12 @@ import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
 
 const styles = theme => ({
   toggleContainer: {
-    display: 'flex',
-    overflow: 'hidden',
-    backfaceVisibility: 'hidden',
-    flexDirection: 'row',
-    margin: '0',
-    width: '100vw',
+    display: "flex",
+    overflow: "hidden",
+    backfaceVisibility: "hidden",
+    flexDirection: "row",
+    margin: "0",
+    width: "100vw",
     border: 0,
     borderRadius: 2
   },
@@ -69,31 +69,31 @@ class Scoring extends Component {
     ToggleButton: false,
     NextRoundButton: false
   };
-
+  // Dispatches to currentRound reducer and selectedTrap saga with value of whichever button is hit [1-5].
   selectRound = (event, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_CURRENT_ROUND,
       payload: value
     });
   };
-
+  // For conditional rendering of the submit scores button. Dispatches to submitScores saga at round 5 with selectedTrap ID.
   nextRound = () => {
     if (this.props.currentRound < 5) {
       this.props.dispatch({
         type: USER_ACTIONS.SET_CURRENT_ROUND,
-        payload: this.props.currentRound + 1,
+        payload: this.props.currentRound + 1
       });
     } else {
-      toast('Scores Submitted, Posts Rotating', {
-        position: toast.POSITION.TOP_CENTER,
+      toast("Scores Submitted, Posts Rotating", {
+        position: toast.POSITION.TOP_CENTER
       });
       this.props.dispatch({
         type: USER_ACTIONS.SUBMIT_SCORES,
-        payload: this.props.selectedTrap,
+        payload: this.props.selectedTrap
       });
     }
   };
-
+  // Dispatches everytime a hit or miss button is clicked, with a payload of the hit or miss, the index, and specific round.
   setScore = (index, round, value) => {
     this.props.dispatch({
       type: USER_ACTIONS.SET_SHOT,
@@ -139,13 +139,8 @@ class Scoring extends Component {
             5
           </ToggleButton>
         </ToggleButtonGroup>
-        <Typography
-          align="center"
-          // disableTypography
-          className={classes.headersTwo}
-          variant="h5"
-        >
-          {' '}
+        <Typography align="center" className={classes.headersTwo} variant="h5">
+          {" "}
           Shooters
         </Typography>
         <Divider className={classes.dividerOne} />
@@ -174,13 +169,13 @@ class Scoring extends Component {
 }
 
 Scoring.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = reduxState => ({
   currentRound: reduxState.currentRound,
   selectedTrap: reduxState.selectedTrap,
-  squads: reduxState.squaddingData,
+  squads: reduxState.squaddingData
 });
 
 const Scores = withStyles(styles)(Scoring);
