@@ -57,7 +57,7 @@ class ViewAdminSelectCompetition extends Component {
     } else {
       axios({
         method: 'POST',
-        url: '/api/competition',
+        url: '/api/competition/admin',
         data: { name: this.state.newCompetitionName },
       })
         .then(response => {
@@ -76,7 +76,7 @@ class ViewAdminSelectCompetition extends Component {
   getCompetitions = () => {
     axios({
       method: 'GET',
-      url: '/api/competition',
+      url: '/api/competition/admin',
     }).then(response => {
       let newCompetitions = response.data.map(competition => {
         return {
@@ -109,7 +109,7 @@ class ViewAdminSelectCompetition extends Component {
 
     axios({
       method: 'PUT',
-      url: `/api/competition`,
+      url: `/api/competition/admin`,
       data: body,
     }).then(response => {
       this.setState({
@@ -132,10 +132,11 @@ class ViewAdminSelectCompetition extends Component {
   deleteCompetition = competitionIdToDelete => {
     axios({
       method: 'DELETE',
-      url: `/api/competition/${competitionIdToDelete}`,
+      url: `/api/competition/admin/${competitionIdToDelete}`,
     })
       .then(response => {
         this.getCompetitions();
+        this.handleClose();
       })
       .catch(error => {
         alert('Something went wrong deleting the competition.');
@@ -232,6 +233,7 @@ class ViewAdminSelectCompetition extends Component {
             open={this.state.modalOpen}
             handleClose={this.handleClose}
             editCompetition={this.editCompetition}
+            deleteCompetition={this.deleteCompetition}
             competitionToEdit={this.state.competitionToEdit}
             handleEditChangeFor={this.handleEditChangeFor}
             handleDateChange={this.handleDateChange}

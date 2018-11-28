@@ -19,7 +19,7 @@ CREATE TABLE "competition" (
     "location" varchar(150) NOT NULL DEFAULT 'Anytown, USA',
     "date" DATE NOT NULL DEFAULT NOW() + INTERVAL '7 days',
     "isActive" BOOLEAN NOT NULL DEFAULT 'true',
-	"secret_url" varchar(255)
+		"secret_url" varchar(255)
 );
 
 
