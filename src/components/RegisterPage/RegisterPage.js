@@ -8,12 +8,12 @@ import { withStyles } from "@material-ui/core/styles";
 import { 
   Card, 
   Button, 
-  TextField,
+  TextField
 } from "@material-ui/core/";
 
 import {
   AccountCircle,
-  Lock,
+  Lock
 } from "@material-ui/icons/";
 
 

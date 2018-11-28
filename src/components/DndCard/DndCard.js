@@ -13,11 +13,10 @@ import {
 const styles = theme => ({
   card: {
     margin: theme.spacing.unit * 2,
-    minWidth: theme.spacing.unit * 30,
+    minWidth: theme.spacing.unit * 30
   },
   cardNoMargin: {
-    // margin: theme.spacing.unit * 3,
-    minWidth: theme.spacing.unit * 30,
+    minWidth: theme.spacing.unit * 30
   }
 });
 

@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import axios from "axios";
+import { connect } from "react-redux";
 
-import { DragDropContext } from 'react-beautiful-dnd';
-import { reorder, move } from '../../modules/dragAndDrop.strategy';
+import { DragDropContext } from "react-beautiful-dnd";
+import { reorder, move } from "../../modules/dragAndDrop.strategy";
 
-import { Divider, Typography } from '@material-ui/core';
+import { Divider, Typography } from "@material-ui/core";
 
-import HeaderMargins from '../HeaderMargins/HeaderMargins';
-import DndPage from '../DndPage/DndPage';
-import DndLeftSide from '../DndLeftSide/DndLeftSide';
-import DndRightSide from '../DndRightSide/DndRightSide';
-import DndCard from '../DndCard/DndCard';
-import DndEditModal from '../DndEditModal/DndEditModal';
-import DndList from '../DndList/DndList';
-import DndAddButton from '../DndAddButton/DndAddButton';
+import HeaderMargins from "../HeaderMargins/HeaderMargins";
+import DndPage from "../DndPage/DndPage";
+import DndLeftSide from "../DndLeftSide/DndLeftSide";
+import DndRightSide from "../DndRightSide/DndRightSide";
+import DndCard from "../DndCard/DndCard";
+import DndEditModal from "../DndEditModal/DndEditModal";
+import DndList from "../DndList/DndList";
+import DndAddButton from "../DndAddButton/DndAddButton";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 class ViewScheduling extends Component {
   state = {
     unassigned: [],
     traps: [
       {
-        name: '',
+        name: "",
         id: 0,
-        schedule: [],
-      },
-    ],
+        schedule: []
+      }
+    ]
   };
 
   componentDidMount() {
@@ -36,8 +36,8 @@ class ViewScheduling extends Component {
 
   getData = () => {
     axios({
-      method: 'GET',
-      url: `/api/competition/scheduling/`,
+      method: "GET",
+      url: `/api/competition/scheduling/`
     })
       .then(response => {
         this.setState({ ...response.data });
@@ -45,7 +45,7 @@ class ViewScheduling extends Component {
       })
       .catch(error => {
         alert(
-          'Something went wrong getting the scheduling data from the server.'
+          "Something went wrong getting the scheduling data from the server."
         );
         console.log(error);
       });
@@ -53,17 +53,17 @@ class ViewScheduling extends Component {
 
   sendData = () => {
     axios({
-      method: 'PUT',
+      method: "PUT",
       url: `/api/competition/scheduling/`,
-      data: this.state,
+      data: this.state
     }).then(() => {
-      toast('Scheduling saved');
+      toast("Scheduling saved");
       this.getData();
     });
   };
 
   getList = id => {
-    if (id === 'unassigned') {
+    if (id === "unassigned") {
       return this.state.unassigned;
     } else {
       return this.state.traps[Number(id)].schedule;
@@ -86,9 +86,9 @@ class ViewScheduling extends Component {
         destination.index
       );
 
-      if (source.droppableId === 'unassigned') {
+      if (source.droppableId === "unassigned") {
         this.setState({
-          unassigned: newItems,
+          unassigned: newItems
         });
       } else {
         this.setState({
@@ -96,10 +96,10 @@ class ViewScheduling extends Component {
             ...this.state.traps.slice(0, Number(source.droppableId)),
             {
               ...this.state.traps[source.droppableId],
-              schedule: newItems,
+              schedule: newItems
             },
-            ...this.state.traps.slice(Number(source.droppableId) + 1),
-          ],
+            ...this.state.traps.slice(Number(source.droppableId) + 1)
+          ]
         });
       }
     } else {
@@ -111,9 +111,9 @@ class ViewScheduling extends Component {
         destination
       );
 
-      if (source.droppableId === 'unassigned') {
+      if (source.droppableId === "unassigned") {
         this.setState({
-          unassigned: result.source,
+          unassigned: result.source
         });
       } else {
         this.setState({
@@ -121,15 +121,15 @@ class ViewScheduling extends Component {
             ...this.state.traps.slice(0, Number(source.droppableId)),
             {
               ...this.state.traps[source.droppableId],
-              schedule: result.source,
+              schedule: result.source
             },
-            ...this.state.traps.slice(Number(source.droppableId) + 1),
-          ],
+            ...this.state.traps.slice(Number(source.droppableId) + 1)
+          ]
         });
       }
-      if (destination.droppableId === 'unassigned') {
+      if (destination.droppableId === "unassigned") {
         this.setState({
-          unassigned: result.destination,
+          unassigned: result.destination
         });
       } else {
         this.setState({
@@ -137,10 +137,10 @@ class ViewScheduling extends Component {
             ...this.state.traps.slice(0, Number(destination.droppableId)),
             {
               ...this.state.traps[destination.droppableId],
-              schedule: result.destination,
+              schedule: result.destination
             },
-            ...this.state.traps.slice(Number(destination.droppableId) + 1),
-          ],
+            ...this.state.traps.slice(Number(destination.droppableId) + 1)
+          ]
         });
       }
     }
@@ -149,33 +149,33 @@ class ViewScheduling extends Component {
 
   addTrap = () => {
     axios({
-      method: 'POST',
-      url: `/api/competition/trap/new/`,
+      method: "POST",
+      url: `/api/competition/trap/new/`
     }).then(() => {
       this.getData();
     });
-    toast('New trap created!');
+    toast("New trap created!");
   };
 
   editTrap = (trapId, newName) => {
     axios({
-      method: 'PUT',
+      method: "PUT",
       url: `/api/competition/edit/trap/${trapId}`,
-      data: { name: newName },
+      data: { name: newName }
     }).then(() => {
       this.getData();
     });
-    toast('Trap name updated!');
+    toast("Trap name updated!");
   };
 
   deleteTrap = trapId => {
     axios({
-      method: 'DELETE',
-      url: `/api/competition/trap/${trapId}`,
+      method: "DELETE",
+      url: `/api/competition/trap/${trapId}`
     }).then(() => {
       this.getData();
     });
-    toast('Trap deleted.');
+    toast("Trap deleted.");
   };
 
   render() {
@@ -239,7 +239,7 @@ class ViewScheduling extends Component {
 }
 
 const mapStateToProps = state => ({
-  user: state.user,
+  user: state.user
 });
 
 export default connect(mapStateToProps)(ViewScheduling);

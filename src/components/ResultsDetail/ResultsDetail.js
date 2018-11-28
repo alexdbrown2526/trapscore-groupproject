@@ -1,6 +1,5 @@
-import React from 'react';
+import React from "react";
 import { withStyles } from "@material-ui/core/styles";
-
 
 const styles = theme => ({
   scoreContainer: {
@@ -29,22 +28,23 @@ const styles = theme => ({
   }
 });
 
-const ResultsDetail = (props) => {
+const ResultsDetail = props => {
   const { classes } = props;
 
   return (
     <>
       <div className={classes.scoreContainer}>
         {props.boxScore.map(score => {
-          let value = score === 1 ? 'hit' : 'miss';
-          return value === 'hit' ? 
-            <div className={`${classes.score} ${classes.hit}`} >/</div> 
-            : 
-            <div className={classes.score} >O</div>
+          let value = score === 1 ? "hit" : "miss";
+          return value === "hit" ? (
+            <div className={`${classes.score} ${classes.hit}`}>/</div>
+          ) : (
+            <div className={classes.score}>O</div>
+          );
         })}
       </div>
     </>
-  )
+  );
 };
 
 export default withStyles(styles)(ResultsDetail);

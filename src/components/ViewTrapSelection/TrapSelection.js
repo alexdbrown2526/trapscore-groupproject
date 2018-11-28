@@ -51,6 +51,7 @@ class TrapSelection extends Component {
     trap: "",
     counter: 0
   };
+  
   // Get available Traps
   componentDidMount() {
     this.props.dispatch({ type: USER_ACTIONS.FETCH_TRAPS });
@@ -65,7 +66,7 @@ class TrapSelection extends Component {
     });
   };
   // Conditional Rendering function
-  // Dispatch action with payload of selected trap ID
+  // Dispatch action with payload of selected trap ID to selectedTrap saga
   handleSubmit = event => {
     this.props.dispatch({
       type: USER_ACTIONS.FETCH_SELECTED_TRAP,

@@ -1,20 +1,20 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
 const styles = theme => ({
   rightSide: {
-    width: '75%',
+    width: "75%",
     minWidth: 100,
-    height: '100vh',
-    overflowY: 'scroll',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'start',
-    alignItems: 'start',
-  },
+    height: "100vh",
+    overflowY: "scroll",
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "start",
+    alignItems: "start"
+  }
 });
 
 const DndRightSide = props => {
@@ -23,7 +23,7 @@ const DndRightSide = props => {
 };
 
 DndRightSide.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(DndRightSide);

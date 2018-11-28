@@ -1,41 +1,41 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
+import { withStyles } from "@material-ui/core/styles";
+import PropTypes from "prop-types";
 
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-import { Button, Modal, TextField, Typography } from '@material-ui/core';
+import { Button, Modal, TextField, Typography } from "@material-ui/core";
 
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexWrap: "wrap"
   },
   textField: {
     marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   },
   dense: {
-    marginTop: 16,
+    marginTop: 16
   },
   paper: {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
+    position: "absolute",
+    top: "50%",
+    left: "50%",
     transform: `translate(-50%, -50%)`,
     minWidth: theme.spacing.unit * 50,
-    maxWidth: '80%',
-    maxHeight: '90%',
-    overflowY: 'scroll',
+    maxWidth: "80%",
+    maxHeight: "90%",
+    overflowY: "scroll",
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing.unit * 4
   },
   headerSpacer: {
-    paddingTop: theme.spacing.unit * 4,
-  },
+    paddingTop: theme.spacing.unit * 4
+  }
 });
 
 const ViewAdminEditCompetition = props => {
@@ -63,8 +63,8 @@ const ViewAdminEditCompetition = props => {
         <Typography variant="body1">
           {props.competitionToEdit.name
             .toLowerCase()
-            .split(' ')
-            .join('')}
+            .split(" ")
+            .join("")}
         </Typography>
         <Typography variant="h6" className={classes.headerSpacer}>
           Default Password:
@@ -72,8 +72,8 @@ const ViewAdminEditCompetition = props => {
         <Typography variant="body1">
           {props.competitionToEdit.name
             .toLowerCase()
-            .split(' ')
-            .join('') + '-admin'}
+            .split(" ")
+            .join("") + "-admin"}
         </Typography>
         <Typography variant="h6" className={classes.headerSpacer}>
           Change Password
@@ -85,12 +85,12 @@ const ViewAdminEditCompetition = props => {
         <form>
           <TextField
             value={props.competitionToEdit.defaultPassword}
-            onChange={props.handleEditChangeFor('defaultPassword')}
+            onChange={props.handleEditChangeFor("defaultPassword")}
             placeholder="Default Password"
           />
           <TextField
             value={props.competitionToEdit.newPassword}
-            onChange={props.handleEditChangeFor('newPassword')}
+            onChange={props.handleEditChangeFor("newPassword")}
             placeholder="New Password"
           />
 
@@ -100,14 +100,14 @@ const ViewAdminEditCompetition = props => {
 
           <TextField
             value={props.competitionToEdit.name}
-            onChange={props.handleEditChangeFor('name')}
+            onChange={props.handleEditChangeFor("name")}
             placeholder="Competition Name"
             type="text"
             name="name"
           />
           <TextField
             value={props.competitionToEdit.location}
-            onChange={props.handleEditChangeFor('location')}
+            onChange={props.handleEditChangeFor("location")}
             placeholder="Location"
             type="text"
             name="location"
@@ -147,7 +147,7 @@ const ViewAdminEditCompetition = props => {
 };
 
 ViewAdminEditCompetition.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ViewAdminEditCompetition);

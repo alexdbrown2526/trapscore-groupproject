@@ -3,12 +3,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import { 
-  AppBar, 
-  IconButton, 
-  Toolbar, 
-  Typography 
-} from "@material-ui/core/";
+import { AppBar, IconButton, Toolbar, Typography } from "@material-ui/core/";
 
 import MenuIcon from "@material-ui/icons/Menu";
 
@@ -16,15 +11,15 @@ import NavSpacer from "../NavSpacer/NavSpacer";
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   grow: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20,
-  },
+    marginRight: 20
+  }
 };
 
 const NavTop = props => {
@@ -52,7 +47,7 @@ const NavTop = props => {
 };
 
 NavTop.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(NavTop);

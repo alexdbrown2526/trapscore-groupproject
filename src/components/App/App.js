@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import { withStyles } from "@material-ui/core/styles";
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+
 import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
 
 //TrapScore Routes
@@ -27,6 +28,7 @@ import Scoring from '../ViewScoring/ViewScoring';
 import TrapSelection from '../ViewTrapSelection/TrapSelection';
 import ViewShooterRegistration from '../ViewShooterRegistration/ViewShooterRegistration';
 
+// Nav Routes
 import {
   selectCompetitionRoute,
   editCompetitionRoute,
@@ -35,24 +37,24 @@ import {
   schedulingRoute,
   selectTrapRoute,
   scoringRoute,
-  resultsRoute,
+  resultsRoute
 } from '../../navigationRoutes';
 
 // Material-UI
 import {
   CssBaseline,
   createMuiTheme,
-  MuiThemeProvider,
+  MuiThemeProvider
 } from '@material-ui/core';
 
 const theme = createMuiTheme({
   palette: {
     primary: { main: '#800000',},
-    secondary: { main: '#171769',},
+    secondary: { main: '#171769',}
   },
   typography: {
     useNextVariants: true,
-  },
+  }
 });
 
 const styles = {

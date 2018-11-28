@@ -1,52 +1,52 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { LOGIN_ACTIONS } from '../../redux/actions/loginActions';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { LOGIN_ACTIONS } from "../../redux/actions/loginActions";
 
-import { withStyles } from '@material-ui/core/styles';
+import { withStyles } from "@material-ui/core/styles";
 
-import { Button, Card, TextField } from '@material-ui/core/';
+import { Button, Card, TextField } from "@material-ui/core/";
 
-import { AccountCircle, Lock } from '@material-ui/icons/';
+import { AccountCircle, Lock } from "@material-ui/icons/";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const styles = theme => ({
   loginCard: {
-    fontFamily: 'Roboto, sans-serif',
-    marginTop: '3%',
-    paddingBottom: '10%',
-    width: '30%',
-    paddingTop: '3%',
-    display: 'flex',
-    overflow: 'hidden',
-    flexDirection: 'column',
-    margin: 'auto',
+    fontFamily: "Roboto, sans-serif",
+    marginTop: "3%",
+    paddingBottom: "10%",
+    width: "30%",
+    paddingTop: "3%",
+    display: "flex",
+    overflow: "hidden",
+    flexDirection: "column",
+    margin: "auto"
   },
 
   loginButton: {
-    marginTop: '4%',
-    marginBottom: '4%',
-    variant: 'contained',
-  },
+    marginTop: "4%",
+    marginBottom: "4%",
+    variant: "contained"
+  }
 });
 
 class LoginPage extends Component {
   state = {
-    username: '',
-    password: '',
+    username: "",
+    password: ""
   };
 
   login = event => {
     event.preventDefault();
-    toast('Welcome to TrapScore!');
+    toast("Welcome to TrapScore!");
 
     if (this.state.username && this.state.password) {
       this.props.dispatch({
         type: LOGIN_ACTIONS.LOGIN,
         payload: {
           username: this.state.username,
-          password: this.state.password,
-        },
+          password: this.state.password
+        }
       });
     } else {
       this.props.dispatch({ type: LOGIN_ACTIONS.LOGIN_INPUT_ERROR });
@@ -55,7 +55,7 @@ class LoginPage extends Component {
 
   handleInputChangeFor = propertyName => event => {
     this.setState({
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
   };
 
@@ -80,8 +80,8 @@ class LoginPage extends Component {
                     type="text"
                     name="username"
                     value={this.state.username}
-                    onChange={this.handleInputChangeFor('username')}
-                  />{' '}
+                    onChange={this.handleInputChangeFor("username")}
+                  />{" "}
                   <AccountCircle />
                 </label>
               </div>
@@ -92,8 +92,8 @@ class LoginPage extends Component {
                     type="password"
                     name="password"
                     value={this.state.password}
-                    onChange={this.handleInputChangeFor('password')}
-                  />{' '}
+                    onChange={this.handleInputChangeFor("password")}
+                  />{" "}
                   <Lock />
                 </label>
               </div>
@@ -114,7 +114,7 @@ class LoginPage extends Component {
                 className="link-button"
                 onClick={() => {
                   this.props.dispatch({
-                    type: LOGIN_ACTIONS.SET_TO_REGISTER_MODE,
+                    type: LOGIN_ACTIONS.SET_TO_REGISTER_MODE
                   });
                 }}
               >
@@ -132,7 +132,7 @@ class LoginPage extends Component {
 // if you wanted you could write this code like this:
 // const mapStateToProps = ({errors}) => ({ errors });
 const mapStateToProps = state => ({
-  errors: state.errors,
+  errors: state.errors
 });
 
 export default withStyles(styles)(connect(mapStateToProps)(LoginPage));

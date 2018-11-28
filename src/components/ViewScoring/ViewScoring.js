@@ -1,14 +1,28 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import { withStyles } from "@material-ui/core/styles";
-import { List, Typography, Divider } from "@material-ui/core/";
-import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab/";
-import ScoringItem from "../ScoringItem/ScoringItem";
-import ScoringAdvanceButton from "../ScoringAdvanceButton/ScoringAdvanceButton";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { USER_ACTIONS } from "../../redux/actions/userActions";
-import { toast } from "react-toastify";
+import { USER_ACTIONS } from '../../redux/actions/userActions';
+
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+
+import { 
+  List, 
+  Typography, 
+  Divider 
+} from '@material-ui/core/';
+
+import { 
+  ToggleButton, 
+  ToggleButtonGroup 
+} from '@material-ui/lab/';
+
+import { toast } from 'react-toastify';
+
+import ScoringItem from '../ScoringItem/ScoringItem';
+import ScoringAdvanceButton from '../ScoringAdvanceButton/ScoringAdvanceButton';
+
+
 
 const styles = theme => ({
   toggleContainer: {
@@ -26,27 +40,25 @@ const styles = theme => ({
     maxHeight: 500
   },
   buttons: {
-    height: "60%",
-    width: "20vw",
-    lineHeight: "4vw",
-    fontSize: "4vw",
-    alignItems: "right",
-    display: "flex"
+    height: '60%',
+    width: '20vw',
+    lineHeight: '4vw',
+    fontSize: '4vw',
+    alignItems: 'right',
+    display: 'flex'
   },
   headers: {
-    paddingBottom: "5%"
+    paddingBottom: '5%'
   },
   headersTwo: {
-    paddingTop: "5%",
-    fontSize: "8vw"
+    paddingTop: '5%',
+    fontSize: '8vw'
   },
   dividerOne: {
     marginTop: 5
-    // marginBottom: -5,
   },
   dividerTwo: {
     marginTop: 5
-    // marginBottom: -3,
   }
 });
 
@@ -88,7 +100,7 @@ class Scoring extends Component {
       payload: {
         index: index,
         round: round,
-        score: value
+        score: value,
       }
     });
   };

@@ -1,27 +1,22 @@
-import React from 'react';
+import React from "react";
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
-import {
-  Avatar, 
-  ListItem, 
-  ListItemText 
-} from '@material-ui/core';
+import { Avatar, ListItem, ListItemText } from "@material-ui/core";
 
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from "react-beautiful-dnd";
 
 const styles = theme => ({
   avatar: {
-    color: '#fff',
-    backgroundColor: theme.palette.primary.main,
-
+    color: "#fff",
+    backgroundColor: theme.palette.primary.main
   },
   avatarBox: {
-    color: '#fff',
+    color: "#fff",
     backgroundColor: theme.palette.secondary.main,
-    borderRadius: 10,
-  },
+    borderRadius: 10
+  }
 });
 
 const DndItem = props => {
@@ -38,9 +33,7 @@ const DndItem = props => {
             <Avatar className={props.box ? classes.avatarBox : classes.avatar}>
               {item.avatar}
             </Avatar>
-            <ListItemText
-              primary={item.mainText}
-            />
+            <ListItemText primary={item.mainText} />
           </ListItem>
         </div>
       )}
@@ -51,7 +44,7 @@ const DndItem = props => {
 DndItem.propTypes = {
   classes: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
-  item: PropTypes.object.isRequired,
+  item: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(DndItem);

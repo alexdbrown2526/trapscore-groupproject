@@ -5,30 +5,26 @@ import {
   squaddingRoute,
   schedulingRoute,
   selectTrapRoute,
-  resultsRoute,
+  resultsRoute
 } from "../../navigationRoutes";
 
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 
-import { 
-  List, 
-  ListItem, 
-  ListItemText 
-} from "@material-ui/core/";
+import { List, ListItem, ListItemText } from "@material-ui/core/";
 
 const styles = {
   userDetail: {
     padding: 24,
-    width: "100%",
+    width: "100%"
   },
   contestDetail: {
     paddingLeft: 24,
-    width: "100%",
+    width: "100%"
   },
   list: {
-    width: 240,
-  },
+    width: 240
+  }
 };
 
 const NavList = props => {
@@ -87,7 +83,7 @@ const NavList = props => {
 };
 
 NavList.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(NavList);

@@ -1,27 +1,27 @@
-import React from 'react';
+import React from "react";
 
-import { withStyles } from '@material-ui/core/styles';
-import { Button } from '@material-ui/core/';
+import { withStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core/";
 
 const styles = theme => ({
   spacer: {
-    width: '100%',
-    height: theme.spacing.unit * 5,
+    width: "100%",
+    height: theme.spacing.unit * 5
   },
   centerButtonFixed: {
-    position: 'fixed',
-    left: '50%',
+    position: "fixed",
+    left: "50%",
     bottom: theme.spacing.unit * 2,
     transform: `translate(-50%, 0%)`,
-    width: '85%',
+    width: "85%"
   },
   centerButtonRelative: {
-    position: 'relative',
-    left: '50%',
+    position: "relative",
+    left: "50%",
     bottom: theme.spacing.unit * 2,
     transform: `translate(-50%, 0%)`,
-    width: '85%',
-  },
+    width: "85%"
+  }
 });
 
 const ScoringAdvanceButton = props => {

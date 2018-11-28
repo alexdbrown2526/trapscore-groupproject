@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import axios from 'axios';
+import React, { Component } from "react";
+import axios from "axios";
 
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
 
 import {
   List,
@@ -11,52 +11,52 @@ import {
   Button,
   Card,
   Checkbox,
-  TextField,
-} from '@material-ui/core/';
+  TextField
+} from "@material-ui/core/";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 const styles = theme => ({
   registerCard: {
-    fontFamily: 'Roboto, sans-serif',
-    paddingBottom: '3%',
-    paddingTop: '3%',
-    position: 'relative',
+    fontFamily: "Roboto, sans-serif",
+    paddingBottom: "3%",
+    paddingTop: "3%",
+    position: "relative",
     zIndex: 1,
-    display: 'flex',
-    overflow: 'hidden',
-    backfaceVisibility: 'hidden',
-    flexDirection: 'column',
-    margin: '0 auto',
+    display: "flex",
+    overflow: "hidden",
+    backfaceVisibility: "hidden",
+    flexDirection: "column",
+    margin: "0 auto",
     maxWidth: 530,
     border: 0,
     borderRadius: 2,
-    marginTop: '2%',
-    listStyle: 'none',
+    marginTop: "2%",
+    listStyle: "none"
   },
 
   eventList: {
-    listStyle: 'none',
-    textAlign: 'left',
-    verticalAlign: 'top',
+    listStyle: "none",
+    textAlign: "left",
+    verticalAlign: "top"
   },
 
   header: {
-    marginTop: '10%',
-  },
+    marginTop: "10%"
+  }
 });
 
 class ViewShooterRegistration extends Component {
   state = {
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    handicap: '',
-    ata_number: '',
+    first_name: "",
+    last_name: "",
+    email: "",
+    phone: "",
+    handicap: "",
+    ata_number: "",
     competition: {
-      events: [],
-    },
+      events: []
+    }
   };
 
   componentDidMount() {
@@ -66,11 +66,11 @@ class ViewShooterRegistration extends Component {
   tryToGetCompetition = () => {
     let toTry = {
       id: this.props.match.params.id,
-      hash: this.props.match.params.hash,
+      hash: this.props.match.params.hash
     };
     axios({
-      method: 'GET',
-      url: `/api/registration/${toTry.id}&${toTry.hash}`,
+      method: "GET",
+      url: `/api/registration/${toTry.id}&${toTry.hash}`
     }).then(response => {
       this.setState({ competition: response.data });
     });
@@ -81,11 +81,11 @@ class ViewShooterRegistration extends Component {
     const body = this.state;
     let toTry = {
       id: this.props.match.params.id,
-      hash: this.props.match.params.hash,
+      hash: this.props.match.params.hash
     };
     //handicaps can only have a value between 16-27
     if (this.state.handicap < 16 || this.state.handicap > 27) {
-      alert('You must choose a number between 16 and 27');
+      alert("You must choose a number between 16 and 27");
       return false;
     }
     //Phone numbers must be entered without dashes
@@ -94,35 +94,35 @@ class ViewShooterRegistration extends Component {
     }
 
     axios({
-      method: 'POST',
+      method: "POST",
       url: `/api/registration/${toTry.id}&${toTry.hash}`,
-      data: body,
+      data: body
     })
       .then(response => {
         this.setState({
-          first_name: '',
-          last_name: '',
-          email: '',
-          phone: '',
-          handicap: '',
-          ata_number: '',
+          first_name: "",
+          last_name: "",
+          email: "",
+          phone: "",
+          handicap: "",
+          ata_number: "",
           competition: {
-            events: [],
-          },
+            events: []
+          }
         });
         this.tryToGetCompetition();
       })
       .catch(error => {
-        console.log('Error submitting registration:', error);
-        alert('Please fill out all fields and try again.');
+        console.log("Error submitting registration:", error);
+        alert("Please fill out all fields and try again.");
       });
-    toast('Shooter Registered');
+    toast("Shooter Registered");
   };
 
   handleChangeFor = propertyName => event => {
     this.setState({
       ...this.state,
-      [propertyName]: event.target.value,
+      [propertyName]: event.target.value
     });
   };
 
@@ -140,11 +140,11 @@ class ViewShooterRegistration extends Component {
           ...this.state.competition.events.slice(0, indexOfCheckedItem),
           {
             ...this.state.competition.events[indexOfCheckedItem],
-            checked: checked,
+            checked: checked
           },
-          ...this.state.competition.events.slice(indexOfCheckedItem + 1),
-        ],
-      },
+          ...this.state.competition.events.slice(indexOfCheckedItem + 1)
+        ]
+      }
     });
   };
 
@@ -169,7 +169,7 @@ class ViewShooterRegistration extends Component {
                   type="text"
                   name="first_name"
                   value={this.state.first_name}
-                  onChange={this.handleChangeFor('first_name')}
+                  onChange={this.handleChangeFor("first_name")}
                 />
               </div>
               <div>
@@ -178,7 +178,7 @@ class ViewShooterRegistration extends Component {
                   type="text"
                   name="last_name"
                   value={this.state.last_name}
-                  onChange={this.handleChangeFor('last_name')}
+                  onChange={this.handleChangeFor("last_name")}
                 />
               </div>
               <div>
@@ -187,7 +187,7 @@ class ViewShooterRegistration extends Component {
                   type="text"
                   name="email"
                   value={this.state.email}
-                  onChange={this.handleChangeFor('email')}
+                  onChange={this.handleChangeFor("email")}
                 />
               </div>
               <div>
@@ -197,7 +197,7 @@ class ViewShooterRegistration extends Component {
                   type="text"
                   name="phone"
                   value={this.state.phone}
-                  onChange={this.handleChangeFor('phone')}
+                  onChange={this.handleChangeFor("phone")}
                 />
               </div>
               <div>
@@ -208,7 +208,7 @@ class ViewShooterRegistration extends Component {
                   min="16"
                   max="27"
                   value={this.state.handicap}
-                  onChange={this.handleChangeFor('handicap')}
+                  onChange={this.handleChangeFor("handicap")}
                 />
               </div>
               <div>
@@ -217,7 +217,7 @@ class ViewShooterRegistration extends Component {
                   type="text"
                   name="ata_number"
                   value={this.state.ata_number}
-                  onChange={this.handleChangeFor('ata_number')}
+                  onChange={this.handleChangeFor("ata_number")}
                 />
               </div>
               <div className={classes.header}>
@@ -260,7 +260,7 @@ class ViewShooterRegistration extends Component {
 }
 
 ViewShooterRegistration.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(ViewShooterRegistration);

@@ -7,8 +7,8 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
     paddingTop: theme.spacing.unit * 8,
-    width: "100%",
-  },
+    width: "100%"
+  }
 });
 
 const NavbarSpacer = ({ classes }) => {
@@ -16,7 +16,7 @@ const NavbarSpacer = ({ classes }) => {
 };
 
 NavbarSpacer.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired
 };
 
 export default withStyles(styles)(NavbarSpacer);
